@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\{
     DashboardController,
+    KurikulumController,
     TahunPelajaranController,
 };
 use Illuminate\Support\Facades\Route;
@@ -22,7 +23,11 @@ Route::group(['middleware' => 'auth'], function () {
 
         //Route Tahun Pelajaran
         Route::get('/tahunpelajaran/data', [TahunPelajaranController::class, 'data'])->name('tahunpelajaran.data');
-        Route::resource('/tahunpelajaran', TahunPelajaranController::class);
+        Route::resource('/tahunpelajaran', TahunPelajaranController::class)->except('create', 'edit');
         Route::put('/tahunpelajaran/update-status/{id}', [TahunPelajaranController::class, 'updateStatus'])->name('tahunpelajaran.update_status');
+
+        // Route Kurikulum
+        Route::get('/kurikulum/data', [KurikulumController::class, 'data'])->name('kurikulum.data');
+        Route::resource('/kurikulum', KurikulumController::class)->except('create', 'edit');
     });
 });
