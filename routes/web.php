@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\{
     DashboardController,
+    GuruController,
     KurikulumController,
     MataPelajaranController,
     TahunPelajaranController,
@@ -34,5 +35,9 @@ Route::group(['middleware' => 'auth'], function () {
         // Route Mata Pelajaran
         Route::get('/matapelajaran/data', [MataPelajaranController::class, 'data'])->name('matapelajaran.data');
         Route::resource('/matapelajaran', MataPelajaranController::class)->except('create', 'edit');
+
+        // Route Guru
+        Route::get('/guru/data', [GuruController::class, 'data'])->name('guru.data');
+        Route::resource('/guru', GuruController::class)->except('create', 'edit');
     });
 });

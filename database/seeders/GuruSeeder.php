@@ -20,6 +20,7 @@ class GuruSeeder extends Seeder
                 'tgl_lahir' => '1985-07-15',
                 'tmt_guru' => '2010-08-01',
                 'tmt_pegawai' => '2011-01-10',
+                'jenis_kelamin_id' => 1,
             ],
         ];
 
