@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class TahunPelajaran extends Model
 {
+    protected $guarded = ['id'];
+
     public function scopeAktif(Builder $query)
     {
         $query->where('status', 1);

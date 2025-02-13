@@ -1,6 +1,9 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\{
+    DashboardController,
+    TahunPelajaranController,
+};
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -14,6 +17,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/', function () {
             return redirect()->route('dashboard');
         });
+
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        //Route Tahun Pelajaran
+        Route::get('/tahunpelajaran/data', [TahunPelajaranController::class, 'data'])->name('tahunpelajaran.data');
+        Route::resource('/tahunpelajaran', TahunPelajaranController::class);
+        Route::put('/tahunpelajaran/update-status/{id}', [TahunPelajaranController::class, 'updateStatus'])->name('tahunpelajaran.update_status');
     });
 });

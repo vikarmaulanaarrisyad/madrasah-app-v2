@@ -49,7 +49,7 @@
                 @if (Auth::user()->hasRole('admin'))
                     <li class="nav-header">MASTER DATA</li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('tahunpelajaran.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-calendar-alt"></i>
                             <p>
                                 Tahun Pelajaran

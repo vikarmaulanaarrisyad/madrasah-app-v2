@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="{{ asset('/AdminLTE/plugins/overlayScrollbars/css/OverlayScrollbars.min.css') }}">
     <!-- SweetAler2 -->
     <link rel="stylesheet" href="{{ asset('/AdminLTE/plugins/sweetalert2/sweetalert2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('AdminLTE/plugins/toastr/toastr.min.css') }}">
     @stack('css_vendor')
 
     <!-- Theme style -->
@@ -135,6 +136,8 @@
     <script src="{{ asset('/AdminLTE/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
     <!-- sweetalert2 -->
     <script src="{{ asset('/AdminLTE/plugins/sweetalert2/sweetalert2.all.min.js') }}"></script>
+
+    <script src="{{ asset('AdminLTE/plugins/toastr/toastr.min.js') }}"></script>
 
     @stack('scripts_vendor')
 
