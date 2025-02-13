@@ -3,6 +3,7 @@
 use App\Http\Controllers\{
     DashboardController,
     KurikulumController,
+    MataPelajaranController,
     TahunPelajaranController,
 };
 use Illuminate\Support\Facades\Route;
@@ -29,5 +30,9 @@ Route::group(['middleware' => 'auth'], function () {
         // Route Kurikulum
         Route::get('/kurikulum/data', [KurikulumController::class, 'data'])->name('kurikulum.data');
         Route::resource('/kurikulum', KurikulumController::class)->except('create', 'edit');
+
+        // Route Mata Pelajaran
+        Route::get('/matapelajaran/data', [MataPelajaranController::class, 'data'])->name('matapelajaran.data');
+        Route::resource('/matapelajaran', MataPelajaranController::class)->except('create', 'edit');
     });
 });
