@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('kurikulums', function (Blueprint $table) {
             $table->id();
             $table->string('nama');
-            $table->unsignedInteger('kurikulum_id');
+            $table->unsignedInteger('tahun_pelajaran_id');
             $table->timestamps();
         });
     }
