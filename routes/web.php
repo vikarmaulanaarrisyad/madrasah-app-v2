@@ -3,6 +3,7 @@
 use App\Http\Controllers\{
     DashboardController,
     GuruController,
+    JurnalGuruController,
     KelasController,
     KurikulumController,
     MataPelajaranController,
@@ -58,5 +59,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/rombel/{rombel_id}/siswa/data', [RombelController::class, 'getSiswaRombel'])->name('rombel.getSiswaRombel');
         Route::post('/rombel/add-siswa', [RombelController::class, 'addSiswa'])->name('rombel.addSiswa');
         Route::delete('/siswa/rombel/delete', [RombelController::class, 'removeSiswa'])->name('siswa.rombel.delete');
+
+        // Route Jurnal Guru
+        Route::get('/jurnal/data', [JurnalGuruController::class, 'data'])->name('jurnal.data');
+        Route::resource('/jurnal', JurnalGuruController::class);
     });
 });

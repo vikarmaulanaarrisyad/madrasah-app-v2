@@ -102,7 +102,7 @@
                     </li>
                     <li class="nav-header">JURNAL MENGAJAR</li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('jurnal.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-book-reader"></i>
                             <p>
                                 Jurnal Guru
