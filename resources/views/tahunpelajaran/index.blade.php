@@ -10,6 +10,30 @@
 @endsection
 
 @section('content')
+    <div class="row mt-3">
+        <div class="col-lg-12">
+            <div class="card shadow-sm border-left-success">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-3">
+                            <i class="fas fa-calendar-alt fa-3x text-success"></i>
+                        </div>
+                        <div>
+                            <h5 class="font-weight-bold text-success">📅 Tahun Pelajaran</h5>
+                            <p class="mb-2 text-dark">
+                                Pastikan tahun pelajaran yang digunakan sudah sesuai dengan kalender akademik terbaru.
+                            </p>
+                            <p class="mb-0">
+                                Atur tahun pelajaran dengan benar
+
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-lg-12">
             <x-card>

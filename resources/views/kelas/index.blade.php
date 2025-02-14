@@ -12,6 +12,32 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
+            <div class="card shadow-sm border-left-primary">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-3">
+                            <i class="fas fa-chalkboard fa-3x text-primary"></i>
+                        </div>
+                        <div>
+                            <h5 class="font-weight-bold text-primary">🏫 Data Kelas</h5>
+                            <p class="mb-2 text-dark">
+                                Pastikan semua kelas telah diperbarui sesuai dengan tahun ajaran yang berjalan. Setiap kelas
+                                harus memiliki wali kelas yang sesuai.
+                            </p>
+                            <p class="mb-0">
+                                Kelola data kelas dengan lebih mudah
+                                {{--  <a href="{{ route('kelas.index') }}"
+                                    class="btn btn-primary btn-sm font-weight-bold shadow">Kelola Kelas</a>  --}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
             <x-card>
                 <x-slot name="header">
                     <h3 class="card-title">

@@ -12,6 +12,34 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
+            <div class="card shadow-sm border-left-danger">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-3">
+                            <i class="fas fa-exclamation-triangle fa-3x text-danger"></i>
+                        </div>
+                        <div>
+                            <h5 class="font-weight-bold text-danger">🚨 Perhatian! Siswa Belum Masuk Rombel</h5>
+                            <p class="mb-2 text-dark">
+                                Ada siswa yang belum dimasukkan ke dalam **rombongan belajar**. Pastikan semua siswa sudah
+                                memiliki rombel untuk menghindari kesalahan dalam administrasi akademik.
+                            </p>
+                            <p class="mb-0">
+                                Silakan lakukan pembaruan melalui menu berikut:
+                                <a href="{{ route('rombel.index') }}"
+                                    class="btn btn-danger btn-sm font-weight-bold shadow">Kelola Rombel</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-lg-12">
             <x-card>
                 <x-slot name="header">
                     <h3 class="card-title">
@@ -41,6 +69,7 @@
                         <th>Tempat Lahir</th>
                         <th>Tanggal Lahir</th>
                         <th>Jenis Kelamin</th>
+                        <th>Rombel</th>
                         <th>Aksi</th>
                     </x-slot>
                 </x-table>
@@ -87,6 +116,9 @@
                 },
                 {
                     data: 'jenis_kelamin.nama'
+                },
+                {
+                    data: 'rombel'
                 },
                 {
                     data: 'aksi',

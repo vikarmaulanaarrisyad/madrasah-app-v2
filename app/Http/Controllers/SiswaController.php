@@ -38,6 +38,10 @@ class SiswaController extends Controller
                 </a>
             ';
             })
+            ->addColumn('rombel', function ($q) {
+                $rombel = optional($q->siswa_rombel->first());
+                return ($rombel->kelas ? $rombel->kelas->nama . ' ' . $rombel->nama : '<span class="badge badge-info">Aktif tanpa rombel</span>');
+            })
             ->addColumn('aksi', function ($q) {
                 return '
                 <button onclick="editForm(`' . route('siswa.show', $q->id) . '`)" class="btn btn-sm btn-primary" title="Edit"><i class="fas fa-pencil-alt"></i></button>

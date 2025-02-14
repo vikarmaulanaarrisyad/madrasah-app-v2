@@ -10,6 +10,30 @@
 @endsection
 
 @section('content')
+    <div class="row mt-3">
+        <div class="col-lg-12">
+            <div class="card shadow-sm border-left-info">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-3">
+                            <i class="fas fa-graduation-cap fa-3x text-info"></i>
+                        </div>
+                        <div>
+                            <h5 class="font-weight-bold text-info">📚 Kurikulum</h5>
+                            <p class="mb-2 text-dark">
+                                Pastikan kurikulum yang digunakan sudah diperbarui dan sesuai dengan kebijakan terbaru dari
+                                pemerintah atau sekolah.
+                            </p>
+                            <p class="mb-0">
+                                Kelola kurikulum dengan mudah
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-lg-12">
             <x-card>

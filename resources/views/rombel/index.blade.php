@@ -10,6 +10,30 @@
 @endsection
 
 @section('content')
+    <div class="row mt-3">
+        <div class="col-lg-12">
+            <div class="card shadow-sm border-left-info">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-3">
+                            <i class="fas fa-users fa-3x text-info"></i>
+                        </div>
+                        <div>
+                            <h5 class="font-weight-bold text-info">📘 Menu Rombongan Belajar</h5>
+                            <p class="mb-2 text-dark">
+                                Menu **Rombongan Belajar (Rombel)** digunakan untuk mengelola kelompok siswa berdasarkan
+                                kelas dan tahun ajaran. Pastikan setiap siswa dimasukkan ke dalam rombel yang sesuai.
+                            </p>
+                            <p class="mb-0">
+                                Akses menu ini untuk menambah atau memperbarui rombel siswa
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-lg-12">
             <x-card>

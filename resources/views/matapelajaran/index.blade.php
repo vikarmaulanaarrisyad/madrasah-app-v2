@@ -10,6 +10,27 @@
 @endsection
 
 @section('content')
+    <div class="row mt-3">
+        <div class="col-lg-12">
+            <div class="card shadow-sm border-left-danger">
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-3">
+                            <i class="fas fa-book-open fa-3x text-danger"></i>
+                        </div>
+                        <div>
+                            <h5 class="font-weight-bold text-danger">📖 Mata Pelajaran</h5>
+                            <p class="mb-2 text-dark">
+                                Pastikan daftar mata pelajaran sesuai dengan kurikulum yang berlaku. Cek dan atur mata
+                                pelajaran
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-lg-12">
             <x-card>
