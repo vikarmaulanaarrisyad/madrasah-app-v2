@@ -18,4 +18,11 @@ class Siswa extends Model
     {
         $query->where('status', 'Aktif');
     }
+
+    public function siswa_rombel()
+    {
+        return $this->belongsToMany(Rombel::class, 'siswa_rombel', 'siswa_id', 'rombel_id')
+            ->withPivot('tahun_pelajaran_id')
+            ->withTimestamps();
+    }
 }

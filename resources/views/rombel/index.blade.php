@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Data Siswa')
+@section('title', 'Data Rombongan Belajar')
 
-@section('subtitle', 'Data Siswa')
+@section('subtitle', 'Data Rombongan Belajar')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-    <li class="breadcrumb-item active">Data Siswa</li>
+    <li class="breadcrumb-item active">Data Rombongan Belajar</li>
 @endsection
 
 @section('content')
@@ -21,11 +21,7 @@
                     <div class="card-tools">
                         <div class="d-flex align-items-center">
                             <div>
-                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                    data-target="#importModal"><i class="fas fa-download"></i> Import
-                                    Mapel</button>
-
-                                <button onclick="addForm(`{{ route('siswa.store') }}`)" class="btn btn-sm btn-primary">
+                                <button onclick="createForm(`{{ route('rombel.create') }}`)" class="btn btn-sm btn-primary">
                                     <i class="fas fa-plus-circle"></i> Tambah Data
                                 </button>
                             </div>
@@ -36,22 +32,22 @@
                 <x-table>
                     <x-slot name="thead">
                         <th>No</th>
-                        <th>NISN</th>
-                        <th>Nama Lengkap</th>
-                        <th>Tempat Lahir</th>
-                        <th>Tanggal Lahir</th>
-                        <th>Jenis Kelamin</th>
+                        <th>Nama Rombel</th>
+                        <th>Tingkat</th>
+                        <th>Wali Kelas</th>
+                        <th>Nama Ruangan</th>
+                        <th>Kurikulum</th>
+                        <th>Jumlah Siswa</th>
                         <th>Aksi</th>
                     </x-slot>
                 </x-table>
             </x-card>
         </div>
     </div>
-    @include('siswa.form')
+    @include('rombel.form')
 @endsection
 
 @include('includes.datatables')
-@include('includes.datepicker')
 
 @push('scripts')
     <script>
@@ -65,7 +61,7 @@
             autoWidth: false,
             responsive: true,
             ajax: {
-                url: '{{ route('siswa.data') }}',
+                url: '{{ route('rombel.data') }}',
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -74,19 +70,22 @@
                     searchable: false
                 },
                 {
-                    data: 'nisn'
+                    data: 'nama'
                 },
                 {
-                    data: 'nama_lengkap'
+                    data: 'tingkat'
                 },
                 {
-                    data: 'tempat_lahir'
+                    data: 'walikelas'
                 },
                 {
-                    data: 'tgl_lahir'
+                    data: 'kelas'
                 },
                 {
-                    data: 'jenis_kelamin.nama'
+                    data: 'kurikulum'
+                },
+                {
+                    data: 'jumlahsiswa'
                 },
                 {
                     data: 'aksi',
@@ -97,7 +96,11 @@
             ]
         })
 
-        function addForm(url, title = 'Form Siswa') {
+        function createForm(url) {
+            window.location.href = url;
+        }
+
+        function addForm(url, title = 'Form Data Rombel') {
             $(modal).modal('show');
             $(`${modal} .modal-title`).text(title);
             $(`${modal} form`).attr('action', url);
@@ -106,7 +109,7 @@
             resetForm(`${modal} form`);
         }
 
-        function editForm(url, title = 'Form Siswa') {
+        function editForm(url, title = 'Form Data Rombel') {
             Swal.fire({
                 title: "Memuat...",
                 text: "Mohon tunggu sebentar...",
@@ -127,13 +130,6 @@
 
                     resetForm(`${modal} form`);
                     loopForm(response.data);
-
-                    // Setel gambar preview jika ada foto
-                    if (response.data.foto) {
-                        $('#foto_preview').attr('src', response.data.foto).show();
-                    } else {
-                        $('#foto_preview').hide(); // Sembunyikan jika tidak ada foto
-                    }
                 })
                 .fail(errors => {
                     Swal.close(); // Tutup loading jika terjadi error

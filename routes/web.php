@@ -6,6 +6,7 @@ use App\Http\Controllers\{
     KelasController,
     KurikulumController,
     MataPelajaranController,
+    RombelController,
     SiswaController,
     TahunPelajaranController,
 };
@@ -49,5 +50,13 @@ Route::group(['middleware' => 'auth'], function () {
         // Route Siswa
         Route::get('/siswa/data', [SiswaController::class, 'data'])->name('siswa.data');
         Route::resource('/siswa', SiswaController::class)->except('edit', 'create');
+
+        // Route Rombel
+        Route::get('/rombel/data', [RombelController::class, 'data'])->name('rombel.data');
+        Route::resource('/rombel', RombelController::class);
+        Route::get('/rombel/{rombel_id}/siswa', [RombelController::class, 'getDataSiswa'])->name('rombel.getDataSiswa');
+        Route::get('/rombel/{rombel_id}/siswa/data', [RombelController::class, 'getSiswaRombel'])->name('rombel.getSiswaRombel');
+        Route::post('/rombel/add-siswa', [RombelController::class, 'addSiswa'])->name('rombel.addSiswa');
+        Route::delete('/siswa/rombel/delete', [RombelController::class, 'removeSiswa'])->name('siswa.rombel.delete');
     });
 });

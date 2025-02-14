@@ -28,6 +28,7 @@ return new class extends Migration
             $table->integer('anakke')->default(0);
             $table->text('alamat')->nullable();
             $table->string('foto')->nullable();
+            $table->integer('level')->default(1);
             $table->enum('status', ['Aktif', 'Lulus', 'Pindah'])->default('Aktif');
             $table->timestamps();
         });
