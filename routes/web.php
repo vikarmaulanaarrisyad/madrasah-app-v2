@@ -6,6 +6,7 @@ use App\Http\Controllers\{
     KelasController,
     KurikulumController,
     MataPelajaranController,
+    SiswaController,
     TahunPelajaranController,
 };
 use Illuminate\Support\Facades\Route;
@@ -43,6 +44,10 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Route Kelas
         Route::get('/kelas/data', [KelasController::class, 'data'])->name('kelas.data');
-        Route::resource('/kelas', KelasController::class);
+        Route::resource('/kelas', KelasController::class)->except('edit', 'create');
+
+        // Route Siswa
+        Route::get('/siswa/data', [SiswaController::class, 'data'])->name('siswa.data');
+        Route::resource('/siswa', SiswaController::class)->except('edit', 'create');
     });
 });
