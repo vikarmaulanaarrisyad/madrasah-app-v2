@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\GuruExport;
 use App\Models\Guru;
 use App\Models\JenisKelamin;
 use App\Models\User;
@@ -9,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class GuruController extends Controller
 {
@@ -279,12 +281,17 @@ class GuruController extends Controller
         }
     }
 
-
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
         //
+    }
+
+    public function exportEXCEL()
+    {
+        $fileName = 'guru_' . now()->format('Ymdhis') . '.xlsx';
+        return Excel::download(new GuruExport, $fileName);
     }
 }

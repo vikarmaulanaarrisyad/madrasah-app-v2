@@ -21,9 +21,14 @@
                     <div class="card-tools">
                         <div class="d-flex align-items-center">
                             <div>
-                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                    data-target="#importModal"><i class="fas fa-download"></i> Import
-                                    Mapel</button>
+                                <button onclick="confirmExport()" type="button" class="btn btn-danger btn-sm"><i
+                                        class="fas fa-download"></i>
+                                    Export Data
+                                </button>
+
+                                <button type="button" class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i>
+                                    Download Excel
+                                </button>
 
                                 <button onclick="addForm(`{{ route('guru.store') }}`)" class="btn btn-sm btn-primary">
                                     <i class="fas fa-plus-circle"></i> Tambah Data
@@ -208,6 +213,53 @@
                     }
                 }
             });
+        }
+
+        function confirmExport() {
+            Swal.fire({
+                title: 'Konfirmasi',
+                html: `
+                <p>Apakah Anda yakin ingin mengunduh file? Pastikan Anda telah memahami risiko yang ada.</p>
+                <label>
+                    <input type="checkbox" id="agreeCheckbox" onchange="toggleDownload()"> Saya setuju dengan risiko yang ada
+                </label>
+            `,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Download',
+                cancelButtonText: 'Batal',
+                didOpen: () => {
+                    const confirmButton = Swal.getConfirmButton();
+                    confirmButton.disabled = true; // Disable tombol saat pertama kali muncul
+
+                    document.getElementById('agreeCheckbox').addEventListener('change', function() {
+                        confirmButton.disabled = !this
+                            .checked; // Aktifkan tombol jika checkbox dicentang
+                    });
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    exportEXCEL();
+                }
+            });
+        }
+
+        function exportEXCEL() {
+            Swal.fire({
+                title: 'Sedang Memproses...',
+                text: 'Mohon tunggu sementara file sedang diproses.',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            window.location.href = '{{ route('guru.exportEXCEL') }}';
+
+            // Tutup loading setelah beberapa detik (opsional)
+            setTimeout(() => {
+                Swal.close();
+            }, 3000);
         }
     </script>
 @endpush
