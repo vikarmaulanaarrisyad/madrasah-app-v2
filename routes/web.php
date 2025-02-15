@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Route Guru
         Route::get('/guru/data', [GuruController::class, 'data'])->name('guru.data');
         Route::get('/guru/export-excel', [GuruController::class, 'exportEXCEL'])->name('guru.exportEXCEL');
+        Route::post('/guru/import-excel', [GuruController::class, 'importEXCEL'])->name('guru.importEXCEL');
         Route::resource('/guru', GuruController::class)->except('create', 'edit');
 
         // Route Kelas

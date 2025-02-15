@@ -49,7 +49,7 @@
                             <select name="rombel" id="filterRombel" class="form-control">
                                 <option value="">Semua Kelas</option>
                                 @foreach ($rombel as $item)
-                                    <option value="{{ $item->id }}">{{ $item->kelas->nama }} {{ $item->nama }}
+                                    <option value="{{ $item->id }}">{{ $item->kelas->nama ?? '' }} {{ $item->nama }}
                                     </option>
                                 @endforeach
                             </select>

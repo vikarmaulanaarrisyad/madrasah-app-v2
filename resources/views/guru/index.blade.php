@@ -26,8 +26,9 @@
                                     Export Data
                                 </button>
 
-                                <button type="button" class="btn btn-success btn-sm"><i class="fas fa-file-excel"></i>
-                                    Download Excel
+                                <button onclick="confirmImport()" type="button" class="btn btn-success btn-sm"><i
+                                        class="fas fa-file-excel"></i>
+                                    Import Excel
                                 </button>
 
                                 <button onclick="addForm(`{{ route('guru.store') }}`)" class="btn btn-sm btn-primary">
@@ -53,6 +54,7 @@
         </div>
     </div>
     @include('guru.form')
+    @include('guru.import-excel')
 @endsection
 
 @include('includes.datatables')
@@ -62,6 +64,7 @@
     <script>
         let table;
         let modal = '#modal-form';
+        let importExcel = '#importExcelModal';
         let button = '#submitBtn';
 
         table = $('.table').DataTable({
@@ -260,6 +263,10 @@
             setTimeout(() => {
                 Swal.close();
             }, 3000);
+        }
+
+        function confirmImport() {
+            $(importExcel).modal('show');
         }
     </script>
 @endpush

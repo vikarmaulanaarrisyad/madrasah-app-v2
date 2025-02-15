@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Guru;
 use App\Models\JurnalGuru;
-use App\Models\Kelas;
 use App\Models\Rombel;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -16,7 +15,7 @@ class JurnalGuruController extends Controller
      */
     public function index()
     {
-        $rombel = Rombel::with('kelas')->get();
+        $rombel = Rombel::all();
         $guru = Guru::all();
         return view('jurnal.index', compact('rombel', 'guru'));
     }
@@ -50,7 +49,7 @@ class JurnalGuruController extends Controller
         return datatables()->eloquent($query)
             ->addIndexColumn()
             ->editColumn('rombel', function ($q) {
-                return $q->rombel->kelas ? $q->rombel->kelas->nama . ' ' . $q->rombel->nama :  '';
+                return $q->rombel && $q->rombel->kelas ? ($q->rombel->kelas->nama ?? '') . ' ' . ($q->rombel->nama ?? '') : '';
             })
             ->editColumn('mapel', function ($q) {
                 return $q->mata_pelajaran ? $q->mata_pelajaran->nama :  '';

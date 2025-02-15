@@ -13,12 +13,12 @@ return new class extends Migration
     {
         Schema::create('gurus', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('nama_lengkap');
             $table->string('gelar_depan')->nullable();
             $table->string('gelar_belakang')->nullable();
             $table->bigInteger('nik')->default(0);
-            $table->unsignedInteger('jenis_kelamin_id');
+            $table->unsignedBigInteger('jenis_kelamin_id');
             $table->string('tempat_lahir');
             $table->date('tgl_lahir');
             $table->date('tmt_guru');

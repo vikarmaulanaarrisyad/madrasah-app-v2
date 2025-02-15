@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\GuruExport;
+use App\Imports\GuruImport;
 use App\Models\Guru;
 use App\Models\JenisKelamin;
 use App\Models\User;
@@ -293,5 +294,35 @@ class GuruController extends Controller
     {
         $fileName = 'guru_' . now()->format('Ymdhis') . '.xlsx';
         return Excel::download(new GuruExport, $fileName);
+    }
+
+    public function importEXCEL(Request $request)
+    {
+        // Validasi file
+        $validator = Validator::make($request->all(), [
+            'excelFile' => 'required|file|mimes:xlsx,xls|max:2048', // Maks 2MB
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
+        try {
+            // Proses import menggunakan Laravel Excel
+            Excel::import(new GuruImport, $request->file('excelFile'), null, \Maatwebsite\Excel\Excel::XLSX);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'File berhasil diupload dan diproses!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }
