@@ -13,14 +13,20 @@ return new class extends Migration
     {
         Schema::create('jurnal_gurus', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('tahun_pelajaran_id');
+            $table->unsignedInteger('rombel_id');
             $table->unsignedInteger('guru_id');
             $table->unsignedInteger('mata_pelajaran_id');
-            $table->unsignedInteger('kelas_id');
             $table->date('tanggal');
+            $table->integer('pembelajaran_ke')->nullable();
+            $table->text('tema')->nullable()->default('-');
+            $table->text('tujuan_pembelajaran')->nullable()->default('-');
             $table->text('materi');
-            $table->text('cp')->nullable()->default('-');
+            $table->text('penilaian')->nullable()->default('-');
+            $table->text('metode_pembelajaran')->nullable()->default('-');
+            $table->text('evaluasi')->nullable()->default('-');
+            $table->text('refleksi')->nullable()->default('-');
             $table->text('tugas')->nullable()->default('-');
-
             $table->timestamps();
         });
     }

@@ -19,6 +19,11 @@ class Rombel extends Model
         return $this->belongsTo(Kelas::class);
     }
 
+    public function kurikulum()
+    {
+        return $this->belongsTo(Kurikulum::class);
+    }
+
     public function walikelas()
     {
         return $this->hasOne(Guru::class, 'id', 'wali_kelas_id');

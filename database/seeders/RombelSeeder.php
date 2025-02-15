@@ -16,19 +16,22 @@ class RombelSeeder extends Seeder
             [
                 'kelas_id' => 1,
                 'nama' => 'A',
-                'tahun_pelajaran_id' => 1,
+                'kurikulum_id' => 1,
+                'tahun_pelajaran_id' => 4,
                 'wali_kelas_id' => null,
             ],
             [
                 'kelas_id' => 2,
                 'nama' => 'B',
-                'tahun_pelajaran_id' => 1,
+                'kurikulum_id' => 1,
+                'tahun_pelajaran_id' => 4,
                 'wali_kelas_id' => 1,
             ],
             [
                 'kelas_id' => 3,
                 'nama' => 'C',
-                'tahun_pelajaran_id' => 2,
+                'kurikulum_id' => 1,
+                'tahun_pelajaran_id' => 4,
                 'wali_kelas_id' => null,
             ],
         ];
@@ -37,6 +40,7 @@ class RombelSeeder extends Seeder
             Rombel::firstOrCreate([
                 'kelas_id' => $data['kelas_id'],
                 'nama' => $data['nama'],
+                'kurikulum_id' => $data['kurikulum_id'],
                 'tahun_pelajaran_id' => $data['tahun_pelajaran_id'],
                 'wali_kelas_id' => $data['wali_kelas_id'],
             ]);

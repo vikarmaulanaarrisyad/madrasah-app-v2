@@ -62,6 +62,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Route Jurnal Guru
         Route::get('/jurnal/data', [JurnalGuruController::class, 'data'])->name('jurnal.data');
-        Route::resource('/jurnal', JurnalGuruController::class);
+        Route::resource('/jurnal', JurnalGuruController::class)->only('index');
+        Route::get('/jurnal/export-pdf', [JurnalGuruController::class, 'exportPDF'])->name('jurnal.exportPDF');
     });
 });

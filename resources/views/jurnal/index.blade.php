@@ -20,18 +20,63 @@
                             <i class="fas fa-book fa-3x text-purple"></i>
                         </div>
                         <div>
-                            <h5 class="font-weight-bold text-purple">📓 Jurnal Guru</h5>
+                            <h5 class="font-weight-bold text-purple">Pengumuman</h5>
                             <p class="mb-2 text-dark">
                                 Setiap guru wajib mengisi jurnal harian untuk mencatat aktivitas pembelajaran yang telah
                                 dilakukan. Pastikan jurnal diisi dengan lengkap, termasuk materi yang diajarkan, metode
-                                pembelajaran, dan evaluasi singkat.
-                            </p>
-                            <p class="mb-0">
-                                Gunakan <strong>filter kelas, guru dan tanggal</strong> di bawah ini untuk mencari jurnal
+                                pembelajaran, dan evaluasi singkat. Gunakan <strong>filter kelas, guru dan tanggal</strong>
+                                di bawah ini untuk mencari jurnal
                                 lebih cepat
-                                🔍.
                             </p>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow-sm mb-3">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Filter Data</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-2">
+                        <!-- Dropdown Filter Kelas -->
+                        <div class="col-md-3">
+                            <label class="form-label">Filter Rombel</label>
+                            <select name="rombel" id="filterRombel" class="form-control">
+                                <option value="">Semua Kelas</option>
+                                @foreach ($rombel as $item)
+                                    <option value="{{ $item->id }}">{{ $item->kelas->nama }} {{ $item->nama }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Dropdown Filter Guru -->
+                        <div class="col-md-3">
+                            <label class="form-label">Filter Guru</label>
+                            <select name="guru" id="filterGuru" class="form-control">
+                                <option value="">Semua Guru</option>
+                                @foreach ($guru as $g)
+                                    <option value="{{ $g->id }}">{{ $g->nama_lengkap }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        {{--  <div class="col-md-3">
+                            <label class="form-label">Filter Mata Pelajaran</label>
+                            <select name="kelas" id="filterRombel" class="form-control">
+                                <option value="">Semua Kelas</option>
+                                @foreach ($kelas as $k)
+                                    @foreach ($k->rombel as $item)
+                                        <option value="{{ $item->id }}">{{ $k->nama }} {{ $item->nama }}</option>
+                                    @endforeach
+                                @endforeach
+                            </select>
+                        </div>  --}}
                     </div>
                 </div>
             </div>
@@ -47,74 +92,22 @@
                         @yield('subtitle')
                     </h3>
                     <div class="card-tools">
-                        <div class="d-flex align-items-center">
-                            <div class="row g-2 align-items-center">
-                                <!-- Dropdown Filter Kelas -->
-                                <div class="col-auto">
-                                    <select name="kelas" id="filterKelas" class="form-control">
-                                        <option value="">Semua Kelas</option>
-                                        @foreach ($kelas as $k)
-                                            @foreach ($k->rombel as $item)
-                                                <option value="{{ $item->id }}">{{ $k->nama }} {{ $item->nama }}
-                                                </option>
-                                            @endforeach
-                                        @endforeach
-
-                                    </select>
-                                </div>
-
-                                <!-- Dropdown Filter Guru -->
-                                <div class="col-3">
-                                    <select name="guru" id="filterGuru" class="form-control">
-                                        <option value="">Semua Guru</option>
-                                        @foreach ($guru as $g)
-                                            <option value="{{ $g->id }}">{{ $g->nama_lengkap }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <!-- Input Tanggal Mulai -->
-                                <div class="col-3">
-                                    <div class="input-group date" id="tglMulai" data-target-input="nearest">
-                                        <input type="text" name="tglMulai" id="inputTglMulai"
-                                            class="form-control datetimepicker-input" data-toggle="datetimepicker"
-                                            data-target="#tglMulai" autocomplete="off" />
-                                        <div class="input-group-append" data-target="#tglMulai"
-                                            data-toggle="datetimepicker">
-                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- Label "s/d" -->
-                                <div class="col-auto">
-                                    <label class="form-label mb-0">s/d</label>
-                                </div>
-
-                                <!-- Input Tanggal Selesai -->
-                                <div class="col-3">
-                                    <div class="input-group date" id="tglSelesai" data-target-input="nearest">
-                                        <input type="text" name="tglSelesai" data-toggle="datetimepicker"
-                                            id="inputTglSelesai" class="form-control datetimepicker-input"
-                                            data-target="#tglSelesai" autocomplete="off" disabled />
-                                        <div class="input-group-append" data-target="#tglSelesai"
-                                            data-toggle="datetimepicker">
-                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <button onclick="exportPDF()" id="downloadPdf" class="btn btn-danger btn-sm">
+                            <i class="fas fa-file-pdf"></i> Download PDF
+                        </button>
                     </div>
+
                 </x-slot>
 
                 <x-table>
                     <x-slot name="thead">
                         <th>No</th>
-                        <th>Tanggal</th>
-                        <th>Kelas</th>
+                        <th style="width: 10%;">Tanggal</th>
+                        <th>Rombel</th>
                         <th>Guru</th>
+                        <th>Mapel</th>
                         <th>Materi</th>
+                        <th>Penilaian</th>
                     </x-slot>
                 </x-table>
             </x-card>
@@ -152,7 +145,7 @@
                 data: function(d) {
                     d.startDate = $('[name=tglMulai]').val();
                     d.endDate = $('[name=tglSelesai]').val();
-                    d.kelas = $('[name=kelas]').val();
+                    d.rombel = $('[name=rombel]').val();
                     d.guru = $('[name=guru]').val();
                 }
             },
@@ -166,18 +159,24 @@
                     data: 'tanggal'
                 },
                 {
-                    data: 'kelas.nama'
+                    data: 'rombel'
                 },
                 {
                     data: 'guru'
                 },
                 {
+                    data: 'mapel'
+                },
+                {
                     data: 'materi'
+                },
+                {
+                    data: 'penilaian'
                 },
             ]
         })
 
-        $('#filterKelas').on('change', function() {
+        $('#filterRombel').on('change', function() {
             if ($(this).val() !== '') {
                 $('#filterGuru').val('');
                 $('#inputTglMulai').val('');
@@ -188,57 +187,11 @@
 
         $('#filterGuru').on('change', function() {
             if ($(this).val() !== '') {
-                $('#filterKelas').val('');
+                $('#filterRombel').val('');
                 $('#inputTglMulai').val('');
                 $('#inputTglSelesai').val('').prop('disabled', true);
             }
             table.ajax.reload();
-        });
-
-        // Inisialisasi DateTimePicker
-        $('#tglMulai').datetimepicker({
-            format: 'YYYY-MM-DD',
-            useCurrent: false,
-        });
-
-        $('#tglSelesai').datetimepicker({
-            format: 'YYYY-MM-DD',
-            useCurrent: false,
-        });
-
-        // Event ketika tanggal mulai dipilih
-        $("#tglMulai").on("change.datetimepicker", function(e) {
-            let tglMulai = e.date ? e.date.format('YYYY-MM-DD') : '';
-
-            if (tglMulai) {
-                // Enable input tglSelesai dan set batas minimal
-                $("#inputTglSelesai").prop("disabled", false).val("");
-                $('#tglSelesai').datetimepicker('minDate', moment(tglMulai, 'YYYY-MM-DD'));
-                $('#filterKelas').val('');
-                $('#filterGuru').val('');
-            } else {
-                // Jika kosong, disable kembali tglSelesai
-                $("#inputTglSelesai").prop("disabled", true).val("");
-                $('#tglSelesai').datetimepicker('minDate', false);
-            }
-        });
-
-        // Event ketika tanggal selesai dipilih
-        $("#tglSelesai").on("change.datetimepicker", function(e) {
-            let tglMulai = $("#inputTglMulai").val();
-            let tglSelesai = e.date ? e.date.format('YYYY-MM-DD') : '';
-            $('#filterKelas').val('');
-            $('#filterGuru').val('');
-            table.ajax.reload();
-
-            if (tglMulai && tglSelesai && moment(tglSelesai).isBefore(moment(tglMulai))) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Tanggal Tidak Valid!',
-                    text: 'Tanggal Selesai tidak boleh sebelum Tanggal Mulai.',
-                });
-                $("#inputTglSelesai").val(""); // Reset input jika tidak valid
-            }
         });
 
         function addForm(url, title = 'Form Data Jurnal') {
@@ -346,6 +299,69 @@
                     if (xhr.status === 422) {
                         loopErrors(xhr.responseJSON.errors);
                     }
+                }
+            });
+        }
+
+        // fungsi mendownload pdf
+        function exportPDF() {
+            let filterRombel = $('#filterRombel').val(); // Ambil nilai filter kelas
+            let filterGuru = $('#filterGuru').val(); // Ambil nilai filter guru
+
+            // Cek apakah setidaknya ada satu filter yang dipilih
+            if (!filterRombel && !filterGuru) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Peringatan!',
+                    text: 'Silakan pilih filter kelas atau guru sebelum mendownload PDF.',
+                    confirmButtonColor: '#d33',
+                });
+                return; // Hentikan proses jika tidak ada filter yang dipilih
+            }
+
+            // Tampilkan SweetAlert Loading
+            Swal.fire({
+                title: 'Sedang memproses...',
+                text: 'Harap tunggu, sedang menyiapkan file PDF.',
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            // Buat URL dengan parameter yang tersedia (jika tidak ada, tidak ditambahkan ke URL)
+            let url = `{{ route('jurnal.exportPDF') }}?`;
+            if (filterRombel) url += `rombel=${filterRombel}&`;
+            if (filterGuru) url += `guru=${filterGuru}&`;
+
+            // Hapus karakter '&' terakhir jika ada
+            url = url.replace(/&$/, '');
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(response) {
+                    Swal.close(); // Tutup SweetAlert Loading
+
+                    if (response.status === 403) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops!',
+                            text: response.message,
+                        });
+                    } else {
+                        // Redirect ke link download PDF dengan filter yang dipilih
+                        window.location.href = url;
+                    }
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error!',
+                        text: 'Terjadi kesalahan, silakan coba lagi.',
+                    });
                 }
             });
         }
