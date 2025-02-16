@@ -36,8 +36,6 @@
         </div>
     </div>
 
-
-
     <div class="row">
         <div class="col-lg-12">
             <x-card>
@@ -49,8 +47,8 @@
                     <div class="card-tools">
                         <div class="d-flex align-items-center">
                             <div>
-                                <button type="button" class="btn btn-success btn-sm" data-toggle="modal"
-                                    data-target="#importModal"><i class="fas fa-download"></i> Import
+                                <button onclick="confirmImport()" type="button" class="btn btn-success btn-sm"><i
+                                        class="fas fa-download"></i> Import
                                     Mapel</button>
 
                                 <button onclick="addForm(`{{ route('siswa.store') }}`)" class="btn btn-sm btn-primary">
@@ -77,6 +75,7 @@
         </div>
     </div>
     @include('siswa.form')
+    @include('siswa.import-excel')
 @endsection
 
 @include('includes.datatables')
@@ -86,6 +85,7 @@
     <script>
         let table;
         let modal = '#modal-form';
+        let importExcel = '#importExcelModal';
         let button = '#submitBtn';
 
         table = $('.table').DataTable({
@@ -243,6 +243,10 @@
                     }
                 }
             });
+        }
+
+        function confirmImport() {
+            $(importExcel).modal('show');
         }
     </script>
 @endpush

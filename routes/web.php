@@ -52,6 +52,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Route Siswa
         Route::get('/siswa/data', [SiswaController::class, 'data'])->name('siswa.data');
+        Route::get('/siswa/export-excel', [SiswaController::class, 'exportEXCEL'])->name('siswa.exportEXCEL');
+        Route::post('/siswa/import-excel', [SiswaController::class, 'importEXCEL'])->name('siswa.importEXCEL');
         Route::resource('/siswa', SiswaController::class)->except('edit', 'create');
 
         // Route Rombel

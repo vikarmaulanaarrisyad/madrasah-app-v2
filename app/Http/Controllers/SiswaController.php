@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\SiswaImport;
 use App\Models\Agama;
 use App\Models\JenisKelamin;
 use App\Models\Kewarganegaraan;
@@ -9,6 +10,7 @@ use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class SiswaController extends Controller
 {
@@ -264,5 +266,35 @@ class SiswaController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function importEXCEL(Request $request)
+    {
+        // Validasi file
+        $validator = Validator::make($request->all(), [
+            'excelFile' => 'required|file|mimes:xlsx,xls|max:2048', // Maks 2MB
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $validator->errors()->first()
+            ], 422);
+        }
+
+        try {
+            // Proses import menggunakan Laravel Excel
+            Excel::import(new SiswaImport, $request->file('excelFile'), null, \Maatwebsite\Excel\Excel::XLSX);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'File berhasil diupload dan diproses!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $e->getMessage()
+            ], 500);
+        }
     }
 }
