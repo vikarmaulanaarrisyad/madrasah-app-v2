@@ -17,8 +17,8 @@
     <div class="sidebar">
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-                @if (!empty(auth()->user()->avatar) && Storage::disk('public')->exists(auth()->user()->avatar))
-                    <img src="{{ Storage::url(auth()->user()->avatar) }}" alt="logo" class="img-circle elevation-2"
+                @if (!empty(auth()->user()->foto) && Storage::disk('public')->exists(auth()->user()->foto))
+                    <img src="{{ Storage::url(auth()->user()->foto) }}" alt="logo" class="img-circle elevation-2"
                         style="width: 35px; height: 35px;">
                 @else
                     <img src="{{ asset('AdminLTE/dist/img/user1-128x128.jpg') }}" alt="logo"
@@ -132,21 +132,25 @@
 
                     <li class="nav-header">PENGATURAN</li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('sekolah.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-school"></i>
                             <p>Madrasah</p>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('aplikasi.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-sliders-h"></i>
                             <p>Aplikasi</p>
                         </a>
                     </li>
                     <li class="nav-item mb-5">
-                        <a href="#" class="nav-link">
+                        <a href="#" class="nav-link" onclick="document.querySelector('#form-logout').submit()">
                             <i class="nav-icon fas fa-sign-out-alt"></i>
                             <p>Keluar</p>
+
+                            <form action="{{ route('logout') }}" method="post" id="form-logout">
+                                @csrf
+                            </form>
                         </a>
                     </li>
                 @endif

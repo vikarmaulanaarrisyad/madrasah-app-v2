@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\{
+    AplikasiController,
     CetakAbsenGuruController,
     CetakAbsenSiswaController,
     DashboardController,
@@ -11,8 +12,10 @@ use App\Http\Controllers\{
     KurikulumController,
     MataPelajaranController,
     RombelController,
+    SekolahController,
     SiswaController,
     TahunPelajaranController,
+    UserProfileInformationController,
 };
 use Illuminate\Support\Facades\Route;
 
@@ -81,6 +84,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/presensi-guru', [CetakAbsenGuruController::class, 'index'])->name('presensi.guru.index');
         Route::get('/presensi-guru/filter', [CetakAbsenGuruController::class, 'filterPresensi'])->name('presensi.guru.filter');
         Route::get('/presensi-guru/download', [CetakAbsenGuruController::class, 'downloadPdf'])->name('presensi.guru.download');
+
+        // Route Sekolah
+        Route::get('/sekolah', [SekolahController::class, 'index'])->name('sekolah.index');
+        Route::put('/sekolah/{id}/update', [SekolahController::class, 'update'])->name('sekolah.update');
+        Route::get('/aplikasi', [AplikasiController::class, 'index'])->name('aplikasi.index');
+        Route::put('/aplikasi/{id}/update', [AplikasiController::class, 'update'])->name('aplikasi.update');
+        Route::get('/user/profile', [UserProfileInformationController::class, 'show'])
+            ->name('profile.show');
     });
 
     // Role Guru

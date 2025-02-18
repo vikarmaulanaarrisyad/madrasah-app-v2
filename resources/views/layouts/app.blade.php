@@ -8,7 +8,7 @@
 
     <title> {{ $aplikasi->singkatan }} - @yield('title')</title>
 
-    {{--  <link rel="icon" href="{{ Storage::url($setting->path_image ?? '') }}" type="image/*">  --}}
+    <link rel="icon" href="{{ Storage::url($sekolah->logo ?? '') }}" type="image/*">
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"

@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('website');
             $table->unsignedInteger('kepala_sekolah_id');
             $table->unsignedInteger('bendahara_id');
-            $table->string('logo')->nullable();
+            $table->string('logo')->default('default.jpg');
             $table->timestamps();
         });
     }
