@@ -17,4 +17,9 @@ class Guru extends Model
     {
         return $this->belongsTo(JenisKelamin::class);
     }
+
+    public function rombel()
+    {
+        return $this->belongsTo(Rombel::class);
+    }
 }

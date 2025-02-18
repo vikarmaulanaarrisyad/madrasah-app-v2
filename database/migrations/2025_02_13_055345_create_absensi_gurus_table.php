@@ -15,7 +15,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('guru_id');
             $table->date('tgl_presensi');
+            $table->time('waktu_masuk')->nullable(); // Waktu masuk
+            $table->time('waktu_keluar')->nullable(); // Waktu keluar
             $table->string('status');
+            $table->boolean('is_holiday')->default(false); // untuk hari libur
             $table->timestamps();
         });
     }

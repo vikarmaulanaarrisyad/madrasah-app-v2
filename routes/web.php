@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\{
+    CetakAbsenGuruController,
     CetakAbsenSiswaController,
     DashboardController,
     GuruController,
@@ -74,6 +75,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/presensi-siswa', [CetakAbsenSiswaController::class, 'index'])->name('presensi.siswa.index');
         Route::get('/presensi-siswa/filter', [CetakAbsenSiswaController::class, 'filterPresensi'])->name('presensi.siswa.filter');
         Route::get('/presensi-siswa/download', [CetakAbsenSiswaController::class, 'downloadPdf'])->name('presensi.siswa.download');
+
+        // Route Cetak Absen Guru
+        Route::get('/presensi-guru/data', [CetakAbsenGuruController::class, 'data'])->name('presensi.guru.data');
+        Route::get('/presensi-guru', [CetakAbsenGuruController::class, 'index'])->name('presensi.guru.index');
+        Route::get('/presensi-guru/filter', [CetakAbsenGuruController::class, 'filterPresensi'])->name('presensi.guru.filter');
+        Route::get('/presensi-guru/download', [CetakAbsenGuruController::class, 'downloadPdf'])->name('presensi.guru.download');
     });
 
     // Role Guru
