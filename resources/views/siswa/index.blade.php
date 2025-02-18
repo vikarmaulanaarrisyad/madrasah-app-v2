@@ -49,7 +49,7 @@
                             <div>
                                 <button onclick="confirmImport()" type="button" class="btn btn-success btn-sm"><i
                                         class="fas fa-download"></i> Import
-                                    Mapel</button>
+                                    Siswa</button>
 
                                 <button onclick="addForm(`{{ route('siswa.store') }}`)" class="btn btn-sm btn-primary">
                                     <i class="fas fa-plus-circle"></i> Tambah Data
