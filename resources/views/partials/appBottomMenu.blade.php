@@ -5,22 +5,21 @@
                <strong>Home</strong>
            </div>
        </a>
-       <a href="{{ route('attandace.student_index') }}"
-           class="item {{ request()->is('presensi/siswa') ? 'active' : '' }}">
+       <a href="" class="item {{ request()->is('presensi/siswa') ? 'active' : '' }}">
            <div class="col">
                <ion-icon name="finger-print-outline" role="img" class="md hydrated"
                    aria-label="finger-print outline"></ion-icon>
                <strong>Absen Siswa</strong>
            </div>
        </a>
-       <a href="{{ route('attendace.teacher_create') }}" class="item">
+       <a href="" class="item">
            <div class="col">
                <div class="action-button large">
                    <ion-icon name="camera" role="img" class="md hydrated" aria-label="add outline"></ion-icon>
                </div>
            </div>
        </a>
-       <a href="{{ route('teacher.journal_index') }}" class="item {{ request()->is('jurnal') ? 'active' : '' }}">
+       <a href="" class="item {{ request()->is('jurnal') ? 'active' : '' }}">
            <div class="col">
                <ion-icon name="document-text-outline" role="img" class="md hydrated"
                    aria-label="document text outline"></ion-icon>

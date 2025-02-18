@@ -109,36 +109,17 @@
                             </p>
                         </a>
                     </li>
-                    <li class="nav-header">KEHADIRAN</li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-calendar-check"></i>
-                            <p>
-                                Rekapitulasi GTK
-                            </p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-chart-bar"></i>
-                            <p>
-                                Prosentase GTK
-                            </p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-user-check"></i>
-                            <p>
-                                Rekapitulasi Siswa
-                            </p>
-                        </a>
-                    </li>
                     <li class="nav-header">REPORT</li>
+                    <li class="nav-item">
+                        <a href="{{ route('presensi.siswa.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-print"></i>
+                            <p>Cetak Absensi Siswa</p>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-print"></i>
-                            <p>Cetak Absensi Siswa</p>
+                            <p>Cetak Absensi Guru</p>
                         </a>
                     </li>
                     <li class="nav-header">MANAGEMEN PENGGUNA</li>

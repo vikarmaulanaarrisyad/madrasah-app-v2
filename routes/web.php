@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\{
+    CetakAbsenSiswaController,
     DashboardController,
     GuruController,
+    GuruJurnalController,
     JurnalGuruController,
     KelasController,
     KurikulumController,
@@ -18,15 +20,13 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
+    Route::get('/', function () {
+        return redirect()->route('dashboard');
+    });
 
     // Role Admin
     Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
-        Route::get('/', function () {
-            return redirect()->route('dashboard');
-        });
-
-        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         //Route Tahun Pelajaran
         Route::get('/tahunpelajaran/data', [TahunPelajaranController::class, 'data'])->name('tahunpelajaran.data');
         Route::resource('/tahunpelajaran', TahunPelajaranController::class)->except('create', 'edit');
@@ -68,5 +68,24 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/jurnal/data', [JurnalGuruController::class, 'data'])->name('jurnal.data');
         Route::resource('/jurnal', JurnalGuruController::class)->only('index');
         Route::get('/jurnal/export-pdf', [JurnalGuruController::class, 'exportPDF'])->name('jurnal.exportPDF');
+
+        // Route Cetak Absen Siswa
+        Route::get('/presensi-siswa/data', [CetakAbsenSiswaController::class, 'data'])->name('presensi.siswa.data');
+        Route::get('/presensi-siswa', [CetakAbsenSiswaController::class, 'index'])->name('presensi.siswa.index');
+        Route::get('/presensi-siswa/filter', [CetakAbsenSiswaController::class, 'filterPresensi'])->name('presensi.siswa.filter');
+        Route::get('/presensi-siswa/download', [CetakAbsenSiswaController::class, 'downloadPdf'])->name('presensi.siswa.download');
     });
+
+    // Role Guru
+    // Route::group(['middleware' => 'role:guru', 'prefix' => 'guru'], function () {
+    //     Route::get('/', function () {
+    //         return redirect()->route('dashboard');
+    //     });
+
+    //     Route::get('/guru/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    //     // Route Jurnal
+    //     Route::get('guru/jurnal/data', [GuruJurnalController::class, 'data'])->name('guru.jurnal_data');
+    //     Route::resource('/guru-jurnal', GuruJurnalController::class);
+    // });
 });
