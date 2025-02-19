@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\AbsensiGuru;
 use App\Models\Guru;
+use App\Models\JamKerja;
+use App\Models\Libur;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -58,40 +60,65 @@ class CetakAbsenGuruController extends Controller
     {
         $guruId = $request->guru;
         $bulan = (int) $request->bulan;
-        $tahun = now()->year;  // Current year
+        $tahun = now()->year;
 
-        // Fetch data for the selected guru and month (same as in filterPresensi)
-        $presensi = AbsensiGuru::where('guru_id', $guruId)
+        // Ambil data presensi
+        $presensi = AbsensiGuru::with('guru')
+            ->where('guru_id', $guruId)
             ->whereMonth('tgl_presensi', $bulan)
             ->whereYear('tgl_presensi', $tahun)
+            ->orderBy('tgl_presensi', 'ASC')
             ->get();
 
-        $data = [];
+        // Ambil jam kerja dan hari libur
+        $jamKerjaList = JamKerja::pluck('jam_masuk', 'hari')->toArray();
+        $jamKerjaPulangList = JamKerja::pluck('jam_keluar', 'hari')->toArray();
+
+        // Ambil daftar libur dengan tanggal sebagai key dan deskripsi libur sebagai value
+        $tanggalLibur = Libur::pluck('description', 'tanggal')->toArray();
+
+        // Tambahkan jam kerja dan cek libur
         foreach ($presensi as $item) {
+            $hari = Carbon::parse($item->tgl_presensi)->translatedFormat('l');
             $tanggal = $item->tgl_presensi;
 
-            // Use valid date format as the key for each entry
-            $data[$item->guru->nama_lengkap][$tanggal] = [
-                'waktu_masuk' => $item->waktu_masuk,
-                'waktu_keluar' => $item->waktu_keluar,
-                'status' => $item->status,
-                'jam_masuk' => $item->jam_masuk,
-                'jam_keluar' => $item->jam_keluar,
-                'is_holiday' => $item->is_holiday,
-            ];
+            // Tambahkan jam kerja sesuai hari
+            $item->jam_kerja_masuk = $jamKerjaList[$hari] ?? '-';
+            $item->jam_kerja_pulang = $jamKerjaPulangList[$hari] ?? '-';
+
+            // Cek jika tanggal termasuk hari libur dan tambahkan deskripsi libur
+            if (isset($tanggalLibur[$tanggal])) {
+                $item->is_holiday = '1';
+                $item->description = $tanggalLibur[$tanggal]; // Menyimpan deskripsi libur
+            } else {
+                $item->is_holiday = '0';
+                $item->description = '-';
+            }
         }
 
-        // Konversi angka bulan ke nama bulan dalam bahasa Indonesia
+        // Format data untuk PDF
+        $data = $presensi->groupBy('guru.nama_lengkap')->map(function ($items) {
+            return $items->keyBy('tgl_presensi')->map(function ($item) {
+                return [
+                    'tgl_presensi' => $item->tgl_presensi,
+                    'waktu_masuk' => $item->waktu_masuk,
+                    'waktu_keluar' => $item->waktu_keluar,
+                    'status' => $item->status,
+                    'jam_kerja_masuk' => $item->jam_kerja_masuk,
+                    'jam_kerja_pulang' => $item->jam_kerja_pulang,
+                    'is_holiday' => $item->is_holiday,
+                    'description' => $item->description, // Tambahkan deskripsi libur
+                ];
+            });
+        });
+
+        // Konversi bulan ke nama Indonesia
         $namaBulan = Carbon::create()->month($bulan)->translatedFormat('F');
 
-        // Load PDF from Blade view with the filtered data
-        $pdf = Pdf::loadView('absen.guru.pdf', compact(
-            'data',          // Attendance data
-            'namaBulan',     // Month name
-            'bulan',         // Pass bulan to view
-        ))->setPaper('a4', 'landscape');
+        // Generate PDF
+        $pdf = Pdf::loadView('absen.guru.pdf', compact('data', 'namaBulan'))
+            ->setPaper('a4', 'landscape');
 
-        // Stream the PDF (to display in the browser)
-        return $pdf->stream("presensi-bulan-$bulan.pdf");
+        return $pdf->stream("presensi-{$guruId}-{$bulan}-{$tahun}.pdf");
     }
 }

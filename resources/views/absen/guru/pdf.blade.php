@@ -4,99 +4,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <title>Laporan Rincian Harian</title>
+    <title>Data Kehadiran</title>
     <style>
-        th {
-            background-color: yellow;
+        @page {
+            size: 210mm 297mm;
+            /* Ukuran kertas F4 */
+            margin: 1cm;
         }
 
-        .highlight {
-            background-color: yellow;
+        body {
+            font-family: Arial, sans-serif;
+            margin: 1px;
         }
 
-        .total-row {
+        .kop {
+            width: 100%;
+            border-top: none;
+            border-bottom: 5px solid black;
+            text-align: center;
+        }
+
+        .kop img {
+            width: 80px;
+            height: auto;
+        }
+
+        .kop td {
+            vertical-align: middle;
+        }
+
+        .kop .lembaga {
+            font-size: 18px;
             font-weight: bold;
-            background-color: #f8f9fa;
+            text-transform: uppercase;
+        }
+
+        .kop .alamat {
+            font-size: 14px;
+        }
+
+        h2 {
+            text-align: left;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        table.identitas {
+            text-align: left;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1px;
+        }
+
+        th,
+        td {
+            border: 1px solid #333;
+            padding: 8px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+
+        td:first-child,
+        td:nth-child(2) {
+            font-weight: bold;
+        }
+
+        .keterangan {
+            font-weight: bold;
+            text-align: left;
+        }
+
+        .wali-kelas {
+            border: none;
+            padding: 10px;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        .wali-kelas-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .wali-kelas-table td {
+            padding: 20px;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1 class="text-center my-4">LAPORAN RINCIAAN HARIAN</h1>
-        <table class="table table-bordered table-striped">
-            <thead>
+    <table class="kop">
+        <tr>
+            <td style="width: 10%; text-align: center; border:none;">
+                <img src="{{ public_path('images/logo-madrasah.jpg') }}" alt="Logo Kiri" style="width:100px;">
+            </td>
+
+            <td style="width: 90%; text-align: center; border:none;">
+                <div class="lembaga">
+                    <span style="font-size: 20px; font-weight: bold;">YAYASAN ASSALAFIYAH AL MUNAWAROH</span><br>
+                    <span style="font-size: 22px; font-weight: bold;">MADRASAH IBTIDAIYAH ASSALAFIYAH</span><br>
+                    <span style="font-size: 14px; font-weight: bold;">STATUS: TERAKREDITASI B</span><br>
+                    <span style="font-size: 14px;">Desa Kemanggungan, Kec. Tarub, Kab. Tegal</span>
+                </div>
+                <div class="alamat" style="margin-top: 5px; font-size: 13px;">
+                    Alamat: Jl. Projosumarto II Gang Mawar 1, Kemanggungan, Tarub, Tegal 52184
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <h2 style="text-align: center;">Data Kehadiran Guru</h2>
+
+    <table>
+        <tr>
+            <th style="width: 13%;">TANGGAL</th>
+            <th>HARI</th>
+            <th>JAM MASUK</th>
+            <th>JAM PULANG</th>
+            <th>ABSEN MASUK</th>
+            <th>ABSEN PULANG</th>
+            <th>KETERANGAN</th>
+        </tr>
+        {{--  @dd($data);  --}}
+
+        @foreach ($data as $guruNama => $presensiList)
+            @foreach ($presensiList as $tglPresensi => $item)
                 <tr>
-                    <th>Tanggal</th>
-                    <th>Nama Shift</th>
-                    <th>Jam Masuk</th>
-                    <th>Scan Masuk</th>
-                    <th>Telat (Menit)</th>
-                    <th>Jam Keluar</th>
-                    <th>Scan Keluar</th>
-                    <th>Durasi</th>
-                    <th>Lembur Awal</th>
-                    <th>Lembur Akhir</th>
-                    <th>Lembur Akhir 2</th>
-                    <th>Shift Lembur</th>
-                    <th>Istrihat</th>
-                    <th>Istrihat Lebih</th>
-                    <th>Istrihat Lebih 2</th>
-                    <th>Keterangan</th>
+                    <td>{{ \Carbon\Carbon::parse($tglPresensi)->format('d-m-Y') }}</td>
+                    <td>{{ \Carbon\Carbon::parse($tglPresensi)->translatedFormat('l') }}</td>
+
+                    @if (!empty($item['is_holiday']) && $item['is_holiday'] == 1)
+                        {{-- Jika libur, tampilkan "-" untuk semua kolom --}}
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td><b style="color: red;">{{ $item['description'] }}</b></td>
+                    @else
+                        {{-- Jika tidak libur, tampilkan data normal --}}
+                        <td>
+                            {{ $item['jam_kerja_masuk'] && $item['jam_kerja_masuk'] !== '-'
+                                ? \Carbon\Carbon::parse($item['jam_kerja_masuk'])->format('H:i')
+                                : '-' }}
+                        </td>
+                        <td>
+                            {{ $item['jam_kerja_pulang'] && $item['jam_kerja_pulang'] !== '-'
+                                ? \Carbon\Carbon::parse($item['jam_kerja_pulang'])->format('H:i')
+                                : '-' }}
+                        </td>
+                        <td>{{ $item['waktu_masuk'] ? \Carbon\Carbon::parse($item['waktu_masuk'])->format('H:i') : '-' }}
+                        </td>
+                        <td>{{ $item['waktu_keluar'] ? \Carbon\Carbon::parse($item['waktu_keluar'])->format('H:i') : '-' }}
+                        </td>
+                        <td>{{ $item['status'] ?? '-' }}</td>
+                    @endif
                 </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Wednesday 01/01/2025</td>
-                    <td>Libur</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>00:00</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td class="highlight">Libur</td>
-                </tr>
-                <tr>
-                    <td>Thursday 02/01/2025</td>
-                    <td>Senin - kamis (NON PNS)</td>
-                    <td>07:00</td>
-                    <td>06:45</td>
-                    <td>15</td>
-                    <td>14:30</td>
-                    <td>14:35</td>
-                    <td>06:00</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <!-- Tambahkan baris lain sesuai kebutuhan -->
-                <tr class="total-row">
-                    <td colspan="15" class="text-right">Total:</td>
-                    <td>138:30</td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="text-center">
-            <p>Halaman: 1 | dari: | Tgl. Cetak: 31/01/2025 22:29:34 | Oleh: admin</p>
-        </div>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            @endforeach
+        @endforeach
+
+    </table>
+
+    <table class="wali-kelas-table" style="width: 100%; border: none;">
+        <tr style=" border: none;">
+            <td colspan="2" style="text-align: center; padding-top: 30px;  border: none;">
+                <p> </p>
+                Kepala Madrasah
+                <br><br><br><br>
+
+                <br>
+                <br>
+                <b>{{ $sekolah->guru->gelar_depan ?? '' }}
+                    {{ $sekolah->guru->nama_lengkap ?? '...........................' }}
+                    {{ $sekolah->guru->gelar_belakang ?? '' }}</b>
+            </td>
+            <td style="text-align: center; width: 50%;  border: none;">
+                <p>{{ $sekolah->desa ?? 'Kemanggungan' }}, {{ tanggal_indonesia(now()->format('Y-m-d')) }}</p>
+                Guru
+                <br><br><br><br>
+                <br>
+                <br>
+                <b> ...........................</b>
+            </td>
+        </tr>
+    </table>
+
 </body>
 
 </html>
