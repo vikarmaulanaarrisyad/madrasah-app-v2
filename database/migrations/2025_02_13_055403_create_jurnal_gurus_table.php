@@ -19,14 +19,14 @@ return new class extends Migration
             $table->unsignedInteger('mata_pelajaran_id');
             $table->date('tanggal');
             $table->integer('pembelajaran_ke')->nullable();
-            $table->text('tema')->nullable()->default('-');
-            $table->text('tujuan_pembelajaran')->nullable()->default('-');
+            $table->text('tema')->nullable();
+            $table->text('tujuan_pembelajaran')->nullable();
             $table->text('materi');
-            $table->text('penilaian')->nullable()->default('-');
-            $table->text('metode_pembelajaran')->nullable()->default('-');
-            $table->text('evaluasi')->nullable()->default('-');
-            $table->text('refleksi')->nullable()->default('-');
-            $table->text('tugas')->nullable()->default('-');
+            $table->text('penilaian')->nullable();
+            $table->text('metode_pembelajaran')->nullable();
+            $table->text('evaluasi')->nullable();
+            $table->text('refleksi')->nullable();
+            $table->text('tugas')->nullable();
             $table->timestamps();
         });
     }
