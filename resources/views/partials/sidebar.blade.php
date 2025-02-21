@@ -130,6 +130,12 @@
                     </li>
                     <li class="nav-header">REPORT</li>
                     <li class="nav-item">
+                        <a href="{{ route('nilai.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-print"></i>
+                            <p>Cetak Raport Siswa</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('presensi.siswa.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-print"></i>
                             <p>Cetak Absensi Siswa</p>

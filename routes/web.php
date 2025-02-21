@@ -11,6 +11,7 @@ use App\Http\Controllers\{
     KelasController,
     KurikulumController,
     MataPelajaranController,
+    NilaiSiswaController,
     RombelController,
     SekolahController,
     SiswaController,
@@ -59,6 +60,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/siswa/export-excel', [SiswaController::class, 'exportEXCEL'])->name('siswa.exportEXCEL');
         Route::post('/siswa/import-excel', [SiswaController::class, 'importEXCEL'])->name('siswa.importEXCEL');
         Route::resource('/siswa', SiswaController::class)->except('edit', 'create');
+        Route::get('/naikkan-siswa/{rombel_id}', [SiswaController::class, 'naikkanSiswaPerRombel'])->name('siswa,kenaikanSiswa');
+        Route::get('/batalkan-kenaikan/{rombel_id}', [SiswaController::class, 'batalkanKenaikanPerRombel'])->name('siswa.batalkanKenaikkanSiswa');
 
         // Route Rombel
         Route::get('/rombel/data', [RombelController::class, 'data'])->name('rombel.data');
@@ -92,6 +95,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/aplikasi/{id}/update', [AplikasiController::class, 'update'])->name('aplikasi.update');
         Route::get('/user/profile', [UserProfileInformationController::class, 'show'])
             ->name('profile.show');
+
+        // Route Nilai Siswa
+        Route::get('/nilai/data', [NilaiSiswaController::class, 'data'])->name('nilai.data');
+        Route::resource('/nilai', NilaiSiswaController::class);
     });
 
     // Role Guru

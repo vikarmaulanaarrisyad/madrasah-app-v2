@@ -6,7 +6,9 @@ use App\Imports\SiswaImport;
 use App\Models\Agama;
 use App\Models\JenisKelamin;
 use App\Models\Kewarganegaraan;
+use App\Models\Rombel;
 use App\Models\Siswa;
+use App\Models\TahunPelajaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -296,5 +298,67 @@ class SiswaController extends Controller
                 'message' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function naikkanSiswaPerRombel($rombel_id)
+    {
+        $tahunAktif = TahunPelajaran::where('status_aktif', 1)->first();
+        if (!$tahunAktif) {
+            return response()->json(['message' => 'Tidak ada tahun pelajaran aktif'], 404);
+        }
+
+        // Cek apakah rombel ada di tahun sebelumnya
+        $rombelLama = Rombel::where('id', $rombel_id)->first();
+        if (!$rombelLama) {
+            return response()->json(['message' => 'Rombel tidak ditemukan'], 404);
+        }
+
+        // Cek apakah ini kelas terakhir (misal: kelas 6)
+        if ($rombelLama->nama == "Kelas 6") {
+            // Luluskan siswa
+            Siswa::where('rombel_id', $rombelLama->id)->update([
+                'status' => 'lulus'
+            ]);
+
+            return response()->json(['message' => 'Siswa dirombel ini telah lulus'], 200);
+        }
+
+        // Cari rombel berikutnya berdasarkan nama yang sama +1 tingkat
+        $rombelBaru = Rombel::where('nama', 'Kelas ' . ((int) filter_var($rombelLama->nama, FILTER_SANITIZE_NUMBER_INT) + 1))
+            ->where('tahun_pelajaran_id', $tahunAktif->id)
+            ->first();
+
+        if (!$rombelBaru) {
+            return response()->json(['message' => 'Rombel berikutnya tidak ditemukan'], 404);
+        }
+
+        // Pindahkan siswa ke rombel baru dan simpan rombel lama
+        Siswa::where('rombel_id', $rombelLama->id)->update([
+            'rombel_sebelumnya_id' => $rombelLama->id,
+            'rombel_id' => $rombelBaru->id
+        ]);
+
+        return response()->json(['message' => 'Siswa berhasil naik kelas'], 200);
+    }
+
+
+    public function batalkanKenaikanSiswa($rombelId)
+    {
+        // Ambil siswa yang memiliki rombel_sebelumnya_id
+        $siswaDinaikkan = Siswa::whereNotNull('rombel_sebelumnya_id')->get();
+
+        if ($siswaDinaikkan->isEmpty()) {
+            return response()->json(['message' => 'Tidak ada siswa yang bisa dikembalikan'], 404);
+        }
+
+        foreach ($siswaDinaikkan as $siswa) {
+            // Kembalikan siswa ke rombel sebelumnya
+            $siswa->update([
+                'rombel_id' => $siswa->rombel_sebelumnya_id,
+                'rombel_sebelumnya_id' => null
+            ]);
+        }
+
+        return response()->json(['message' => 'Kenaikan siswa berhasil dibatalkan'], 200);
     }
 }
