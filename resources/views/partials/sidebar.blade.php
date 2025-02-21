@@ -100,6 +100,25 @@
                             </p>
                         </a>
                     </li>
+
+                    @php
+                        $semesterGenap = \App\Models\Semester::where('nama', 'Genap')->first();
+                        $tahunPelajaranGenap = App\Models\TahunPelajaran::aktif()
+                            ->where('semester_id', $semesterGenap->id)
+                            ->first();
+                    @endphp
+                    @if ($tahunPelajaranGenap)
+                        <li class="nav-item">
+                            <a href="{{ route('rombel.index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-users"></i>
+                                <p>
+                                    Proses Kenaikan
+                                </p>
+                            </a>
+                        </li>
+                    @endif
+
+
                     <li class="nav-header">JURNAL MENGAJAR</li>
                     <li class="nav-item">
                         <a href="{{ route('jurnal.index') }}" class="nav-link">
