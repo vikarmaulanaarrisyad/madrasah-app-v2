@@ -14,8 +14,8 @@ class KurikulumSeeder extends Seeder
     public function run(): void
     {
         $kurikulumList = [
-            ['nama' => 'Kurikulum 2013', 'tahun_pelajaran_id' => '4'],
-            ['nama' => 'Kurikulum Merdeka', 'tahun_pelajaran_id' => '4'],
+            ['nama' => 'Kurikulum 2013', 'tahun_pelajaran_id' => '1'],
+            ['nama' => 'Kurikulum Merdeka', 'tahun_pelajaran_id' => '1'],
         ];
 
         foreach ($kurikulumList as $kurikulum) {

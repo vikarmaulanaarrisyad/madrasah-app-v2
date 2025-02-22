@@ -17,7 +17,7 @@ class JurnalGuruController extends Controller
     {
         $rombel = Rombel::all();
         $guru = Guru::all();
-        return view('jurnal.index', compact('rombel', 'guru'));
+        return view('admin.jurnal.index', compact('rombel', 'guru'));
     }
 
     public function getData(Request $request)

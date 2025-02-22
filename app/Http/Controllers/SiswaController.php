@@ -25,7 +25,7 @@ class SiswaController extends Controller
         $kewarganegaraan = Kewarganegaraan::all();
         $agama = Agama::all();
 
-        return view('siswa.index', compact('jenisKelamin', 'kewarganegaraan', 'agama'));
+        return view('admin.siswa.index', compact('jenisKelamin', 'kewarganegaraan', 'agama'));
     }
 
     public function data()

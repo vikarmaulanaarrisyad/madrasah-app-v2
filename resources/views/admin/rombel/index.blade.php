@@ -1,31 +1,31 @@
 @extends('layouts.app')
 
-@section('title', 'Tahun Pelajaran')
+@section('title', 'Data Rombongan Belajar')
 
-@section('subtitle', 'Tahun Pelajaran')
+@section('subtitle', 'Data Rombongan Belajar')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-    <li class="breadcrumb-item active">Tahun Pelajaran</li>
+    <li class="breadcrumb-item active">Data Rombongan Belajar</li>
 @endsection
 
 @section('content')
     <div class="row mt-3">
         <div class="col-lg-12">
-            <div class="card shadow-sm border-left-success">
+            <div class="card shadow-sm border-left-info">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="mr-3">
-                            <i class="fas fa-calendar-alt fa-3x text-success"></i>
+                            <i class="fas fa-users fa-3x text-info"></i>
                         </div>
                         <div>
-                            <h5 class="font-weight-bold text-success">📅 Tahun Pelajaran</h5>
+                            <h5 class="font-weight-bold text-info">📘 Menu Rombongan Belajar</h5>
                             <p class="mb-2 text-dark">
-                                Pastikan tahun pelajaran yang digunakan sudah sesuai dengan kalender akademik terbaru.
+                                Menu **Rombongan Belajar (Rombel)** digunakan untuk mengelola kelompok siswa berdasarkan
+                                kelas dan tahun ajaran. Pastikan setiap siswa dimasukkan ke dalam rombel yang sesuai.
                             </p>
                             <p class="mb-0">
-                                Atur tahun pelajaran dengan benar
-
+                                Akses menu ini untuk menambah atau memperbarui rombel siswa
                             </p>
                         </div>
                     </div>
@@ -40,27 +40,35 @@
                 <x-slot name="header">
                     <h3 class="card-title">
                         <i class="fas fa-calendar-alt mr-1 mt-2"></i>
-                        Tahun Pelajaran
+                        @yield('subtitle')
                     </h3>
                     <div class="card-tools">
-                        <button onclick="addForm(`{{ route('tahunpelajaran.store') }}`)" class="btn btn-sm btn-primary"><i
-                                class="fas fa-plus-circle"></i> Tambah Data</button>
+                        <div class="d-flex align-items-center">
+                            <div>
+                                <button onclick="createForm(`{{ route('rombel.create') }}`)" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-plus-circle"></i> Tambah Data
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </x-slot>
 
                 <x-table>
                     <x-slot name="thead">
                         <th>No</th>
-                        <th>Tahun</th>
-                        <th>Semester</th>
-                        <th>Aktif</th>
+                        <th>Nama Rombel</th>
+                        <th>Tingkat</th>
+                        <th>Wali Kelas</th>
+                        <th>Kelas</th>
+                        <th>Kurikulum</th>
+                        <th>Jumlah Siswa</th>
                         <th>Aksi</th>
                     </x-slot>
                 </x-table>
             </x-card>
         </div>
     </div>
-    @include('tahunpelajaran.form')
+    @include('admin.rombel.form')
 @endsection
 
 @include('includes.datatables')
@@ -77,7 +85,7 @@
             autoWidth: false,
             responsive: true,
             ajax: {
-                url: '{{ route('tahunpelajaran.data') }}'
+                url: '{{ route('rombel.data') }}',
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -89,12 +97,19 @@
                     data: 'nama'
                 },
                 {
-                    data: 'semester.nama'
+                    data: 'tingkat'
                 },
                 {
-                    data: 'status',
-                    orderable: false,
-                    searchable: false
+                    data: 'walikelas'
+                },
+                {
+                    data: 'kelas'
+                },
+                {
+                    data: 'kurikulum.nama'
+                },
+                {
+                    data: 'jumlahsiswa'
                 },
                 {
                     data: 'aksi',
@@ -105,7 +120,11 @@
             ]
         })
 
-        function addForm(url, title = 'Form Tahun Pelajaran') {
+        function createForm(url) {
+            window.location.href = url;
+        }
+
+        function addForm(url, title = 'Form Data Rombel') {
             $(modal).modal('show');
             $(`${modal} .modal-title`).text(title);
             $(`${modal} form`).attr('action', url);
@@ -114,7 +133,7 @@
             resetForm(`${modal} form`);
         }
 
-        function editForm(url, title = 'Form Tahun Pelajaran') {
+        function editForm(url, title = 'Form Data Rombel') {
             Swal.fire({
                 title: "Memuat...",
                 text: "Mohon tunggu sebentar...",
@@ -149,68 +168,6 @@
                         loopErrors(errors.responseJSON.errors);
                     }
                 });
-        }
-
-        function updateStatus(id) {
-            let _token = $('meta[name="csrf-token"]').attr('content'); // Ambil CSRF token dari meta tag
-
-            // Tampilkan Swal Loading
-            Swal.fire({
-                title: "Memproses...",
-                text: "Mohon tunggu sebentar...",
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                didOpen: () => {
-                    Swal.showLoading(); // Menampilkan spinner loading
-                }
-            });
-
-            $.ajax({
-                url: '/admin/tahunpelajaran/update-status/' + id,
-                type: 'PUT',
-                data: {
-                    _token: _token // CSRF Token untuk keamanan
-                },
-                success: function(response) {
-                    Swal.close(); // Tutup loading
-
-                    // Tampilkan notifikasi toastr sukses
-                    toastr.success(response.message, "Berhasil!", {
-                        timeOut: 2000
-                    });
-
-                    table.ajax.reload();
-                    let icon = $('a[kodeq="' + id + '"]').find('i');
-
-                    if (icon.length > 0) {
-                        console.log("Status Baru:", response.new_status);
-                        console.log("Class Sebelum:", icon.attr("class"));
-
-                        if (response.new_status == 1) {
-                            icon.removeClass('fa-toggle-off text-danger')
-                                .addClass('fa-toggle-on text-success');
-                        } else {
-                            icon.removeClass('fa-toggle-on text-success')
-                                .addClass('fa-toggle-off text-danger');
-                        }
-                    }
-                },
-                error: function(xhr) {
-                    Swal.close(); // Tutup loading
-
-                    // Tampilkan notifikasi toastr error
-                    if (xhr.status === 400) {
-                        // Tampilkan notifikasi toastr error jika tidak boleh menonaktifkan status terakhir
-                        toastr.error(xhr.responseJSON.message, "Gagal!", {
-                            timeOut: 2000
-                        });
-                    } else {
-                        toastr.error("Terjadi kesalahan saat memperbarui status.", "Gagal!", {
-                            timeOut: 2000
-                        });
-                    }
-                }
-            });
         }
 
         function submitForm(originalForm) {

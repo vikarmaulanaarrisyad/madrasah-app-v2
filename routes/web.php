@@ -4,11 +4,13 @@ use App\Http\Controllers\{
     AplikasiController,
     CetakAbsenGuruController,
     CetakAbsenSiswaController,
+    CetakBukuIndukController,
     DashboardController,
     GuruController,
     GuruJurnalController,
     JurnalGuruController,
     KelasController,
+    KkmController,
     KurikulumController,
     MataPelajaranController,
     NilaiSiswaController,
@@ -88,6 +90,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/presensi-guru/filter', [CetakAbsenGuruController::class, 'filterPresensi'])->name('presensi.guru.filter');
         Route::get('/presensi-guru/download', [CetakAbsenGuruController::class, 'downloadPdf'])->name('presensi.guru.download');
 
+        Route::get('/bukuinduk/data', [CetakBukuIndukController::class, 'data'])->name('bukuinduk.data');
+        Route::get('/bukuinduk', [CetakBukuIndukController::class, 'index'])->name('bukuinduk.index');
+        Route::get('/bukuinduk/download_semua', [CetakBukuIndukController::class, 'downloadAll'])->name('bukuinduk.download_all');
+
         // Route Sekolah
         Route::get('/sekolah', [SekolahController::class, 'index'])->name('sekolah.index');
         Route::put('/sekolah/{id}/update', [SekolahController::class, 'update'])->name('sekolah.update');
@@ -97,20 +103,6 @@ Route::group(['middleware' => 'auth'], function () {
             ->name('profile.show');
 
         // Route Nilai Siswa
-        Route::get('/nilai/data', [NilaiSiswaController::class, 'data'])->name('nilai.data');
-        Route::resource('/nilai', NilaiSiswaController::class);
+        Route::resource('/k13kkm', KkmController::class);
     });
-
-    // Role Guru
-    // Route::group(['middleware' => 'role:guru', 'prefix' => 'guru'], function () {
-    //     Route::get('/', function () {
-    //         return redirect()->route('dashboard');
-    //     });
-
-    //     Route::get('/guru/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-    //     // Route Jurnal
-    //     Route::get('guru/jurnal/data', [GuruJurnalController::class, 'data'])->name('guru.jurnal_data');
-    //     Route::resource('/guru-jurnal', GuruJurnalController::class);
-    // });
 });

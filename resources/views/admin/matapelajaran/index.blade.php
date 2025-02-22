@@ -72,7 +72,7 @@
             </x-card>
         </div>
     </div>
-    @include('matapelajaran.form')
+    @include('admin.matapelajaran.form')
 @endsection
 
 @include('includes.datatables')

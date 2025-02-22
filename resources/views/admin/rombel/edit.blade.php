@@ -110,7 +110,7 @@
         </div>
     </div>
 
-    @include('rombel.select_siswa')
+    @include('admin.rombel.select_siswa')
 @endsection
 
 @include('includes.datatables')

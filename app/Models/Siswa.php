@@ -14,6 +14,21 @@ class Siswa extends Model
         return $this->belongsTo(JenisKelamin::class);
     }
 
+    public function agama()
+    {
+        return $this->belongsTo(Agama::class);
+    }
+
+    public function kewarganegaraan()
+    {
+        return $this->belongsTo(Kewarganegaraan::class);
+    }
+
+    public function orangtua()
+    {
+        return $this->belongsTo(OrangTua::class);
+    }
+
     public function scopeAktif(Builder $query): void
     {
         $query->where('status', 'Aktif');

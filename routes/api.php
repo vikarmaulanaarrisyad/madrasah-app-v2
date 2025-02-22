@@ -25,11 +25,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::delete('/jurnal/{id}', [JurnalController::class, 'destroy']);
     // });
 
-    Route::middleware('role:guru,siswa')->group(function () {
-        // Presensi
-        Route::get('/presensi', [PresensiSiswaController::class, 'index']);
-        Route::post('/presensi', [PresensiSiswaController::class, 'store']);
-        Route::put('/presensi/{id}', [PresensiSiswaController::class, 'update']);
-        Route::delete('/presensi/{id}', [PresensiSiswaController::class, 'destroy']);
-    });
+    Route::resource('/siswa-presensi', PresensiSiswaController::class);
 });

@@ -65,18 +65,6 @@
                                 @endforeach
                             </select>
                         </div>
-
-                        {{--  <div class="col-md-3">
-                            <label class="form-label">Filter Mata Pelajaran</label>
-                            <select name="kelas" id="filterRombel" class="form-control">
-                                <option value="">Semua Kelas</option>
-                                @foreach ($kelas as $k)
-                                    @foreach ($k->rombel as $item)
-                                        <option value="{{ $item->id }}">{{ $k->nama }} {{ $item->nama }}</option>
-                                    @endforeach
-                                @endforeach
-                            </select>
-                        </div>  --}}
                     </div>
                 </div>
             </div>
@@ -113,7 +101,7 @@
             </x-card>
         </div>
     </div>
-    @include('jurnal.form')
+    @include('admin.jurnal.form')
 @endsection
 
 @include('includes.datatables')

@@ -15,7 +15,7 @@ class TahunPelajaranController extends Controller
     public function index()
     {
         $semesters = Semester::all();
-        return view('tahunpelajaran.index', compact('semesters'));
+        return view('admin.tahunpelajaran.index', compact('semesters'));
     }
 
     public function data()

@@ -74,8 +74,8 @@
             </x-card>
         </div>
     </div>
-    @include('siswa.form')
-    @include('siswa.import-excel')
+    @include('admin.siswa.form')
+    @include('admin.siswa.import-excel')
 @endsection
 
 @include('includes.datatables')

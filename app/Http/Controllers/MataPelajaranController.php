@@ -15,7 +15,7 @@ class MataPelajaranController extends Controller
     public function index()
     {
         $kurikulums = Kurikulum::all();
-        return view('matapelajaran.index', compact('kurikulums'));
+        return view('admin.matapelajaran.index', compact('kurikulums'));
     }
 
     public function data(Request $request)

@@ -1,33 +1,31 @@
 @extends('layouts.app')
 
-@section('title', 'Data Kelas')
+@section('title', 'Tahun Pelajaran')
 
-@section('subtitle', 'Data Kelas')
+@section('subtitle', 'Tahun Pelajaran')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-    <li class="breadcrumb-item active">Data Kelas</li>
+    <li class="breadcrumb-item active">Tahun Pelajaran</li>
 @endsection
 
 @section('content')
-    <div class="row">
+    <div class="row mt-3">
         <div class="col-lg-12">
-            <div class="card shadow-sm border-left-primary">
+            <div class="card shadow-sm border-left-success">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="mr-3">
-                            <i class="fas fa-chalkboard fa-3x text-primary"></i>
+                            <i class="fas fa-calendar-alt fa-3x text-success"></i>
                         </div>
                         <div>
-                            <h5 class="font-weight-bold text-primary">🏫 Data Kelas</h5>
+                            <h5 class="font-weight-bold text-success">📅 Tahun Pelajaran</h5>
                             <p class="mb-2 text-dark">
-                                Pastikan semua kelas telah diperbarui sesuai dengan tahun ajaran yang berjalan. Setiap kelas
-                                harus memiliki wali kelas yang sesuai.
+                                Pastikan tahun pelajaran yang digunakan sudah sesuai dengan kalender akademik terbaru.
                             </p>
                             <p class="mb-0">
-                                Kelola data kelas dengan lebih mudah
-                                {{--  <a href="{{ route('kelas.index') }}"
-                                    class="btn btn-primary btn-sm font-weight-bold shadow">Kelola Kelas</a>  --}}
+                                Atur tahun pelajaran dengan benar
+
                             </p>
                         </div>
                     </div>
@@ -42,31 +40,27 @@
                 <x-slot name="header">
                     <h3 class="card-title">
                         <i class="fas fa-calendar-alt mr-1 mt-2"></i>
-                        @yield('subtitle')
+                        Tahun Pelajaran
                     </h3>
                     <div class="card-tools">
-                        <div class="d-flex align-items-center">
-                            <div>
-                                <button onclick="addForm(`{{ route('kelas.store') }}`)" class="btn btn-sm btn-primary">
-                                    <i class="fas fa-plus-circle"></i> Tambah Data
-                                </button>
-                            </div>
-                        </div>
+                        <button onclick="addForm(`{{ route('tahunpelajaran.store') }}`)" class="btn btn-sm btn-primary"><i
+                                class="fas fa-plus-circle"></i> Tambah Data</button>
                     </div>
                 </x-slot>
 
                 <x-table>
                     <x-slot name="thead">
                         <th>No</th>
-                        <th>Nama Kelas</th>
-                        <th>Tingkat</th>
+                        <th>Tahun</th>
+                        <th>Semester</th>
+                        <th>Aktif</th>
                         <th>Aksi</th>
                     </x-slot>
                 </x-table>
             </x-card>
         </div>
     </div>
-    @include('kelas.form')
+    @include('admin.tahunpelajaran.form')
 @endsection
 
 @include('includes.datatables')
@@ -83,7 +77,7 @@
             autoWidth: false,
             responsive: true,
             ajax: {
-                url: '{{ route('kelas.data') }}',
+                url: '{{ route('tahunpelajaran.data') }}'
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -95,7 +89,12 @@
                     data: 'nama'
                 },
                 {
-                    data: 'tingkat'
+                    data: 'semester.nama'
+                },
+                {
+                    data: 'status',
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     data: 'aksi',
@@ -106,7 +105,7 @@
             ]
         })
 
-        function addForm(url, title = 'Form Data Kelas') {
+        function addForm(url, title = 'Form Tahun Pelajaran') {
             $(modal).modal('show');
             $(`${modal} .modal-title`).text(title);
             $(`${modal} form`).attr('action', url);
@@ -115,7 +114,7 @@
             resetForm(`${modal} form`);
         }
 
-        function editForm(url, title = 'Form Data Kelas') {
+        function editForm(url, title = 'Form Tahun Pelajaran') {
             Swal.fire({
                 title: "Memuat...",
                 text: "Mohon tunggu sebentar...",
@@ -150,6 +149,68 @@
                         loopErrors(errors.responseJSON.errors);
                     }
                 });
+        }
+
+        function updateStatus(id) {
+            let _token = $('meta[name="csrf-token"]').attr('content'); // Ambil CSRF token dari meta tag
+
+            // Tampilkan Swal Loading
+            Swal.fire({
+                title: "Memproses...",
+                text: "Mohon tunggu sebentar...",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading(); // Menampilkan spinner loading
+                }
+            });
+
+            $.ajax({
+                url: '/admin/tahunpelajaran/update-status/' + id,
+                type: 'PUT',
+                data: {
+                    _token: _token // CSRF Token untuk keamanan
+                },
+                success: function(response) {
+                    Swal.close(); // Tutup loading
+
+                    // Tampilkan notifikasi toastr sukses
+                    toastr.success(response.message, "Berhasil!", {
+                        timeOut: 2000
+                    });
+
+                    table.ajax.reload();
+                    let icon = $('a[kodeq="' + id + '"]').find('i');
+
+                    if (icon.length > 0) {
+                        console.log("Status Baru:", response.new_status);
+                        console.log("Class Sebelum:", icon.attr("class"));
+
+                        if (response.new_status == 1) {
+                            icon.removeClass('fa-toggle-off text-danger')
+                                .addClass('fa-toggle-on text-success');
+                        } else {
+                            icon.removeClass('fa-toggle-on text-success')
+                                .addClass('fa-toggle-off text-danger');
+                        }
+                    }
+                },
+                error: function(xhr) {
+                    Swal.close(); // Tutup loading
+
+                    // Tampilkan notifikasi toastr error
+                    if (xhr.status === 400) {
+                        // Tampilkan notifikasi toastr error jika tidak boleh menonaktifkan status terakhir
+                        toastr.error(xhr.responseJSON.message, "Gagal!", {
+                            timeOut: 2000
+                        });
+                    } else {
+                        toastr.error("Terjadi kesalahan saat memperbarui status.", "Gagal!", {
+                            timeOut: 2000
+                        });
+                    }
+                }
+            });
         }
 
         function submitForm(originalForm) {

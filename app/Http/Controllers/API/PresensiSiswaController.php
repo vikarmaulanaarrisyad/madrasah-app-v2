@@ -17,14 +17,13 @@ class PresensiSiswaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'tanggal' => 'required|date',
-            'status' => 'required|string|in:hadir,izin,sakit,alfa',
+            'tanggal' => 'required',
+            'status' => 'required',
         ]);
 
         $presensi = AbsensiSiswa::create([
-            'tanggal' => $request->tanggal,
+            'tgl_presensi' => $request->tanggal,
             'status' => $request->status,
-            'user_id' => Auth::id(),
         ]);
 
         return response()->json(['message' => 'Presensi berhasil dicatat', 'presensi' => $presensi], 201);
@@ -36,7 +35,7 @@ class PresensiSiswaController extends Controller
 
         $request->validate([
             'tanggal' => 'required|date',
-            'status' => 'required|string|in:hadir,izin,sakit,alfa',
+            'status' => 'required',
         ]);
 
         $presensi->update($request->all());
