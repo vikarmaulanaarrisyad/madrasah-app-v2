@@ -14,7 +14,7 @@ class CetakAbsenSiswaController extends Controller
     public function index()
     {
         $rombels = Rombel::with('kelas')->get();
-        return view('absen.siswa.index', compact('rombels'));
+        return view('admin.absen.siswa.index', compact('rombels'));
     }
 
     public function filterPresensi(Request $request)
@@ -143,7 +143,7 @@ class CetakAbsenSiswaController extends Controller
         }
 
         // Load PDF from Blade view with required data
-        $pdf = Pdf::loadView('absen.siswa.pdf', compact(
+        $pdf = Pdf::loadView('admin.absen.siswa.pdf', compact(
             'dataPresensi', // Attendance data
             'namaBulan',    // Month name
             'jumlahHari',   // Number of days in the month

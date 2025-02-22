@@ -59,7 +59,7 @@
             </x-card>
         </div>
     </div>
-    @include('kurikulum.form')
+    @include('admin.kurikulum.form')
 @endsection
 
 @include('includes.datatables')
@@ -85,10 +85,10 @@
                     searchable: false
                 },
                 {
-                    data: 'nama'
+                    data: 'tahun_pelajaran'
                 },
                 {
-                    data: 'tahun_pelajaran.nama'
+                    data: 'nama'
                 },
                 {
                     data: 'aksi',

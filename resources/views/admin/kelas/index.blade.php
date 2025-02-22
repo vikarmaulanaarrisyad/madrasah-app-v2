@@ -1,31 +1,33 @@
 @extends('layouts.app')
 
-@section('title', 'Data Rombongan Belajar')
+@section('title', 'Data Kelas')
 
-@section('subtitle', 'Data Rombongan Belajar')
+@section('subtitle', 'Data Kelas')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-    <li class="breadcrumb-item active">Data Rombongan Belajar</li>
+    <li class="breadcrumb-item active">Data Kelas</li>
 @endsection
 
 @section('content')
-    <div class="row mt-3">
+    <div class="row">
         <div class="col-lg-12">
-            <div class="card shadow-sm border-left-info">
+            <div class="card shadow-sm border-left-primary">
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <div class="mr-3">
-                            <i class="fas fa-users fa-3x text-info"></i>
+                            <i class="fas fa-chalkboard fa-3x text-primary"></i>
                         </div>
                         <div>
-                            <h5 class="font-weight-bold text-info">📘 Menu Rombongan Belajar</h5>
+                            <h5 class="font-weight-bold text-primary">🏫 Data Kelas</h5>
                             <p class="mb-2 text-dark">
-                                Menu **Rombongan Belajar (Rombel)** digunakan untuk mengelola kelompok siswa berdasarkan
-                                kelas dan tahun ajaran. Pastikan setiap siswa dimasukkan ke dalam rombel yang sesuai.
+                                Pastikan semua kelas telah diperbarui sesuai dengan tahun ajaran yang berjalan. Setiap kelas
+                                harus memiliki wali kelas yang sesuai.
                             </p>
                             <p class="mb-0">
-                                Akses menu ini untuk menambah atau memperbarui rombel siswa
+                                Kelola data kelas dengan lebih mudah
+                                {{--  <a href="{{ route('kelas.index') }}"
+                                    class="btn btn-primary btn-sm font-weight-bold shadow">Kelola Kelas</a>  --}}
                             </p>
                         </div>
                     </div>
@@ -45,7 +47,7 @@
                     <div class="card-tools">
                         <div class="d-flex align-items-center">
                             <div>
-                                <button onclick="createForm(`{{ route('rombel.create') }}`)" class="btn btn-sm btn-primary">
+                                <button onclick="addForm(`{{ route('kelas.store') }}`)" class="btn btn-sm btn-primary">
                                     <i class="fas fa-plus-circle"></i> Tambah Data
                                 </button>
                             </div>
@@ -56,19 +58,15 @@
                 <x-table>
                     <x-slot name="thead">
                         <th>No</th>
-                        <th>Nama Rombel</th>
+                        <th>Nama Kelas</th>
                         <th>Tingkat</th>
-                        <th>Wali Kelas</th>
-                        <th>Nama Ruangan</th>
-                        <th>Kurikulum</th>
-                        <th>Jumlah Siswa</th>
                         <th>Aksi</th>
                     </x-slot>
                 </x-table>
             </x-card>
         </div>
     </div>
-    @include('rombel.form')
+    @include('admin.kelas.form')
 @endsection
 
 @include('includes.datatables')
@@ -85,7 +83,7 @@
             autoWidth: false,
             responsive: true,
             ajax: {
-                url: '{{ route('rombel.data') }}',
+                url: '{{ route('kelas.data') }}',
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -100,18 +98,6 @@
                     data: 'tingkat'
                 },
                 {
-                    data: 'walikelas'
-                },
-                {
-                    data: 'kelas'
-                },
-                {
-                    data: 'kurikulum'
-                },
-                {
-                    data: 'jumlahsiswa'
-                },
-                {
                     data: 'aksi',
                     name: 'aksi',
                     orderable: false,
@@ -120,11 +106,7 @@
             ]
         })
 
-        function createForm(url) {
-            window.location.href = url;
-        }
-
-        function addForm(url, title = 'Form Data Rombel') {
+        function addForm(url, title = 'Form Data Kelas') {
             $(modal).modal('show');
             $(`${modal} .modal-title`).text(title);
             $(`${modal} form`).attr('action', url);
@@ -133,7 +115,7 @@
             resetForm(`${modal} form`);
         }
 
-        function editForm(url, title = 'Form Data Rombel') {
+        function editForm(url, title = 'Form Data Kelas') {
             Swal.fire({
                 title: "Memuat...",
                 text: "Mohon tunggu sebentar...",

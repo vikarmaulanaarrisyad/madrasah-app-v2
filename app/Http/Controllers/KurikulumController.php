@@ -15,7 +15,7 @@ class KurikulumController extends Controller
     public function index()
     {
         $kurikulums = Kurikulum::all();
-        return view('kurikulum.index', compact('kurikulums'));
+        return view('admin.kurikulum.index', compact('kurikulums'));
     }
 
     public function data()
@@ -24,6 +24,9 @@ class KurikulumController extends Controller
 
         return datatables($query)
             ->addIndexColumn()
+            ->editColumn('tahun_pelajaran', function ($q) {
+                return $q->tahun_pelajaran->nama . ' ' . $q->tahun_pelajaran->semester->nama;
+            })
             ->addColumn('aksi', function ($q) {
                 return '
                 <button onclick="editForm(`' . route('kurikulum.show', $q->id) . '`)" class="btn btn-sm btn-primary" title="Edit"><i class="fas fa-pencil-alt"></i></button>

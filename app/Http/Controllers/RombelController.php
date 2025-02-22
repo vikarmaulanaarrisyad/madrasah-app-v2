@@ -18,14 +18,14 @@ class RombelController extends Controller
      */
     public function index()
     {
-        return view('rombel.index');
+        return view('admin.rombel.index');
     }
 
     public function data()
     {
         $tahunPelajaran = TahunPelajaran::aktif()->first();
 
-        $query = Rombel::with('siswa_rombel', 'kelas', 'walikelas')
+        $query = Rombel::with('siswa_rombel', 'kelas', 'walikelas', 'kurikulum')
             ->whereHas('tahun_pelajaran', function ($q) use ($tahunPelajaran) {
                 $q->where('tahun_pelajaran_id', $tahunPelajaran->id);
             })
@@ -33,6 +33,9 @@ class RombelController extends Controller
 
         return datatables($query)
             ->addIndexColumn()
+            ->editColumn('walikelas', function ($q) {
+                return $q->walikelas ? $q->walikelas->nama_lengkap : '<span class="badge badge-info">Belum ada walikelas</span>';
+            })
             ->addColumn('tingkat', function ($q) {
                 return $q->kelas->tingkat ?? '';
             })
@@ -41,9 +44,6 @@ class RombelController extends Controller
             })
             ->addColumn('kelas', function ($q) {
                 return $q->kelas->nama;
-            })
-            ->addColumn('kurikulum', function ($q) {
-                return $q->tahun_pelajaran->kurikulum()->first()->nama ?? '';
             })
             ->addColumn('jumlahsiswa', function ($q) {
                 return $q->siswa_rombel->count() ?? 0;
@@ -66,7 +66,7 @@ class RombelController extends Controller
         $walikelas = Guru::all();
         $kurikulum = Kurikulum::all();
 
-        return view('rombel.create', compact('kelas', 'walikelas', 'kurikulum'));
+        return view('admin.rombel.create', compact('kelas', 'walikelas', 'kurikulum'));
     }
 
     /**
@@ -128,7 +128,7 @@ class RombelController extends Controller
         $kelas = Kelas::all();
         $walikelas = Guru::all();
         $kurikulum = Kurikulum::all();
-        return view('rombel.show', compact('rombel', 'kelas', 'walikelas', 'kurikulum'));
+        return view('admin.rombel.show', compact('rombel', 'kelas', 'walikelas', 'kurikulum'));
     }
 
     /**
@@ -141,7 +141,7 @@ class RombelController extends Controller
         $walikelas = Guru::all();
         $kurikulum = Kurikulum::all();
 
-        return view('rombel.edit', compact('kelas', 'walikelas', 'kurikulum', 'rombel'));
+        return view('admin.rombel.edit', compact('kelas', 'walikelas', 'kurikulum', 'rombel'));
     }
 
     /**
@@ -320,8 +320,6 @@ class RombelController extends Controller
                 ], 400);
             }
         } catch (\Exception $e) {
-
-
             return response()->json([
                 'success' => false,
                 'message' => 'Terjadi kesalahan saat menghapus siswa.',

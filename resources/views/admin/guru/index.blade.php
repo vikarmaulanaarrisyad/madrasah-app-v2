@@ -53,8 +53,8 @@
             </x-card>
         </div>
     </div>
-    @include('guru.form')
-    @include('guru.import-excel')
+    @include('admin.guru.form')
+    @include('admin.guru.import-excel')
 @endsection
 
 @include('includes.datatables')
