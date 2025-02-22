@@ -101,7 +101,7 @@
                         </a>
                     </li>
 
-                    @php
+                    {{--  @php
                         $semesterGenap = \App\Models\Semester::where('nama', 'Genap')->first();
                         $tahunPelajaranGenap = App\Models\TahunPelajaran::aktif()
                             ->where('semester_id', $semesterGenap->id)
@@ -116,7 +116,7 @@
                                 </p>
                             </a>
                         </li>
-                    @endif
+                    @endif  --}}
 
 
                     <li class="nav-header">JURNAL MENGAJAR</li>
