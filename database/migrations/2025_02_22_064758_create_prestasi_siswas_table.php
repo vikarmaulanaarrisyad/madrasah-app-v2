@@ -11,12 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('siswa_rombel', function (Blueprint $table) {
+        Schema::create('prestasi_siswas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('tahun_pelajaran_id')->nullable();
-            $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade');
-            $table->foreignId('rombel_id')->constrained('rombels')->onDelete('cascade');
+            $table->unsignedBigInteger('rombel_id');
+            $table->enum('jenis_prestasi', ['1', '2']);
+            $table->string('deskripsi', 200);
             $table->timestamps();
+
+            // Jenis Prestasi
+            // 1 = Akademik
+            // 2 = Non Akademik
         });
     }
 
@@ -25,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('siswa_rombel');
+        Schema::dropIfExists('prestasi_siswas');
     }
 };

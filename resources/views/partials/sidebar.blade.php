@@ -101,7 +101,7 @@
                         </a>
                     </li>
 
-                    @php
+                    {{--  @php
                         $semesterGenap = \App\Models\Semester::where('nama', 'Genap')->first();
                         $tahunPelajaranGenap = App\Models\TahunPelajaran::aktif()
                             ->where('semester_id', $semesterGenap->id)
@@ -116,7 +116,7 @@
                                 </p>
                             </a>
                         </li>
-                    @endif
+                    @endif  --}}
 
 
                     <li class="nav-header">JURNAL MENGAJAR</li>
@@ -129,6 +129,12 @@
                         </a>
                     </li>
                     <li class="nav-header">REPORT</li>
+                    <li class="nav-item">
+                        <a href="{{ route('nilai.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-print"></i>
+                            <p>Cetak Raport Siswa</p>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a href="{{ route('presensi.siswa.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-print"></i>

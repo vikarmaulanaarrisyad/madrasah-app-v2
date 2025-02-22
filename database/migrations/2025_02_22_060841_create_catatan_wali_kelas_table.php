@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('siswa_rombel', function (Blueprint $table) {
+        Schema::create('catatan_wali_kelas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('tahun_pelajaran_id')->nullable();
-            $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade');
-            $table->foreignId('rombel_id')->constrained('rombels')->onDelete('cascade');
+            $table->unsignedInteger('rombel_id');
+            $table->text('catatan')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('siswa_rombel');
+        Schema::dropIfExists('catatan_wali_kelas');
     }
 };
