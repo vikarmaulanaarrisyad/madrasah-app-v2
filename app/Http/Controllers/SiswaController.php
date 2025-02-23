@@ -6,6 +6,9 @@ use App\Imports\SiswaImport;
 use App\Models\Agama;
 use App\Models\JenisKelamin;
 use App\Models\Kewarganegaraan;
+use App\Models\OrangTua;
+use App\Models\Pekerjaan;
+use App\Models\Pendidikan;
 use App\Models\Rombel;
 use App\Models\Siswa;
 use App\Models\TahunPelajaran;
@@ -30,6 +33,9 @@ class SiswaController extends Controller
 
     public function data()
     {
+        // Ambil tahun pelajaran yang sedang aktif
+        $tahunAktif = TahunPelajaran::aktif()->first();
+
         $query = Siswa::with('jenis_kelamin')->aktif()->orderBy('id', 'DESC');
 
         return datatables($query)
@@ -42,14 +48,29 @@ class SiswaController extends Controller
                 </a>
             ';
             })
-            ->addColumn('rombel', function ($q) {
-                $rombel = optional($q->siswa_rombel->first());
-                return ($rombel->kelas ? $rombel->kelas->nama . ' ' . $rombel->nama : '<span class="badge badge-info">Aktif tanpa rombel</span>');
+            ->addColumn('rombel', function ($q) use ($tahunAktif) {
+                // Jika tidak ada tahun pelajaran aktif, langsung kembalikan badge merah
+                if (!$tahunAktif) {
+                    return '<span class="badge badge-danger">Tidak ada tahun pelajaran aktif</span>';
+                }
+
+                // Cari rombel berdasarkan tahun pelajaran aktif
+                $rombel = $q->siswa_rombel->where('tahun_pelajaran_id', $tahunAktif->id)->first();
+
+                // Jika rombel ditemukan, tampilkan nama kelas + nama rombel
+                if ($rombel) {
+                    return optional($rombel->kelas)->nama . ' ' . $rombel->nama;
+                }
+
+                // Jika tidak ditemukan, tampilkan badge merah
+                return '<span class="badge badge-danger">Tidak terdaftar di rombel aktif</span>';
             })
+
             ->addColumn('aksi', function ($q) {
                 return '
-                <button onclick="editForm(`' . route('siswa.show', $q->id) . '`)" class="btn btn-sm btn-primary" title="Edit"><i class="fas fa-pencil-alt"></i></button>
-            ';
+                <a href="' . route('siswa.detail', $q->id) . '" class="btn btn-sm btn-primary">Lihat Detail</a>
+                ';
+                // <button onclick="editForm(`' . route('siswa.show', $q->id) . '`)" class="btn btn-sm btn-primary" title="Edit"><i class="fas fa-pencil-alt"></i></button>
             })
             ->escapeColumns([])
             ->make(true);
@@ -176,10 +197,23 @@ class SiswaController extends Controller
         //
     }
 
+    public function detail($id)
+    {
+        $siswa = Siswa::with('orangtua')->findOrfail($id);
+        $jenisKelamin = JenisKelamin::all();
+        $kewarganegaraan = Kewarganegaraan::all();
+        $agama = Agama::all();
+        $pendidikan = Pendidikan::all();
+        $pekerjaan = Pekerjaan::all();
+        $ortu = OrangTua::where('siswa_id', $id)->first();
+
+        return view('admin.siswa.detail', compact('siswa', 'jenisKelamin', 'kewarganegaraan', 'agama', 'pendidikan', 'pekerjaan', 'ortu'));
+    }
+
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
         $siswa = Siswa::findOrFail($id);
 
@@ -260,6 +294,58 @@ class SiswaController extends Controller
             'status' => 'success',
             'message' => 'Data berhasil diperbarui'
         ], 200);
+    }
+
+    public function updateOrtu(Request $request)
+    {
+        $rules = [
+            'nama_ayah' => 'nullable',
+            'nama_ibu' => 'required',
+            'nama_walimurid' => 'nullable',
+            'pekerjaan_ayah_id' => 'required',
+            'pekerjaan_ibu_id' => 'required',
+            'pekerjaan_walimurid_id' => 'required',
+            'pendidikan_ayah_id' =>  'required',
+            'pendidikan_ibu_id' =>  'required',
+            'pendidikan_walimurid_id' => 'required',
+        ];
+
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json([
+                'status'  => 'error',
+                'errors'  => $validator->errors(),
+                'message' => 'Maaf, inputan yang Anda masukkan salah. Silakan periksa kembali dan coba lagi.',
+            ], 422);
+        }
+
+        $siswa = Siswa::where('id', $request->siswa_id)->aktif()->first();
+
+        if (!$siswa) {
+            return response()->json(['message' => 'Siswa tidak ditemukan'], 404);
+        }
+
+        $data = [
+            'nama_ayah' => $request->nama_ayah ?? '-',
+            'nama_ibu' => $request->nama_ibu ?? '-',
+            'nama_walimurid' => $request->nama_walimurid ?? '-',
+            'pekerjaan_ayah_id' => $request->pekerjaan_ayah_id ?? '-',
+            'pekerjaan_ibu_id' => $request->pekerjaan_ibu_id ?? '-',
+            'pekerjaan_walimurid_id' => $request->pekerjaan_walimurid_id ?? '-',
+            'pendidikan_ayah_id' => $request->pendidikan_ayah_id ?? '-',
+            'pendidikan_ibu_id' => $request->pendidikan_ibu_id ?? '-',
+            'pendidikan_walimurid_id' => $request->pendidikan_walimurid_id ?? '-',
+        ];
+
+        OrangTua::updateOrCreate(
+            ['siswa_id' => $siswa->id],
+            $data
+        );
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data berhasil disimpan'
+        ], 201);
     }
 
     /**

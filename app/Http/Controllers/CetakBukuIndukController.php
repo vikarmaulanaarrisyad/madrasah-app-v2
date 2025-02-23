@@ -63,7 +63,7 @@ class CetakBukuIndukController extends Controller
         $uniqueFileName = "buku_induk_{$timestamp}.pdf";
 
         // Load view ke PDF
-        $pdf = Pdf::loadView('admin.bukuinduk.pdf', compact('siswas'));
+        $pdf = Pdf::loadView('admin.bukuinduk.pdf', compact('siswas'))->set_option('isPhpEnabled', true);
 
         // Stream PDF langsung ke browser
         return $pdf->stream($uniqueFileName);
