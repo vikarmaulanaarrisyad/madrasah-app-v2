@@ -37,7 +37,7 @@ class Siswa extends Model
     public function siswa_rombel()
     {
         return $this->belongsToMany(Rombel::class, 'siswa_rombel', 'siswa_id', 'rombel_id')
-            ->withPivot('tahun_pelajaran_id')
+            ->withPivot('tahun_pelajaran_id', 'status', 'keterangan')
             ->withTimestamps();
     }
 }

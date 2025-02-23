@@ -18,7 +18,7 @@
                         <li class="nav-item"><a class="nav-link active" href="#siswa" data-toggle="tab">Data Siswa</a>
                         </li>
                         <li class="nav-item"><a class="nav-link" href="#orangtua" data-toggle="tab">Data Orang Tua</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#aktivitarbelajar" data-toggle="tab">Aktivitas
+                        <li class="nav-item"><a class="nav-link" href="#aktivitasbelajar" data-toggle="tab">Aktivitas
                                 Belajar</a>
                         </li>
                     </ul>
@@ -34,8 +34,8 @@
                         </div>
                         <!-- /.tab-pane -->
 
-                        <div class="tab-pane" id="aktivitarbelajar">
-                            {{--  @include('admin.student.form.siswa-nilai')  --}}
+                        <div class="tab-pane" id="aktivitasbelajar">
+                            @include('admin.siswa.aktivitasbelajar')
                         </div>
                         <!-- /.tab-pane -->
                     </div>

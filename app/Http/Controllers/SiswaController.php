@@ -199,7 +199,7 @@ class SiswaController extends Controller
 
     public function detail($id)
     {
-        $siswa = Siswa::with('orangtua')->findOrfail($id);
+        $siswa = Siswa::with('orangtua', 'siswa_rombel')->findOrfail($id);
         $jenisKelamin = JenisKelamin::all();
         $kewarganegaraan = Kewarganegaraan::all();
         $agama = Agama::all();
