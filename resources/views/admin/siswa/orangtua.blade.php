@@ -9,19 +9,22 @@
             <div class="form-group">
                 <label for="nama_ayah">Nama Lengkap Ayah <span class="text-danger">*</span></label>
                 <input id="nama_ayah" class="form-control" type="text" name="nama_ayah" autocomplete="off"
-                    value="{{ old('nama_ayah', $ortu->nama_ayah) }}">
+                    value="{{ old('nama_ayah', $ortu->nama_ayah ?? '') }}">
             </div>
         </div>
         <div class="col-lg-4">
             <div class="form-group">
                 <label for="pendidikan_ayah_id">Pendidikan Terakhir Ayah <span class="text-danger">*</span></label>
                 <select name="pendidikan_ayah_id" id="pendidikan_ayah_id" class="form-control">
-                    <option disabled selected>Pilih salah satu</option>
-                    @foreach ($pendidikan as $item)
-                        <option value="{{ $item->id }}"
-                            {{ $ortu->pendidikan_ayah_id == $item->id ? 'selected' : '' }}>
-                            {{ $item->nama }}</option>
-                    @endforeach
+                    <option value="">-- Pilih Pendidikan Ayah --</option>
+                    @if (!empty($pendidikan))
+                        @foreach ($pendidikan as $item)
+                            <option value="{{ $item->id }}"
+                                {{ optional($ortu)->pendidikan_ayah_id == $item->id ? 'selected' : '' }}>
+                                {{ $item->nama }}</option>
+                        @endforeach
+                    @endif
+
                 </select>
             </div>
         </div>
@@ -29,12 +32,15 @@
             <div class="form-group">
                 <label for="pekerjaan_ayah_id">Pekerjaan Ayah <span class="text-danger">*</span></label>
                 <select name="pekerjaan_ayah_id" id="pekerjaan_ayah_id" class="form-control">
-                    <option disabled selected>Pilih salah satu</option>
-                    @foreach ($pekerjaan as $item)
-                        <option value="{{ $item->id }}"
-                            {{ $ortu->pekerjaan_ayah_id == $item->id ? 'selected' : '' }}>
-                            {{ $item->nama }}</option>
-                    @endforeach
+                    <option value="">-- Pilih Pekerjaan Ayah --</option>
+                    @if (!empty($pekerjaan))
+                        @foreach ($pekerjaan as $item)
+                            <option value="{{ $item->id }}"
+                                {{ optional($ortu)->pekerjaan_ayah_id == $item->id ? 'selected' : '' }}>
+                                {{ $item->nama }}</option>
+                        @endforeach
+                    @endif
+
                 </select>
             </div>
         </div>
@@ -45,19 +51,22 @@
             <div class="form-group">
                 <label for="nama_ayah">Nama Lengkap Ibu <span class="text-danger">*</span></label>
                 <input id="nama_ibu" class="form-control" type="text" name="nama_ibu" autocomplete="off"
-                    value="{{ old('nama_ibu', $ortu->nama_ibu) }}">
+                    value="{{ old('nama_ibu', $ortu->nama_ibu ?? '') }}">
             </div>
         </div>
         <div class="col-lg-4">
             <div class="form-group">
                 <label for="pendidikan_ibu_id">Pendidikan Terakhir Ibu <span class="text-danger">*</span></label>
                 <select name="pendidikan_ibu_id" id="pendidikan_ibu_id" class="form-control">
-                    <option disabled selected>Pilih salah satu</option>
-                    @foreach ($pendidikan as $item)
-                        <option value="{{ $item->id }}"
-                            {{ $ortu->pendidikan_ibu_id == $item->id ? 'selected' : '' }}>
-                            {{ $item->nama }}</option>
-                    @endforeach
+                    <option value="">-- Pilih Pendidikan Ibu --</option>
+                    @if (!empty($pendidikan))
+                        @foreach ($pendidikan as $item)
+                            <option value="{{ $item->id }}"
+                                {{ optional($ortu)->pendidikan_ibu_id == $item->id ? 'selected' : '' }}>
+                                {{ $item->nama }}</option>
+                        @endforeach
+                    @endif
+
                 </select>
             </div>
         </div>
@@ -65,12 +74,15 @@
             <div class="form-group">
                 <label for="pekerjaan_ibu_id">Pekerjaan Ibu <span class="text-danger">*</span></label>
                 <select name="pekerjaan_ibu_id" id="pekerjaan_ibu_id" class="form-control">
-                    <option disabled selected>Pilih salah satu</option>
-                    @foreach ($pekerjaan as $item)
-                        <option value="{{ $item->id }}"
-                            {{ $ortu->pekerjaan_ibu_id == $item->id ? 'selected' : '' }}>
-                            {{ $item->nama }}</option>
-                    @endforeach
+                    <option value="">-- Pilih Pekerjaan Ibu --</option>
+                    @if (!empty($pekerjaan))
+                        @foreach ($pekerjaan as $item)
+                            <option value="{{ $item->id }}"
+                                {{ optional($ortu)->pekerjaan_ibu_id == $item->id ? 'selected' : '' }}>
+                                {{ $item->nama }}</option>
+                        @endforeach
+                    @endif
+
                 </select>
             </div>
         </div>
@@ -81,19 +93,22 @@
             <div class="form-group">
                 <label for="nama_walimurid">Nama Lengkap Wali <span class="text-danger">*</span></label>
                 <input id="nama_walimurid" class="form-control" type="text" name="nama_walimurid" autocomplete="off"
-                    value="{{ old('nama_walimurid', $ortu->nama_walimurid) }}">
+                    value="{{ old('nama_walimurid', $ortu->nama_walimurid ?? '') }}">
             </div>
         </div>
         <div class="col-lg-4">
             <div class="form-group">
                 <label for="pendidikan_walimurid_id">Pendidikan Terakhir Wali <span class="text-danger">*</span></label>
                 <select name="pendidikan_walimurid_id" id="pendidikan_walimurid_id" class="form-control">
-                    <option disabled selected>Pilih salah satu</option>
-                    @foreach ($pendidikan as $item)
-                        <option value="{{ $item->id }}"
-                            {{ $ortu->pendidikan_walimurid_id == $item->id ? 'selected' : '' }}>
-                            {{ $item->nama }}</option>
-                    @endforeach
+                    <option value="">-- Pilih Pendidikan --</option>
+                    @if (!empty($pendidikan))
+                        @foreach ($pendidikan as $item)
+                            <option value="{{ $item->id }}"
+                                {{ optional($ortu)->pendidikan_walimurid_id == $item->id ? 'selected' : '' }}>
+                                {{ $item->nama }}</option>
+                        @endforeach
+                    @endif
+
                 </select>
             </div>
         </div>
@@ -101,12 +116,15 @@
             <div class="form-group">
                 <label for="pekerjaan_walimurid_id">Pekerjaan Wali <span class="text-danger">*</span></label>
                 <select name="pekerjaan_walimurid_id" id="pekerjaan_walimurid_id" class="form-control">
-                    <option disabled selected>Pilih salah satu</option>
-                    @foreach ($pekerjaan as $item)
-                        <option value="{{ $item->id }}"
-                            {{ $ortu->pekerjaan_walimurid_id == $item->id ? 'selected' : '' }}>
-                            {{ $item->nama }}</option>
-                    @endforeach
+                    <option value="">-- Pilih Pekerjaan --</option>
+                    @if (!empty($pekerjaan))
+                        @foreach ($pekerjaan as $item)
+                            <option value="{{ $item->id }}"
+                                {{ optional($ortu)->pekerjaan_walimurid_id == $item->id ? 'selected' : '' }}>
+                                {{ $item->nama }}</option>
+                        @endforeach
+                    @endif
+
                 </select>
             </div>
         </div>
