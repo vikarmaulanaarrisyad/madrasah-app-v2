@@ -26,7 +26,7 @@ class Siswa extends Model
 
     public function orangtua()
     {
-        return $this->belongsTo(OrangTua::class);
+        return $this->belongsTo(OrangTua::class, 'siswa_id');
     }
 
     public function scopeAktif(Builder $query): void

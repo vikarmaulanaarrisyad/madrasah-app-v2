@@ -11,6 +11,7 @@
             /* Ukuran F4 */
             margin: 1cm 1cm 1cm 1cm;
             /* Atas 1cm, Kanan 1.5cm, Bawah 1cm, Kiri 1cm */
+            counter-reset: page;
         }
 
         body {
@@ -226,11 +227,11 @@
                 </tr>
                 <tr>
                     <td class="indent">a. Ayah</td>
-                    <td>: {{ $siswa->orangtua->nama_lengkap_ayah ?? '-' }}</td>
+                    <td>: {{ $siswa->orangtua->nama_ayah ?? '-' }}</td>
                 </tr>
                 <tr>
                     <td class="indent">b. Ibu</td>
-                    <td>: {{ $siswa->orangtua->nama_lengkap_ibu ?? '-' }}</td>
+                    <td>: {{ $siswa->orangtua->nama_ibu ?? '-' }}</td>
                 </tr>
                 <tr>
                     <td class="indent-title">10. Pendidikan Tertinggi</td>
