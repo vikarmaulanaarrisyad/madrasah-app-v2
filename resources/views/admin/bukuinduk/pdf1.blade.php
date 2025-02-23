@@ -7,7 +7,7 @@
     <title>Buku Induk Siswa</title>
     <style>
         @page {
-            size: 21.59cm 33cm;
+            size: 21cm 33cm;
             /* Ukuran F4 */
             margin: 1cm 1cm 1cm 1cm;
             /* Atas 1cm, Kanan 1.5cm, Bawah 1cm, Kiri 1cm */
@@ -15,7 +15,7 @@
 
         body {
             font-family: Arial, sans-serif;
-            font-size: 12px;
+            font-size: 14px;
             margin: 0;
             padding: 0;
         }
@@ -79,29 +79,11 @@
         }
 
         .photo-box {
-            border: 1px solid #000;
-            width: 100px;
-            height: 120px;
+            width: 80px;
+            height: 100px;
             text-align: center;
-            line-height: 80px;
-            font-size: 14px;
-            float: right;
-            margin-left: 20px;
-        }
-
-        .ttd-text {
-            line-height: 15px;
-            margin-top: 50px;
-            font-size: 9px;
-            text-align: center;
-            text-justify: inter-word;
-            word-spacing: -1px;
-            /* Mengurangi spasi antar kata */
-            width: 130px;
-            /* Sesuaikan dengan kebutuhan */
-            margin-left: -15px;
-            margin-right: auto;
-            /* Agar tetap di tengah */
+            vertical-align: middle;
+            border: 1px solid black;
         }
 
         .photo-box img {
@@ -121,6 +103,7 @@
     <div class="container">
         @foreach ($siswas as $siswa)
             <div class="title">II. LEMBAR BUKU INDUK SISWA</div>
+            {{--  <td rowspan="5" class="photo-box">Pas Foto 3x4</td>  --}}
             <table width="100%">
                 <tr>
                     <td><strong>Nomor Induk Siswa</strong></td>
@@ -139,24 +122,9 @@
             </table>
 
             <div class="section-title">A. Keterangan Siswa</div>
-
-            <table width="100%">
+            <table>
                 <tr>
                     <td class="indent-title">1. Nama Siswa</td>
-                    <td colspan="3" style="text-align: center;">
-                        <div style="display: flex; flex-direction: column; align-items: center;">
-                            <div class="photo-box">Pas Photo 3x4 <p class="ttd-text">
-                                    Cap Tiga jari tengah Tangan
-                                    Kiri diatas pas foto bagian bawah waktu diterima di sekolah
-                                    <br>
-                                    <br>
-                                    Tanda Tangan Siswa
-                                    <br><br><br><br>
-                                    (.......................................)
-                                </p>
-                            </div>
-                        </div>
-                    </td>
                 </tr>
                 <tr>
                     <td class="indent">Nama Lengkap</td>
@@ -209,20 +177,6 @@
             <table>
                 <tr>
                     <td class="indent-title">9. Nama Orang Tua Kandung</td>
-                    <td colspan="3" style="text-align: center;">
-                        <div style="display: flex; flex-direction: column; align-items: center;">
-                            <div class="photo-box">Pas Photo 3x4 <p class="ttd-text">
-                                    Cap Tiga jari tengah Tangan
-                                    Kiri diatas pas foto bagian bawah waktu diterima di sekolah
-                                    <br>
-                                    <br>
-                                    Tanda Tangan Siswa
-                                    <br><br><br><br>
-                                    (.......................................)
-                                </p>
-                            </div>
-                        </div>
-                    </td>
                 </tr>
                 <tr>
                     <td class="indent">a. Ayah</td>
@@ -276,24 +230,10 @@
             </table>
 
             <div class="section-title">C. Perkembangan Siswa</div>
-            <table width="100%">
+            <table>
                 <tr>
                     <td class="indent-title">16. Pendidikan Sebelumnya</td>
-                    <td colspan="3" style="text-align: center;">
-                        <div style="display: flex; flex-direction: column; align-items: center;">
-                            <div class="photo-box">Pas Photo 3x4 <p class="ttd-text">
-                                    Cap Tiga jari tengah Tangan
-                                    Kiri diatas pas foto bagian bawah waktu diterima di sekolah
-                                    <br>
-                                    <br>
-                                    Tanda Tangan Siswa
-                                    <br><br><br><br>
-                                    (.......................................)
-                                </p>
-                            </div>
-                        </div>
-                    </td>
-
+                    <td></td>
                 </tr>
                 <tr>
                     <td class="indent">a. Masuk menjadi siswa baru tingkat I</td>
