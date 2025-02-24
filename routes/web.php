@@ -28,9 +28,9 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    // Route::get('/', function () {
-    //     return redirect()->route('dashboard');
-    // });
+    Route::get('/', function () {
+        return redirect()->route('dashboard');
+    });
 
     // Role Admin
     Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
@@ -68,7 +68,9 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Route Proses Kenaikan Siswa
         Route::get('/kenaikan-siswa', [KenaikanSiswaController::class, 'index'])->name('kenaikan-siswa.index');
+        Route::get('/kenaikan-siswa/get-siswa', [KenaikanSiswaController::class, 'getSiswa'])->name('kenaikan-siswa.get-siswa');
         Route::post('/kenaikan-siswa/proses', [KenaikanSiswaController::class, 'prosesKenaikan'])->name('kenaikan-siswa.proses');
+        Route::post('/kenaikan-siswa/batal', [KenaikanSiswaController::class, 'batalKenaikan'])->name('kenaikan-siswa.batal');
 
         Route::get('/naikkan-siswa/{rombel_id}', [SiswaController::class, 'naikkanSiswaPerRombel'])->name('siswa,kenaikanSiswa');
         Route::get('/batalkan-kenaikan/{rombel_id}', [SiswaController::class, 'batalkanKenaikanPerRombel'])->name('siswa.batalkanKenaikkanSiswa');

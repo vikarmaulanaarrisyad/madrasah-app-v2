@@ -107,7 +107,7 @@
                     data: 'nama'
                 },
                 {
-                    data: 'kurikulum.nama'
+                    data: 'kurikulum'
                 },
                 {
                     data: 'aksi',

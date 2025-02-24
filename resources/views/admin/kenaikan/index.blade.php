@@ -28,21 +28,23 @@
                                 value="{{ $tahunPelajaranAktif->nama }} {{ $tahunPelajaranAktif->semester->nama }}"
                                 readonly>
                         </div>
+
                         <div class="form-group">
-                            <label>Kelas Tujuan</label>
-                            <select class="form-control" name="kelas_tujuan">
-                                {{--  @foreach ($kelas as $k)
-                                    <option value="{{ $k->id }}">{{ $k->nama }}</option>
-                                @endforeach  --}}
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Rombel Tujuan</label>
-                            <select class="form-control" name="rombel_tujuan">
-                                @foreach ($rombelBerikutnya as $r)
-                                    <option value="{{ $r->id }}">{{ $r->nama }}</option>
+                            <label>Rombel Tahun Sebelumnya</label>
+                            <select class="form-control" name="rombel_sebelumnya" id="rombel_sebelumnya">
+                                <option value="">-- Pilih Rombel --</option>
+                                @foreach ($rombelSebelumnya as $r)
+                                    <option value="{{ $r->id }}" data-kelas="{{ $r->kelas->nama }}"
+                                        data-tingkat="{{ $r->kelas->tingkat }}">
+                                        {{ $r->kelas->nama }} {{ $r->nama }}
+                                    </option>
                                 @endforeach
                             </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Kelas Tujuan</label>
+                            <input type="text" class="form-control" name="kelas_tujuan" id="kelas_tujuan" readonly>
                         </div>
 
                         <div class="form-group">
@@ -52,23 +54,12 @@
                                     <tr>
                                         <th><input type="checkbox" id="selectAll"></th>
                                         <th>Nama</th>
+                                        <th>NISN</th>
                                         <th>NIS</th>
-                                        <th>Kelas</th>
-                                        <th>Rombel</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    @foreach ($siswa as $s)
-                                        <tr>
-                                            <td>
-                                                <input type="checkbox" name="siswa_ids[]" value="{{ $s->id }}">
-                                            </td>
-                                            <td>{{ $s->nama_lengkap }}</td>
-                                            <td>{{ $s->nis }}</td>
-                                            <td>2</td>
-                                            <td>2</td>
-                                        </tr>
-                                    @endforeach
+                                <tbody id="tbodySiswa">
+                                    {{-- Data siswa akan diisi melalui AJAX --}}
                                 </tbody>
                             </table>
                         </div>
@@ -81,14 +72,73 @@
     </div>
 @endsection
 
+@include('includes.datatables')
+
 @push('scripts')
     <script>
         $(document).ready(function() {
-            // Checkbox untuk memilih semua siswa
+            // Ambil tingkat tertinggi dari server
+            const tingkatTertinggi = 6; // Misalnya, tingkat tertinggi adalah 6 (kelas 6)
+
+            // Event saat rombel sebelumnya berubah
+            $('#rombel_sebelumnya').change(function() {
+                let selectedRombel = $(this).find(':selected');
+                let tingkatSaatIni = parseInt(selectedRombel.data('tingkat')); // Ambil tingkat kelas
+                let kelasTujuan = "";
+
+                if (tingkatSaatIni >= tingkatTertinggi) {
+                    kelasTujuan = "Lulus";
+                } else {
+                    kelasTujuan = "Kelas " + (tingkatSaatIni + 1); // Contoh: Kelas 5 → Kelas 6
+                }
+
+                $('#kelas_tujuan').val(kelasTujuan); // Set kelas tujuan
+            });
+
+            // AJAX untuk menampilkan siswa berdasarkan rombel
+            $('#rombel_sebelumnya').change(function() {
+                let rombelId = $(this).val();
+
+                $('#tbodySiswa').html('<tr><td colspan="5" class="text-center">Loading...</td></tr>');
+
+                $.ajax({
+                    url: "{{ route('kenaikan-siswa.get-siswa') }}",
+                    type: "GET",
+                    data: {
+                        rombel_id: rombelId
+                    },
+                    success: function(response) {
+                        let rows = "";
+                        if (response.siswa.length > 0) {
+                            $.each(response.siswa, function(index, siswa) {
+                                rows += `
+                                    <tr>
+                                        <td><input type="checkbox" name="siswa_ids[]" value="${siswa.id}"></td>
+                                        <td>${siswa.nama_lengkap}</td>
+                                        <td>${siswa.nisn}</td>
+                                        <td>${siswa.nis}</td>
+                                    </tr>`;
+                            });
+                        } else {
+                            rows =
+                                '<tr><td colspan="5" class="text-center">Tidak ada siswa di rombel ini</td></tr>';
+                        }
+                        $('#tbodySiswa').html(rows);
+                    },
+                    error: function(xhr) {
+                        $('#tbodySiswa').html(
+                            '<tr><td colspan="5" class="text-center text-danger">Gagal mengambil data!</td></tr>'
+                        );
+                    }
+                });
+            });
+
+            // Pilih semua siswa
             $('#selectAll').change(function() {
                 $('input[name="siswa_ids[]"]').prop('checked', $(this).prop('checked'));
             });
 
+            // Proses kenaikan siswa
             $('#formKenaikan').submit(function(e) {
                 e.preventDefault();
 
@@ -110,15 +160,18 @@
                     cancelButtonText: 'Batal'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Sedang Memproses...',
+                            allowOutsideClick: false,
+                            didOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
                         $.ajax({
                             url: "{{ route('kenaikan-siswa.proses') }}",
                             type: "POST",
-                            data: {
-                                _token: "{{ csrf_token() }}",
-                                siswa_ids: selectedSiswa,
-                                kelas_tujuan: $('select[name="kelas_tujuan"]').val(),
-                                rombel_tujuan: $('select[name="rombel_tujuan"]').val(),
-                            },
+                            data: $('#formKenaikan').serialize(),
                             success: function(response) {
                                 Swal.fire('Berhasil!', response.message, 'success');
                             },
