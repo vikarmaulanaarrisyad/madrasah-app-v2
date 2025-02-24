@@ -101,22 +101,26 @@
                         </a>
                     </li>
 
-                    {{--  @php
-                        $semesterGenap = \App\Models\Semester::where('nama', 'Genap')->first();
-                        $tahunPelajaranGenap = App\Models\TahunPelajaran::aktif()
-                            ->where('semester_id', $semesterGenap->id)
-                            ->first();
+                    @php
+                        // Ambil tahun pelajaran aktif
+                        $tahunPelajaranAktif = \App\Models\TahunPelajaran::aktif()->first();
+
+                        // Ambil tahun sebelumnya (pastikan tidak null)
+                        $tahunSebelumnya = $tahunPelajaranAktif
+                            ? \App\Models\TahunPelajaran::where('id', '<', $tahunPelajaranAktif->id)
+                                ->orderBy('nama', 'desc')
+                                ->first()
+                            : null;
                     @endphp
-                    @if ($tahunPelajaranGenap)
+
+                    @if ($tahunSebelumnya && ($tahunSebelumnya->semester->nama ?? '') == 'Genap')
                         <li class="nav-item">
-                            <a href="{{ route('rombel.index') }}" class="nav-link">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>
-                                    Proses Kenaikan
-                                </p>
+                            <a href="{{ route('kenaikan-siswa.index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-graduation-cap"></i>
+                                <p>Proses Kenaikan</p>
                             </a>
                         </li>
-                    @endif  --}}
+                    @endif
 
 
                     {{--  <li class="nav-header">E-RAPORT</li>
@@ -285,6 +289,54 @@
                             <i class="nav-icon fas fa-print"></i>
                             <p>Cetak Absensi Guru</p>
                         </a>
+                    </li>
+                    <li class="nav-header">MANAJEMEN WEBSITE</li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-globe-asia"></i>
+                            <p>
+                                Website
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview" style="display: none;">
+                            <li class="nav-item">
+                                <a href="pages/charts/chartjs.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Kategori</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/charts/inline.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Artikel</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/charts/inline.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Slider</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/charts/uplot.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Platform</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/charts/uplot.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Event</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/charts/uplot.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Testimonial</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-header">MANAGEMEN PENGGUNA</li>
                     <li class="nav-item">

@@ -194,6 +194,8 @@
                                 .addClass('fa-toggle-off text-danger');
                         }
                     }
+
+                    window.location.reload();
                 },
                 error: function(xhr) {
                     Swal.close(); // Tutup loading
