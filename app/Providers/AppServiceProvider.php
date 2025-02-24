@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Aplikasi;
 use App\Models\Sekolah;
+use App\Models\TahunPelajaran;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +24,7 @@ class AppServiceProvider extends ServiceProvider
     {
         view()->composer('*', function ($view) {
             $view->with('aplikasi', Aplikasi::first());
+            $view->with('tapel', TahunPelajaran::aktif()->first());
             $view->with('sekolah', Sekolah::first());
         });
     }

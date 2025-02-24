@@ -10,10 +10,10 @@ use App\Http\Controllers\{
     GuruJurnalController,
     JurnalGuruController,
     KelasController,
+    KenaikanSiswaController,
     KkmController,
     KurikulumController,
     MataPelajaranController,
-    NilaiSiswaController,
     RombelController,
     SekolahController,
     SiswaController,
@@ -23,13 +23,14 @@ use App\Http\Controllers\{
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('auth.login');
+    return view('welcome');
+    // return view('auth.login');
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/', function () {
-        return redirect()->route('dashboard');
-    });
+    // Route::get('/', function () {
+    //     return redirect()->route('dashboard');
+    // });
 
     // Role Admin
     Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
@@ -64,6 +65,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('/siswa', SiswaController::class)->except('edit', 'create');
         Route::get('/siswa/{id}/detail', [SiswaController::class, 'detail'])->name('siswa.detail');
         Route::post('/siswa/orangtua/update', [SiswaController::class, 'updateOrtu'])->name('siswa.update_ortu');
+
+        // Route Proses Kenaikan Siswa
+        Route::get('/kenaikan-siswa', [KenaikanSiswaController::class, 'index'])->name('kenaikan-siswa.index');
+        Route::post('/kenaikan-siswa/proses', [KenaikanSiswaController::class, 'prosesKenaikan'])->name('kenaikan-siswa.proses');
+
         Route::get('/naikkan-siswa/{rombel_id}', [SiswaController::class, 'naikkanSiswaPerRombel'])->name('siswa,kenaikanSiswa');
         Route::get('/batalkan-kenaikan/{rombel_id}', [SiswaController::class, 'batalkanKenaikanPerRombel'])->name('siswa.batalkanKenaikkanSiswa');
 
