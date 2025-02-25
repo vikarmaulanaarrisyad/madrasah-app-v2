@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('artikels', function (Blueprint $table) {
             $table->id();
+            $table->date('tgl_publish');
+            $table->unsignedBigInteger('kategori_id');
+            $table->string('judul');
+            $table->string('slug');
+            $table->text('content')->nullable();
+            $table->string('image')->default('image.jpg');
+            $table->enum('status', ['publish', 'archived'])->default('publish');
             $table->timestamps();
         });
     }

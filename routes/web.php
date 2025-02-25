@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\{
     AplikasiController,
+    ArtikelController,
     CetakAbsenGuruController,
     CetakAbsenSiswaController,
     CetakBukuIndukController,
@@ -116,6 +117,11 @@ Route::group(['middleware' => 'auth'], function () {
         // Route Kategori
         Route::get('/kategori/data', [KategoriController::class, 'data'])->name('kategori.data');
         Route::resource('/kategori', KategoriController::class);
+
+        // Route Artikel
+        Route::get('/artikel/data', [ArtikelController::class, 'data'])->name('artikel.data');
+        Route::resource('/artikel', ArtikelController::class);
+        Route::put('/artikel/update-status/{id}', [ArtikelController::class, 'updateStatus'])->name('artikel.update_status');
 
         // Route Nilai Siswa
         Route::resource('/k13kkm', KkmController::class);
