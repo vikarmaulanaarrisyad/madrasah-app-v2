@@ -174,6 +174,7 @@
                             data: $('#formKenaikan').serialize(),
                             success: function(response) {
                                 Swal.fire('Berhasil!', response.message, 'success');
+                                window.location.reload();
                             },
                             error: function(xhr) {
                                 Swal.fire('Gagal!', xhr.responseJSON.message, 'error');

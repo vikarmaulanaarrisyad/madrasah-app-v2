@@ -84,7 +84,7 @@ class KenaikanSiswaController extends Controller
     }
 
 
-    public function index()
+    public function index1()
     {
         $tahunPelajaranAktif = TahunPelajaran::aktif()->orderBy('nama', 'desc')->first();
         if (!$tahunPelajaranAktif) {
@@ -112,6 +112,43 @@ class KenaikanSiswaController extends Controller
         return view('admin.kenaikan.index', compact('rombelSebelumnya', 'tahunSebelumnya', 'tahunPelajaranAktif', 'kelas', 'kelasTujuan'));
     }
 
+    public function index()
+    {
+        // Ambil Tahun Pelajaran Aktif
+        $tahunPelajaranAktif = TahunPelajaran::aktif()->orderBy('nama', 'desc')->first();
+        if (!$tahunPelajaranAktif) {
+            return redirect()->back()->with('error', 'Tahun Pelajaran Aktif tidak ditemukan.');
+        }
+
+        // Ambil Tahun Pelajaran Sebelumnya yang memiliki semester "Genap"
+        $tahunSebelumnya = TahunPelajaran::where('id', '<', $tahunPelajaranAktif->id)
+            ->whereHas('semester', function ($query) {
+                $query->where('nama', 'Genap');
+            })
+            ->orderBy('id', 'desc')
+            ->first();
+
+        if (!$tahunSebelumnya) {
+            return redirect()->back()->with('error', 'Tahun Pelajaran Sebelumnya tidak ditemukan atau bukan semester Genap.');
+        }
+
+        // Ambil daftar Rombel berdasarkan Tahun Pelajaran Sebelumnya
+        $rombelSebelumnya = Rombel::where('tahun_pelajaran_id', $tahunSebelumnya->id)->get();
+
+        // Ambil daftar Kelas
+        $kelas = Kelas::orderBy('nama')->get();
+
+        // Buat daftar tujuan kenaikan kelas
+        $kelasTujuan = [];
+        foreach ($kelas as $index => $k) {
+            if (isset($kelas[$index + 1])) {
+                $kelasTujuan[$k->id] = $kelas[$index + 1]->nama;
+            }
+        }
+
+        return view('admin.kenaikan.index', compact('rombelSebelumnya', 'tahunSebelumnya', 'tahunPelajaranAktif', 'kelas', 'kelasTujuan'));
+    }
+
     public function prosesKenaikan(Request $request)
     {
         $request->validate([
@@ -122,13 +159,102 @@ class KenaikanSiswaController extends Controller
         try {
             DB::beginTransaction();
 
-            $status = $request->kelas_tujuan === "Lulus" ? "Lulus" : "Naik Kelas";
-            $keterangan = $request->kelas_tujuan === "Lulus"
-                ? "Lulus dari sekolah"
-                : "Naik ke " . $request->kelas_tujuan;
+            // Ambil tahun pelajaran aktif
+            $tahunPelajaranAktif = TahunPelajaran::aktif()->orderBy('nama', 'desc')->first();
+            if (!$tahunPelajaranAktif) {
+                throw new \Exception("Tahun Pelajaran Aktif tidak ditemukan.");
+            }
 
+            // Ambil tahun pelajaran sebelumnya
+            $tahunSebelumnya = TahunPelajaran::where('id', '<', $tahunPelajaranAktif->id)
+                ->orderBy('nama', 'desc')
+                ->first();
+            if (!$tahunSebelumnya) {
+                throw new \Exception("Tahun Pelajaran Sebelumnya tidak ditemukan.");
+            }
+
+            $status = "Aktif";
+            $keterangan = "-"; // Default jika bukan kelas 1
+
+            // Jika siswa lulus, ubah level ke 7 (Alumni)
             if ($request->kelas_tujuan === "Lulus") {
-                // Update level siswa menjadi 7 jika lulus
+                Siswa::whereIn('id', $request->siswa_ids)->update([
+                    'level' => 7,
+                ]);
+                $status = "Alumni";
+                $keterangan = "Lulus";
+            } else {
+                // Cari kelas tujuan berdasarkan nama
+                $kelas = Kelas::where('nama', $request->kelas_tujuan)->first();
+                if (!$kelas) {
+                    throw new \Exception("Kelas tujuan tidak ditemukan.");
+                }
+
+                // Update level siswa ke tingkat kelas tujuan
+                Siswa::whereIn('id', $request->siswa_ids)->update([
+                    'rombel_sebelumnya_id' => $request->rombel_sebelumnya,
+                    'level' => $kelas->tingkat,
+                ]);
+            }
+
+            // Loop setiap siswa untuk memperbarui status di `siswa_rombel`
+            foreach ($request->siswa_ids as $siswa_id) {
+                // Ambil level siswa setelah update
+                $siswa = Siswa::find($siswa_id);
+
+                // **Jika siswa berasal dari kelas 1 pada tahun sebelumnya, set keterangan "Siswa Baru"**
+                $rombelSebelumnya = DB::table('siswa_rombel')
+                    ->where('siswa_id', $siswa_id)
+                    ->where('rombel_id', $request->rombel_sebelumnya)
+                    ->where('tahun_pelajaran_id', $tahunSebelumnya->id) // Tahun sebelumnya
+                    ->first();
+
+                if ($siswa->level == 1) {
+                    $keterangan = "Siswa Baru";
+                } else {
+                    $keterangan = "Naik dari Kelas Sebelumnya";
+                }
+
+                // Perbarui atau buat data di `siswa_rombel`
+                DB::table('siswa_rombel')
+                    ->where('tahun_pelajaran_id', $tahunPelajaranAktif->id)
+                    ->update(
+                        [
+                            'status' => $status,
+                            'keterangan' => $keterangan,
+                            'updated_at' => now(),
+                        ]
+                    );
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Proses kenaikan siswa berhasil dilakukan!',
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function prosesKenaikan1(Request $request)
+    {
+        $request->validate([
+            'siswa_ids' => 'required|array',
+            'kelas_tujuan' => 'required|string',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $status = $request->kelas_tujuan === "Lulus" ? "Alumni" : "Aktif";
+            $keterangan = $request->kelas_tujuan === "Lulus" ? "Lulus" : "-";
+
+            // Jika siswa lulus, ubah level ke 7 (Alumni)
+            if ($request->kelas_tujuan === "Lulus") {
                 Siswa::whereIn('id', $request->siswa_ids)->update([
                     'level' => 7,
                 ]);
@@ -146,8 +272,18 @@ class KenaikanSiswaController extends Controller
                 ]);
             }
 
-            // Update data di tabel pivot `siswa_rombel`
+            // Loop setiap siswa untuk memperbarui status di `siswa_rombel`
             foreach ($request->siswa_ids as $siswa_id) {
+                // Ambil level siswa setelah update
+                $siswa = Siswa::find($siswa_id);
+
+                // Jika level siswa adalah 1, status tetap "Aktif" dan keterangan "Siswa Baru"
+                if ($siswa->level == '1') {
+                    $status = "Aktif";
+                    $keterangan = "Siswa Baru";
+                }
+
+                // Update data di tabel pivot `siswa_rombel`
                 DB::table('siswa_rombel')
                     ->where('siswa_id', $siswa_id)
                     ->where('rombel_id', $request->rombel_sebelumnya)

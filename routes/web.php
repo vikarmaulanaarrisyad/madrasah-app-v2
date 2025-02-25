@@ -9,6 +9,7 @@ use App\Http\Controllers\{
     GuruController,
     GuruJurnalController,
     JurnalGuruController,
+    KategoriController,
     KelasController,
     KenaikanSiswaController,
     KkmController,
@@ -28,9 +29,9 @@ Route::get('/', function () {
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/', function () {
-        return redirect()->route('dashboard');
-    });
+    // Route::get('/', function () {
+    //     return redirect()->route('dashboard');
+    // });
 
     // Role Admin
     Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
@@ -111,6 +112,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/aplikasi/{id}/update', [AplikasiController::class, 'update'])->name('aplikasi.update');
         Route::get('/user/profile', [UserProfileInformationController::class, 'show'])
             ->name('profile.show');
+
+        // Route Kategori
+        Route::get('/kategori/data', [KategoriController::class, 'data'])->name('kategori.data');
+        Route::resource('/kategori', KategoriController::class);
 
         // Route Nilai Siswa
         Route::resource('/k13kkm', KkmController::class);
