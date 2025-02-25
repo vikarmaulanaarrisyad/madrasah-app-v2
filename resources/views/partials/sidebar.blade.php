@@ -92,28 +92,23 @@
                             </p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="{{ route('rombel.index') }}" class="nav-link">
-                            <i class="nav-icon fas fa-users"></i>
-                            <p>
-                                Rombongan Belajar
-                            </p>
-                        </a>
-                    </li>
 
                     @php
                         // Ambil tahun pelajaran aktif
                         $tahunPelajaranAktif = \App\Models\TahunPelajaran::aktif()->first();
 
-                        // Ambil tahun sebelumnya (pastikan tidak null)
+                        // Ambil tahun sebelumnya yang memiliki semester "Genap"
                         $tahunSebelumnya = $tahunPelajaranAktif
                             ? \App\Models\TahunPelajaran::where('id', '<', $tahunPelajaranAktif->id)
-                                ->orderBy('nama', 'desc')
+                                ->whereHas('semester', function ($query) {
+                                    $query->where('nama', 'Genap');
+                                })
+                                ->orderBy('id', 'desc')
                                 ->first()
                             : null;
                     @endphp
 
-                    @if ($tahunSebelumnya && ($tahunSebelumnya->semester->nama ?? '') == 'Genap')
+                    @if ($tahunSebelumnya)
                         <li class="nav-item">
                             <a href="{{ route('kenaikan-siswa.index') }}" class="nav-link">
                                 <i class="nav-icon fas fa-graduation-cap"></i>
@@ -122,6 +117,15 @@
                         </li>
                     @endif
 
+
+                    <li class="nav-item">
+                        <a href="{{ route('rombel.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-users"></i>
+                            <p>
+                                Rombongan Belajar
+                            </p>
+                        </a>
+                    </li>
 
                     {{--  <li class="nav-header">E-RAPORT</li>
                     <li class="nav-item">
@@ -301,13 +305,13 @@
                         </a>
                         <ul class="nav nav-treeview" style="display: none;">
                             <li class="nav-item">
-                                <a href="pages/charts/chartjs.html" class="nav-link">
+                                <a href="{{ route('kategori.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Kategori</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="pages/charts/inline.html" class="nav-link">
+                                <a href="{{ route('artikel.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Artikel</p>
                                 </a>

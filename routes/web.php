@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\{
     AplikasiController,
+    ArtikelController,
     CetakAbsenGuruController,
     CetakAbsenSiswaController,
     CetakBukuIndukController,
@@ -9,6 +10,7 @@ use App\Http\Controllers\{
     GuruController,
     GuruJurnalController,
     JurnalGuruController,
+    KategoriController,
     KelasController,
     KenaikanSiswaController,
     KkmController,
@@ -68,7 +70,9 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Route Proses Kenaikan Siswa
         Route::get('/kenaikan-siswa', [KenaikanSiswaController::class, 'index'])->name('kenaikan-siswa.index');
+        Route::get('/kenaikan-siswa/get-siswa', [KenaikanSiswaController::class, 'getSiswa'])->name('kenaikan-siswa.get-siswa');
         Route::post('/kenaikan-siswa/proses', [KenaikanSiswaController::class, 'prosesKenaikan'])->name('kenaikan-siswa.proses');
+        Route::post('/kenaikan-siswa/batal', [KenaikanSiswaController::class, 'batalKenaikan'])->name('kenaikan-siswa.batal');
 
         Route::get('/naikkan-siswa/{rombel_id}', [SiswaController::class, 'naikkanSiswaPerRombel'])->name('siswa,kenaikanSiswa');
         Route::get('/batalkan-kenaikan/{rombel_id}', [SiswaController::class, 'batalkanKenaikanPerRombel'])->name('siswa.batalkanKenaikkanSiswa');
@@ -109,6 +113,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/aplikasi/{id}/update', [AplikasiController::class, 'update'])->name('aplikasi.update');
         Route::get('/user/profile', [UserProfileInformationController::class, 'show'])
             ->name('profile.show');
+
+        // Route Kategori
+        Route::get('/kategori/data', [KategoriController::class, 'data'])->name('kategori.data');
+        Route::resource('/kategori', KategoriController::class);
+
+        // Route Artikel
+        Route::get('/artikel/data', [ArtikelController::class, 'data'])->name('artikel.data');
+        Route::resource('/artikel', ArtikelController::class);
+        Route::put('/artikel/update-status/{id}', [ArtikelController::class, 'updateStatus'])->name('artikel.update_status');
 
         // Route Nilai Siswa
         Route::resource('/k13kkm', KkmController::class);

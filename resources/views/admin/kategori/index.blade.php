@@ -1,78 +1,39 @@
 @extends('layouts.app')
 
-@section('title', 'Mata Pelajaran')
+@section('title', 'Data Kategori')
 
-@section('subtitle', 'Mata Pelajaran')
+@section('subtitle', 'Data Kategori')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-    <li class="breadcrumb-item active">Mata Pelajaran</li>
+    <li class="breadcrumb-item active">Kategori</li>
 @endsection
 
 @section('content')
-    <div class="row mt-3">
-        <div class="col-lg-12">
-            <div class="card shadow-sm border-left-danger">
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <div class="mr-3">
-                            <i class="fas fa-book-open fa-3x text-danger"></i>
-                        </div>
-                        <div>
-                            <h5 class="font-weight-bold text-danger">📖 Mata Pelajaran</h5>
-                            <p class="mb-2 text-dark">
-                                Pastikan daftar mata pelajaran sesuai dengan kurikulum yang berlaku. Cek dan atur mata
-                                pelajaran
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <div class="row">
         <div class="col-lg-12">
             <x-card>
                 <x-slot name="header">
                     <h3 class="card-title">
-                        <i class="fas fa-calendar-alt mr-1 mt-2"></i>
                         @yield('subtitle')
                     </h3>
                     <div class="card-tools">
-                        <div class="d-flex align-items-center">
-                            <div class="mr-2">
-                                <select id="filterkurikulum" name="filterkurikulum" class="form-control form-control-sm">
-                                    <option value="">- Semua Kurikulum -</option>
-                                    @foreach ($kurikulums as $item)
-                                        <option value="{{ $item->id }}">{{ $item->nama }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div>
-                                <button onclick="addForm(`{{ route('matapelajaran.store') }}`)"
-                                    class="btn btn-sm btn-primary">
-                                    <i class="fas fa-plus-circle"></i> Tambah Data
-                                </button>
-                            </div>
-                        </div>
+                        <button onclick="addForm(`{{ route('kategori.store') }}`)" class="btn btn-sm btn-primary"><i
+                                class="fas fa-plus-circle"></i> Tambah Data</button>
                     </div>
-
                 </x-slot>
 
                 <x-table>
                     <x-slot name="thead">
                         <th>No</th>
-                        <th>Kode Mapel</th>
-                        <th>Nama Mapel</th>
-                        <th>Kurikulum</th>
+                        <th>Nama Kategori</th>
                         <th>Aksi</th>
                     </x-slot>
                 </x-table>
             </x-card>
         </div>
     </div>
-    @include('admin.matapelajaran.form')
+    @include('admin.kategori.form')
 @endsection
 
 @include('includes.datatables')
@@ -89,10 +50,7 @@
             autoWidth: false,
             responsive: true,
             ajax: {
-                url: '{{ route('matapelajaran.data') }}',
-                data: function(d) {
-                    d.filterkurikulum = $('[name=filterkurikulum]').val()
-                },
+                url: '{{ route('kategori.data') }}'
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -101,13 +59,7 @@
                     searchable: false
                 },
                 {
-                    data: 'kode'
-                },
-                {
                     data: 'nama'
-                },
-                {
-                    data: 'kurikulum'
                 },
                 {
                     data: 'aksi',
@@ -118,11 +70,7 @@
             ]
         })
 
-        $('#filterkurikulum').on('change', function() {
-            table.ajax.reload();
-        })
-
-        function addForm(url, title = 'Form Mapel') {
+        function addForm(url, title = 'Form Kategori') {
             $(modal).modal('show');
             $(`${modal} .modal-title`).text(title);
             $(`${modal} form`).attr('action', url);
@@ -131,7 +79,7 @@
             resetForm(`${modal} form`);
         }
 
-        function editForm(url, title = 'Form Mapel') {
+        function editForm(url, title = 'Form Kategori') {
             Swal.fire({
                 title: "Memuat...",
                 text: "Mohon tunggu sebentar...",
@@ -149,7 +97,6 @@
                     $(`${modal} .modal-title`).text(title);
                     $(`${modal} form`).attr('action', url);
                     $(`${modal} [name=_method]`).val('put');
-
                     resetForm(`${modal} form`);
                     loopForm(response.data);
                 })
