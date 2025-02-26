@@ -22,12 +22,15 @@ use App\Http\Controllers\{
     TahunPelajaranController,
     UserProfileInformationController,
 };
+use App\Http\Controllers\Front\ArtikelFrontController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
     // return view('auth.login');
 });
+
+Route::get('/artikel/{slug}', [ArtikelFrontController::class, 'detail'])->name('front.artikel_detail');
 
 Route::group(['middleware' => 'auth'], function () {
     // Route::get('/', function () {

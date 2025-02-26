@@ -19,7 +19,7 @@
                                     <ul>
                                         <li>
                                             <a data-animation="fadeInUp" data-delay="1.6s" class="main-btn"
-                                                href="#">
+                                                href="{{ route('front.artikel_detail', $slider->slug) }}">
                                                 Read More
                                             </a>
                                         </li>
