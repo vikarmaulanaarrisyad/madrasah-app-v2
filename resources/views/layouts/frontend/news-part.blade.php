@@ -23,10 +23,14 @@
                                         {{ tanggal_indonesia($artikelTerbaru->tgl_publish) }}</a></li>
                                 <li><a href="#"> <span>By</span> Admin</a></li>
                             </ul>
-                            <a href="#">
+                            <a href="{{ route('front.artikel_detail', $artikelTerbaru->slug) }}">
                                 <h3>{{ $artikelTerbaru->judul ?? 'Tidak ada berita terbaru' }}</h3>
                             </a>
-                            <p>{!! $artikelTerbaru->content ?? 'Belum ada konten berita yang tersedia.' !!}</p>
+                            <p>
+                                {{--  {!! $artikelTerbaru->content ?? 'Belum ada konten berita yang tersedia.' !!}  --}}
+                                {{ Str::limit(strip_tags($artikelTerbaru->content ?? 'Tidak ada konten berita'), 150, '...') }}
+
+                            </p>
                         </div>
                     </div> <!-- singel news -->
                 </div>
@@ -59,7 +63,7 @@
                                                     {{ tanggal_indonesia($item->tgl_publish) }}</a></li>
                                             <li><a href="#"> <span>By</span> Admin</a></li>
                                         </ul>
-                                        <a href="#">
+                                        <a href="{{ route('front.artikel_detail', $item->slug) }}">
                                             <h3>{{ $item->judul ?? 'Judul Tidak Tersedia' }}</h3>
                                         </a>
                                         <p>{{ Str::limit(strip_tags($item->content ?? 'Tidak ada konten berita'), 100, '...') }}

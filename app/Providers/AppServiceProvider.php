@@ -30,6 +30,9 @@ class AppServiceProvider extends ServiceProvider
             $view->with('artikelTerbaru', Artikel::where('status', 'publish')->orderBy('id', 'DESC')->first());
             $view->with('artikel', Artikel::where('status', 'publish')->orderBy('id', 'DESC')->take(3)->skip(1)->get());
             $view->with('artikelSlider', Artikel::where('status', 'publish')->orderBy('id', 'DESC')->take(10)->get());
+
+            // Menambahkan artikel populer berdasarkan jumlah views tertinggi
+            $view->with('populerPost', Artikel::where('status', 'publish')->orderBy('id', 'DESC')->take(5)->get());
         });
     }
 }
