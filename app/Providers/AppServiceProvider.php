@@ -29,6 +29,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with('sekolah', Sekolah::first());
             $view->with('artikelTerbaru', Artikel::where('status', 'publish')->orderBy('id', 'DESC')->first());
             $view->with('artikel', Artikel::where('status', 'publish')->orderBy('id', 'DESC')->take(3)->skip(1)->get());
+            $view->with('artikelSlider', Artikel::where('status', 'publish')->orderBy('id', 'DESC')->take(10)->get());
         });
     }
 }
