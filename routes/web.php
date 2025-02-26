@@ -2,13 +2,18 @@
 
 use App\Http\Controllers\{
     AplikasiController,
+    ArtikelController,
     CetakAbsenGuruController,
     CetakAbsenSiswaController,
+    CetakBukuIndukController,
     DashboardController,
     GuruController,
     GuruJurnalController,
     JurnalGuruController,
+    KategoriController,
     KelasController,
+    KenaikanSiswaController,
+    KkmController,
     KurikulumController,
     MataPelajaranController,
     RombelController,
@@ -20,13 +25,14 @@ use App\Http\Controllers\{
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('auth.login');
+    return view('welcome');
+    // return view('auth.login');
 });
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/', function () {
-        return redirect()->route('dashboard');
-    });
+    // Route::get('/', function () {
+    //     return redirect()->route('dashboard');
+    // });
 
     // Role Admin
     Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
@@ -59,6 +65,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/siswa/export-excel', [SiswaController::class, 'exportEXCEL'])->name('siswa.exportEXCEL');
         Route::post('/siswa/import-excel', [SiswaController::class, 'importEXCEL'])->name('siswa.importEXCEL');
         Route::resource('/siswa', SiswaController::class)->except('edit', 'create');
+        Route::get('/siswa/{id}/detail', [SiswaController::class, 'detail'])->name('siswa.detail');
+        Route::post('/siswa/orangtua/update', [SiswaController::class, 'updateOrtu'])->name('siswa.update_ortu');
+
+        // Route Proses Kenaikan Siswa
+        Route::get('/kenaikan-siswa', [KenaikanSiswaController::class, 'index'])->name('kenaikan-siswa.index');
+        Route::get('/kenaikan-siswa/get-siswa', [KenaikanSiswaController::class, 'getSiswa'])->name('kenaikan-siswa.get-siswa');
+        Route::post('/kenaikan-siswa/proses', [KenaikanSiswaController::class, 'prosesKenaikan'])->name('kenaikan-siswa.proses');
+        Route::post('/kenaikan-siswa/batal', [KenaikanSiswaController::class, 'batalKenaikan'])->name('kenaikan-siswa.batal');
+
+        Route::get('/naikkan-siswa/{rombel_id}', [SiswaController::class, 'naikkanSiswaPerRombel'])->name('siswa,kenaikanSiswa');
+        Route::get('/batalkan-kenaikan/{rombel_id}', [SiswaController::class, 'batalkanKenaikanPerRombel'])->name('siswa.batalkanKenaikkanSiswa');
 
         // Route Rombel
         Route::get('/rombel/data', [RombelController::class, 'data'])->name('rombel.data');
@@ -85,6 +102,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/presensi-guru/filter', [CetakAbsenGuruController::class, 'filterPresensi'])->name('presensi.guru.filter');
         Route::get('/presensi-guru/download', [CetakAbsenGuruController::class, 'downloadPdf'])->name('presensi.guru.download');
 
+        Route::get('/bukuinduk/data', [CetakBukuIndukController::class, 'data'])->name('bukuinduk.data');
+        Route::get('/bukuinduk', [CetakBukuIndukController::class, 'index'])->name('bukuinduk.index');
+        Route::get('/bukuinduk/download_semua', [CetakBukuIndukController::class, 'downloadAll'])->name('bukuinduk.download_all');
+
         // Route Sekolah
         Route::get('/sekolah', [SekolahController::class, 'index'])->name('sekolah.index');
         Route::put('/sekolah/{id}/update', [SekolahController::class, 'update'])->name('sekolah.update');
@@ -92,18 +113,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/aplikasi/{id}/update', [AplikasiController::class, 'update'])->name('aplikasi.update');
         Route::get('/user/profile', [UserProfileInformationController::class, 'show'])
             ->name('profile.show');
+
+        // Route Kategori
+        Route::get('/kategori/data', [KategoriController::class, 'data'])->name('kategori.data');
+        Route::resource('/kategori', KategoriController::class);
+
+        // Route Artikel
+        Route::get('/artikel/data', [ArtikelController::class, 'data'])->name('artikel.data');
+        Route::resource('/artikel', ArtikelController::class);
+        Route::put('/artikel/update-status/{id}', [ArtikelController::class, 'updateStatus'])->name('artikel.update_status');
+
+        // Route Nilai Siswa
+        Route::resource('/k13kkm', KkmController::class);
     });
-
-    // Role Guru
-    // Route::group(['middleware' => 'role:guru', 'prefix' => 'guru'], function () {
-    //     Route::get('/', function () {
-    //         return redirect()->route('dashboard');
-    //     });
-
-    //     Route::get('/guru/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
-    //     // Route Jurnal
-    //     Route::get('guru/jurnal/data', [GuruJurnalController::class, 'data'])->name('guru.jurnal_data');
-    //     Route::resource('/guru-jurnal', GuruJurnalController::class);
-    // });
 });

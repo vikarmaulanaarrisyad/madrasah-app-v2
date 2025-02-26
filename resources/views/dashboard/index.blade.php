@@ -20,7 +20,8 @@
                 <div class="icon">
                     <i class="fas fa-user-friends"></i>
                 </div>
-                <a href="" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ route('guru.index') }}" class="small-box-footer">Selengkapnya <i
+                        class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <div class="col-lg-3 col-6">
@@ -33,7 +34,8 @@
                 <div class="icon">
                     <i class="fas fa-user-graduate"></i>
                 </div>
-                <a href="./jam-kbm" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ route('siswa.index') }}" class="small-box-footer">Selengkapnya <i
+                        class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <div class="col-lg-3 col-6">
@@ -46,7 +48,8 @@
                 <div class="icon">
                     <i class="fab fa-instalod"></i>
                 </div>
-                <a href="./ruang-rombel" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ route('rombel.index') }}" class="small-box-footer">Selengkapnya <i
+                        class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <div class="col-lg-3 col-6">
@@ -59,7 +62,8 @@
                 <div class="icon">
                     <i class="fas fa-book-open"></i>
                 </div>
-                <a href="./mapel" class="small-box-footer">Selengkapnya <i class="fas fa-arrow-circle-right"></i></a>
+                <a href="{{ route('kurikulum.index') }}" class="small-box-footer">Selengkapnya <i
+                        class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
     </div>

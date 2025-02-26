@@ -21,7 +21,7 @@ class GuruController extends Controller
     public function index()
     {
         $jenisKelamin = JenisKelamin::all();
-        return view('guru.index', compact('jenisKelamin'));
+        return view('admin.guru.index', compact('jenisKelamin'));
     }
 
     public function data()

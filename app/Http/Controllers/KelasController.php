@@ -13,7 +13,7 @@ class KelasController extends Controller
      */
     public function index()
     {
-        return view('kelas.index');
+        return view('admin.kelas.index');
     }
 
     public function data()

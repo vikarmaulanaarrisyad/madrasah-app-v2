@@ -15,7 +15,7 @@ class CetakAbsenGuruController extends Controller
     public function index()
     {
         $gurus = Guru::all();
-        return view('absen.guru.index', compact('gurus'));
+        return view('admin.absen.guru.index', compact('gurus'));
     }
 
     public function filterPresensi(Request $request)
@@ -116,7 +116,7 @@ class CetakAbsenGuruController extends Controller
         $namaBulan = Carbon::create()->month($bulan)->translatedFormat('F');
 
         // Generate PDF
-        $pdf = Pdf::loadView('absen.guru.pdf', compact('data', 'namaBulan'))
+        $pdf = Pdf::loadView('admin.absen.guru.pdf', compact('data', 'namaBulan'))
             ->setPaper('a4', 'landscape');
 
         return $pdf->stream("presensi-{$guruId}-{$bulan}-{$tahun}.pdf");

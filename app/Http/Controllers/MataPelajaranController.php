@@ -15,7 +15,7 @@ class MataPelajaranController extends Controller
     public function index()
     {
         $kurikulums = Kurikulum::all();
-        return view('matapelajaran.index', compact('kurikulums'));
+        return view('admin.matapelajaran.index', compact('kurikulums'));
     }
 
     public function data(Request $request)
@@ -26,6 +26,9 @@ class MataPelajaranController extends Controller
 
         return datatables($query)
             ->addIndexColumn()
+            ->editColumn('kurikulum', function ($q) {
+                return $q->kurikulum ? $q->kurikulum->nama : '';
+            })
             ->addColumn('aksi', function ($q) {
                 return '
                 <button onclick="editForm(`' . route('matapelajaran.show', $q->id) . '`)" class="btn btn-sm btn-primary" title="Edit"><i class="fas fa-pencil-alt"></i></button>

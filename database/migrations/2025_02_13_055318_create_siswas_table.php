@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('siswas', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('rombel_sebelumnya_id')->nullable();
+            $table->integer('level')->default(1);
             $table->bigInteger('nisn')->default(0);
             $table->bigInteger('nik')->default(0);
             $table->bigInteger('nis')->default(0);
@@ -28,7 +30,6 @@ return new class extends Migration
             $table->integer('anakke')->default(0);
             $table->text('alamat')->nullable();
             $table->string('foto')->nullable();
-            $table->integer('level')->default(1);
             $table->enum('status', ['Aktif', 'Lulus', 'Pindah'])->default('Aktif');
             $table->timestamps();
         });

@@ -14,10 +14,8 @@ class TahunPelajaranSeeder extends Seeder
     public function run(): void
     {
         $tahunPelajaranList = [
-            ['semester_id' => 1, 'nama' => '2023/2024', 'status' => '0'],
-            ['semester_id' => 2, 'nama' => '2023/2024', 'status' => '0'],
-            ['semester_id' => 1, 'nama' => '2024/2025', 'status' => '0'],
-            ['semester_id' => 2, 'nama' => '2024/2025', 'status' => '1'],
+            ['semester_id' => 1, 'nama' => '2024/2025', 'status' => '1'],
+            ['semester_id' => 2, 'nama' => '2024/2025', 'status' => '0'],
         ];
 
         foreach ($tahunPelajaranList as $tahunPelajaran) {

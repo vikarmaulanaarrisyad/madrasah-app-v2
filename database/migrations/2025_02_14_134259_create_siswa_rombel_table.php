@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('siswa_rombel', function (Blueprint $table) {
             $table->id();
+            $table->unsignedInteger('tahun_pelajaran_id')->nullable();
             $table->foreignId('siswa_id')->constrained('siswas')->onDelete('cascade');
             $table->foreignId('rombel_id')->constrained('rombels')->onDelete('cascade');
-            $table->unsignedInteger('tahun_pelajaran_id')->nullable();
             $table->timestamps();
         });
     }
