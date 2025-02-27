@@ -24,5 +24,13 @@
             format: 'YYYY-MM-DD HH:mm',
             locale: 'id'
         });
+
+        $('.picker').datetimepicker({
+            icons: {
+                time: 'far fa-clock'
+            },
+            format: 'HH:mm',
+            locale: 'id'
+        });
     </script>
 @endpush
