@@ -1,10 +1,9 @@
-<section id="video-feature" class="bg_cover pt-60 pb-110"
-    style="background-image: url({{ asset('education') }}/images/bg-1.jpg)">
+<section id="video-feature" class="bg_cover pt-60 pb-110" style="background-image: url({{ asset('images/bg.jpeg') }})">
     <div class="container">
         <div class="row align-items-center">
             <div class="col-lg-6 order-last order-lg-first">
                 <div class="video text-lg-left text-center pt-50">
-                    <a class="Video-popup" href="https://www.youtube.com/watch?v=bRRtdzJH1oE"><i
+                    <a class="Video-popup" href="https://www.youtube.com/watch?v=_nC0KyCmz3c"><i
                             class="fa fa-play"></i></a>
                 </div> <!-- row -->
             </div>

@@ -32,6 +32,8 @@
                         <li class="nav-item"><a class="nav-link active" href="#identitas" data-toggle="tab">Profile
                                 Madrasah</a>
                         </li>
+                        <li class="nav-item"><a class="nav-link" href="#sambutan" data-toggle="tab">Sambutan Madrasah</a>
+                        </li>
                         <li class="nav-item"><a class="nav-link" href="#sejarah" data-toggle="tab">Sejarah Madrasah</a></li>
                         <li class="nav-item"><a class="nav-link" href="#visi" data-toggle="tab">Visi Madrasah</a></li>
                         <li class="nav-item"><a class="nav-link" href="#misi" data-toggle="tab">Misi Madrasah</a></li>
@@ -41,6 +43,9 @@
                     <div class="tab-content">
                         <div class="tab-pane active" id="identitas">
                             @include('pengaturan.sekolah.profile')
+                        </div>
+                        <div class="tab-pane" id="sambutan">
+                            @include('pengaturan.sekolah.sambutan')
                         </div>
                         <!-- /.tab-pane -->
                         <div class="tab-pane" id="sejarah">
