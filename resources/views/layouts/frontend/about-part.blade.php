@@ -8,12 +8,8 @@
                  </div> <!-- section title -->
                  <div class="about-cont">
                      <p>
-                         Lorem ipsum gravida nibh vel velit auctor aliquetn sollicitudirem quibibendum auci elit cons
-                         equat ipsutis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet .
-                         Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt mauris. <br> <br> auci elit cons
-                         equat ipsutis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet .
-                         Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt mauris</p>
-                     <a href="#" class="main-btn mt-55">Learn More</a>
+                         {!! $sekolah->sambutan !!}
+                     </p>
                  </div>
              </div> <!-- about cont -->
              <div class="col-lg-6 offset-lg-1">
