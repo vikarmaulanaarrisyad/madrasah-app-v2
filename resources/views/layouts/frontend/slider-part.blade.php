@@ -23,12 +23,12 @@
                                                 Read More
                                             </a>
                                         </li>
-                                        <li>
+                                        {{--  <li>
                                             <a data-animation="fadeInUp" data-delay="1.9s" class="main-btn main-btn-2"
                                                 href="#">
                                                 Get Started
                                             </a>
-                                        </li>
+                                        </li>  --}}
                                     </ul>
                                 </div>
                             </div>

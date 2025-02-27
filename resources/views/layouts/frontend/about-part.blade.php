@@ -3,11 +3,12 @@
          <div class="row">
              <div class="col-lg-5">
                  <div class="section-title mt-50">
-                     <h5>Sejarah {{ $sekolah->nama }}</h5>
-                     <h2>Selamat Datang </h2>
+                     <h5>Sambutan Kepala {{ $sekolah->nama }}</h5>
+                     <h3 class="mt-2">Selamat Datang </h3>
                  </div> <!-- section title -->
                  <div class="about-cont">
-                     <p>Lorem ipsum gravida nibh vel velit auctor aliquetn sollicitudirem quibibendum auci elit cons
+                     <p>
+                         Lorem ipsum gravida nibh vel velit auctor aliquetn sollicitudirem quibibendum auci elit cons
                          equat ipsutis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet .
                          Morbi accumsan ipsum velit. Nam nec tellus a odio tincidunt mauris. <br> <br> auci elit cons
                          equat ipsutis sem nibh id elit. Duis sed odio sit amet nibh vulputate cursus a sit amet .
