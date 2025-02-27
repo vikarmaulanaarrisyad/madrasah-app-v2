@@ -14,23 +14,22 @@
                          <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                              <ul class="navbar-nav mr-auto">
                                  <li class="nav-item">
-                                     <a class="active" href="{{ url('/') }}">Beranda</a>
+                                     <a class="{{ request()->is('/') ? 'active' : '' }}"
+                                         href="{{ url('/') }}">Beranda</a>
                                  </li>
+
                                  <li class="nav-item">
                                      <a class="" href="#">Profile</a>
                                      <ul class="sub-menu">
                                          <li><a class="" href="{{ route('front.sejarah_index') }}">Sejarah</a>
                                          </li>
-                                         <li><a href="index-3.html">Logo</a></li>
                                      </ul>
                                  </li>
                                  <li class="nav-item">
-                                     <a href="events.html">Events</a>
-                                     <ul class="sub-menu">
-                                         <li><a href="events.html">Events</a></li>
-                                         <li><a href="events-singel.html">Event Singel</a></li>
-                                     </ul>
+                                     <a class="{{ request()->routeIs('front.event_index') ? 'active' : '' }}"
+                                         href="{{ route('front.event_index') }}">Events</a>
                                  </li>
+
                                  <li class="nav-item">
                                      <a href="#">Berita Terbaru</a>
                                  </li>

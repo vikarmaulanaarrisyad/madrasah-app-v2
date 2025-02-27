@@ -24,6 +24,7 @@ use App\Http\Controllers\{
     UserProfileInformationController,
 };
 use App\Http\Controllers\Front\ArtikelFrontController;
+use App\Http\Controllers\Front\EventFrontController;
 use App\Http\Controllers\Front\ProfileFrontController;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +35,9 @@ Route::get('/', function () {
 
 Route::get('/artikel/{slug}', [ArtikelFrontController::class, 'detail'])->name('front.artikel_detail');
 Route::get('/profile/sejarah', [ProfileFrontController::class, 'sejarahIndex'])->name('front.sejarah_index');
+
+Route::get('/event', [EventFrontController::class, 'index'])->name('front.event_index');
+Route::get('/event/{slug}', [EventFrontController::class, 'detail'])->name('front.event_detail');
 
 Route::group(['middleware' => 'auth'], function () {
     // Route::get('/', function () {
@@ -132,6 +136,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Event
         Route::get('/event/data', [EventController::class, 'data'])->name('event.data');
         Route::resource('/event', EventController::class);
+
         // Route Nilai Siswa
         Route::resource('/k13kkm', KkmController::class);
     });
