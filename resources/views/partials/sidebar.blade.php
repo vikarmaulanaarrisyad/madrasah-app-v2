@@ -322,18 +322,6 @@
                                     <p>Event</p>
                                 </a>
                             </li>
-                            <li class="nav-item">
-                                <a href="pages/charts/uplot.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Platform</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages/charts/uplot.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Testimonial</p>
-                                </a>
-                            </li>
                         </ul>
                     </li>
                     <li class="nav-header">MANAGEMEN PENGGUNA</li>

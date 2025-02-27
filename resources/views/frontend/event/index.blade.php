@@ -61,7 +61,8 @@
                             {{-- Nomor Halaman --}}
                             @for ($i = 1; $i <= $eventList->lastPage(); $i++)
                                 <li class="page-item {{ $i == $eventList->currentPage() ? 'active' : '' }}">
-                                    <a href="{{ $eventList->url($i) }}">{{ $i }}</a>
+                                    <a class=" {{ $i == $eventList->currentPage() ? 'active' : '' }}"
+                                        href="{{ $eventList->url($i) }}">{{ $i }}</a>
                                 </li>
                             @endfor
 

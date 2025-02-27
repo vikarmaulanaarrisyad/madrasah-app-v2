@@ -27,24 +27,17 @@
                                  </li>
                                  <li class="nav-item">
                                      <a class="{{ request()->routeIs('front.event_index') ? 'active' : '' }}"
-                                         href="{{ route('front.event_index') }}">Events</a>
+                                         href="{{ route('front.event_index') }}">Agenda</a>
                                  </li>
 
                                  <li class="nav-item">
-                                     <a href="#">Berita Terbaru</a>
+                                     <a class="{{ request()->routeIs('front.artikel_index') ? 'active' : '' }}"
+                                         href="{{ route('front.artikel_index') }}">Artikel</a>
                                  </li>
                                  <li class="nav-item">
                                      <a href="#">PPDB</a>
                                      <ul class="sub-menu">
                                          <li><a href="contact.html">Informasi PPDB</a></li>
-                                         <li><a href="contact-2.html">Formulir PPDB</a></li>
-                                     </ul>
-                                 </li>
-                                 <li class="nav-item">
-                                     <a href="contact.html">Contact</a>
-                                     <ul class="sub-menu">
-                                         <li><a href="contact.html">Contact Us</a></li>
-                                         <li><a href="contact-2.html">Contact Us 2</a></li>
                                      </ul>
                                  </li>
                                  <li class="nav-item">
