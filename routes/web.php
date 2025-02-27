@@ -7,6 +7,7 @@ use App\Http\Controllers\{
     CetakAbsenSiswaController,
     CetakBukuIndukController,
     DashboardController,
+    EventController,
     GuruController,
     GuruJurnalController,
     JurnalGuruController,
@@ -128,6 +129,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('/artikel', ArtikelController::class);
         Route::put('/artikel/update-status/{id}', [ArtikelController::class, 'updateStatus'])->name('artikel.update_status');
 
+        // Event
+        Route::get('/event/data', [EventController::class, 'data'])->name('event.data');
+        Route::resource('/event', EventController::class);
         // Route Nilai Siswa
         Route::resource('/k13kkm', KkmController::class);
     });
