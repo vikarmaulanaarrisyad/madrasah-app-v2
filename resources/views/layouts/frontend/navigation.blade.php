@@ -14,12 +14,13 @@
                          <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                              <ul class="navbar-nav mr-auto">
                                  <li class="nav-item">
-                                     <a class="active" href="about.html">Beranda</a>
+                                     <a class="active" href="{{ url('/') }}">Beranda</a>
                                  </li>
                                  <li class="nav-item">
-                                     <a class="" href="index-2.html">Profile</a>
+                                     <a class="" href="#">Profile</a>
                                      <ul class="sub-menu">
-                                         <li><a class="" href="index-2.html">Sejarah</a></li>
+                                         <li><a class="" href="{{ route('front.sejarah_index') }}">Sejarah</a>
+                                         </li>
                                          <li><a href="index-3.html">Logo</a></li>
                                      </ul>
                                  </li>
@@ -31,10 +32,10 @@
                                      </ul>
                                  </li>
                                  <li class="nav-item">
-                                     <a href="about.html">Berita Terbaru</a>
+                                     <a href="#">Berita Terbaru</a>
                                  </li>
                                  <li class="nav-item">
-                                     <a href="contact.html">PPDB</a>
+                                     <a href="#">PPDB</a>
                                      <ul class="sub-menu">
                                          <li><a href="contact.html">Informasi PPDB</a></li>
                                          <li><a href="contact-2.html">Formulir PPDB</a></li>

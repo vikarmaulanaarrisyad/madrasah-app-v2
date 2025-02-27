@@ -317,21 +317,15 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="pages/charts/inline.html" class="nav-link">
+                                <a href="pages/charts/uplot.html" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Slider</p>
+                                    <p>Event</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="pages/charts/uplot.html" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Platform</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="pages/charts/uplot.html" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Event</p>
                                 </a>
                             </li>
                             <li class="nav-item">
