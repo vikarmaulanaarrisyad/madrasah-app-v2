@@ -25,6 +25,7 @@ use App\Http\Controllers\{
 };
 use App\Http\Controllers\Front\ArtikelFrontController;
 use App\Http\Controllers\Front\EventFrontController;
+use App\Http\Controllers\Front\PpdbFrontController;
 use App\Http\Controllers\Front\ProfileFrontController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,11 +34,15 @@ Route::get('/', function () {
     // return view('auth.login');
 });
 
+Route::get('/artikel', [ArtikelFrontController::class, 'index'])->name('front.artikel_index');
 Route::get('/artikel/{slug}', [ArtikelFrontController::class, 'detail'])->name('front.artikel_detail');
 Route::get('/profile/sejarah', [ProfileFrontController::class, 'sejarahIndex'])->name('front.sejarah_index');
 
 Route::get('/event', [EventFrontController::class, 'index'])->name('front.event_index');
 Route::get('/event/{slug}', [EventFrontController::class, 'detail'])->name('front.event_detail');
+
+// Route : PPDB
+// Route::get('/ppdb', [PpdbFrontController::class, 'index'])->name('front.ppdb_index');
 
 Route::group(['middleware' => 'auth'], function () {
     // Route::get('/', function () {
