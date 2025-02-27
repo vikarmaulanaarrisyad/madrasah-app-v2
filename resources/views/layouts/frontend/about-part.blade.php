@@ -18,36 +18,27 @@
                          <h3>Upcoming events</h3>
                      </div> <!-- event title -->
                      <ul>
-                         <li>
-                             <div class="singel-event">
-                                 <span><i class="fa fa-calendar"></i> 2 December 2018</span>
-                                 <a href="events-singel.html">
-                                     <h4>Campus clean workshop</h4>
-                                 </a>
-                                 <span><i class="fa fa-clock-o"></i> 10:00 Am - 3:00 Pm</span>
-                                 <span><i class="fa fa-map-marker"></i> Rc Auditorim</span>
-                             </div>
-                         </li>
-                         <li>
-                             <div class="singel-event">
-                                 <span><i class="fa fa-calendar"></i> 2 December 2018</span>
-                                 <a href="events-singel.html">
-                                     <h4>Tech Summit</h4>
-                                 </a>
-                                 <span><i class="fa fa-clock-o"></i> 10:00 Am - 3:00 Pm</span>
-                                 <span><i class="fa fa-map-marker"></i> Rc Auditorim</span>
-                             </div>
-                         </li>
-                         <li>
-                             <div class="singel-event">
-                                 <span><i class="fa fa-calendar"></i> 2 December 2018</span>
-                                 <a href="events-singel.html">
-                                     <h4>Enviroement conference</h4>
-                                 </a>
-                                 <span><i class="fa fa-clock-o"></i> 10:00 Am - 3:00 Pm</span>
-                                 <span><i class="fa fa-map-marker"></i> Rc Auditorim</span>
-                             </div>
-                         </li>
+                         @if ($events->isNotEmpty())
+                             @foreach ($events as $event)
+                                 <li>
+                                     <div class="singel-event">
+                                         <span><i class="fa fa-calendar"></i>
+                                             {{ \Carbon\Carbon::parse($event->tanggal)->format('d F Y') }}</span>
+                                         <a href="#">
+                                             <h4>{{ $event->judul }}</h4>
+                                         </a>
+                                         <span><i class="fa fa-clock-o"></i>
+                                             {{ \Carbon\Carbon::parse($event->waktu_mulai)->format('H:i A') }} -
+                                             {{ \Carbon\Carbon::parse($event->waktu_selesai)->format('H:i A') }}
+                                         </span>
+                                         <span><i class="fa fa-map-marker"></i> {{ $event->lokasi }}</span>
+                                     </div>
+                                 </li>
+                             @endforeach
+                         @else
+                             <li>Tidak ada event yang tersedia.</li>
+                         @endif
+
                      </ul>
                  </div> <!-- about event -->
              </div>
