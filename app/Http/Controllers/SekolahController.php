@@ -23,16 +23,19 @@ class SekolahController extends Controller
 
         // Validate the request data
         $validatedData = $request->validate([
-            'nama' => 'required|string|max:255',
-            'npsn' => 'required|numeric',
-            'nsm' => 'required|numeric',
-            'alamat' => 'required|string',
-            'notelp' => 'required|numeric',
-            'email' => 'required|email',
+            'nama' => 'nullable|string|max:255',
+            'npsn' => 'nullable|numeric',
+            'nsm' => 'nullable|numeric',
+            'alamat' => 'nullable|string',
+            'notelp' => 'nullable|numeric',
+            'email' => 'nullable|email',
             'website' => 'nullable|url',
-            'kepala_sekolah_id' => 'required|exists:gurus,id',
-            'bendahara_id' => 'required|exists:gurus,id',
+            'kepala_sekolah_id' => 'nullable|exists:gurus,id',
+            'bendahara_id' => 'nullable|exists:gurus,id',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'sejarah' => 'nullable',
+            'visi' => 'nullable',
+            'misi' => 'nullable',
         ]);
 
         $data = $request->except('logo');

@@ -23,6 +23,7 @@ use App\Http\Controllers\{
     UserProfileInformationController,
 };
 use App\Http\Controllers\Front\ArtikelFrontController;
+use App\Http\Controllers\Front\ProfileFrontController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -31,6 +32,7 @@ Route::get('/', function () {
 });
 
 Route::get('/artikel/{slug}', [ArtikelFrontController::class, 'detail'])->name('front.artikel_detail');
+Route::get('/profile/sejarah', [ProfileFrontController::class, 'sejarahIndex'])->name('front.sejarah_index');
 
 Route::group(['middleware' => 'auth'], function () {
     // Route::get('/', function () {

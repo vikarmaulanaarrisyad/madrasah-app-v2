@@ -10,7 +10,7 @@
     <script>
         $('.summernote').summernote({
             fontNames: [''],
-            height: 250
+            height: 350
         });
 
         $('.note-btn-group.note-fontname').remove();
