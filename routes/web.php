@@ -23,6 +23,7 @@ use App\Http\Controllers\{
     TahunPelajaranController,
     UserProfileInformationController,
 };
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Front\ArtikelFrontController;
 use App\Http\Controllers\Front\EventFrontController;
 use App\Http\Controllers\Front\PpdbFrontController;
@@ -141,6 +142,12 @@ Route::group(['middleware' => 'auth'], function () {
         // Event
         Route::get('/event/data', [EventController::class, 'data'])->name('event.data');
         Route::resource('/event', EventController::class);
+
+        // Manajemen User
+        Route::get('/users/data', [UserController::class, 'data'])->name('users.data');
+        Route::post('users/reset-password/{id}', [UserController::class, 'resetPassword'])->name('users.resetPassword');
+        Route::resource('/users', UserController::class);
+
 
         // Route Nilai Siswa
         Route::resource('/k13kkm', KkmController::class);
