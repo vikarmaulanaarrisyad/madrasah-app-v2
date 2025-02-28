@@ -159,6 +159,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::put('/k13kkm/update-kkm/{id}', [Kkm13MapelController::class, 'updateKkm'])->name('k13kkm.updatekkm');
 
         // Route Interval
+        Route::get('/k13interval/data', [IntervalPredikatController::class, 'data'])->name('k13interval.data');
         Route::resource('/k13interval', IntervalPredikatController::class);
     });
 });
