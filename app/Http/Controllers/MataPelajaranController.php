@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Kurikulum;
 use App\Models\MataPelajaran;
+use App\Models\Rombel;
+use App\Models\TahunPelajaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -156,5 +158,36 @@ class MataPelajaranController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function getMataPelajaran($kelasId)
+    {
+        // Ambil Tahun Pelajaran yang aktif
+        $tapelAktif = TahunPelajaran::aktif()->first();
+
+        // Pastikan Tahun Pelajaran Aktif ada
+        if (!$tapelAktif) {
+            return response()->json(['message' => 'Tahun Pelajaran aktif tidak ditemukan'], 404);
+        }
+
+        // Ambil Rombongan Belajar (Rombel) berdasarkan kelas dan tahun pelajaran aktif
+        $rombel = Rombel::where('kelas_id', $kelasId)
+            ->where('tahun_pelajaran_id', $tapelAktif->id)
+            ->first();
+
+        // Jika Rombel tidak ditemukan
+        if (!$rombel) {
+            return response()->json(['message' => 'Rombel tidak ditemukan untuk kelas ini'], 404);
+        }
+
+        // Cek apakah kurikulum_id bernilai NULL
+        if (is_null($rombel->kurikulum_id)) {
+            return response()->json(['message' => 'Kurikulum belum ditentukan untuk kelas ini'], 400);
+        }
+
+        // Ambil Mata Pelajaran berdasarkan kurikulum_id
+        $mapel = MataPelajaran::where('kurikulum_id', $rombel->kurikulum_id)->get();
+
+        return response()->json($mapel);
     }
 }
