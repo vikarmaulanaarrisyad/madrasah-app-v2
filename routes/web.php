@@ -23,6 +23,9 @@ use App\Http\Controllers\{
     TahunPelajaranController,
     UserProfileInformationController,
 };
+use App\Http\Controllers\Admin\K13\IntervalPredikatController;
+use App\Http\Controllers\Admin\K13\Kkm13MapelController;
+use App\Http\Controllers\Admin\K13\KkmMapelController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Front\ArtikelFrontController;
 use App\Http\Controllers\Front\EventFrontController;
@@ -63,6 +66,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('/kurikulum', KurikulumController::class)->except('create', 'edit');
 
         // Route Mata Pelajaran
+        Route::get('/ajax/get-matapelajaran/{kelasId}', [MataPelajaranController::class, 'getMataPelajaran'])->name('matapelajaran.get');
         Route::get('/matapelajaran/data', [MataPelajaranController::class, 'data'])->name('matapelajaran.data');
         Route::resource('/matapelajaran', MataPelajaranController::class)->except('create', 'edit');
 
@@ -73,6 +77,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('/guru', GuruController::class)->except('create', 'edit');
 
         // Route Kelas
+        Route::get('/ajax/kelas/data', [KelasController::class, 'getkelas'])->name('kelas.get');
         Route::get('/kelas/data', [KelasController::class, 'data'])->name('kelas.data');
         Route::resource('/kelas', KelasController::class)->except('edit', 'create');
 
@@ -148,8 +153,12 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('users/reset-password/{id}', [UserController::class, 'resetPassword'])->name('users.resetPassword');
         Route::resource('/users', UserController::class);
 
+        // Route KKM MAPEL K13
+        Route::get('/k13kkm/data', [Kkm13MapelController::class, 'data'])->name('k13kkm.data');
+        Route::resource('/k13kkm', Kkm13MapelController::class);
+        Route::put('/k13kkm/update-kkm/{id}', [Kkm13MapelController::class, 'updateKkm'])->name('k13kkm.updatekkm');
 
-        // Route Nilai Siswa
-        Route::resource('/k13kkm', KkmController::class);
+        // Route Interval
+        Route::resource('/k13interval', IntervalPredikatController::class);
     });
 });

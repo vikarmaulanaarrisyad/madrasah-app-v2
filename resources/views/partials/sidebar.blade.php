@@ -107,7 +107,6 @@
                                 ->first()
                             : null;
                     @endphp
-
                     @if ($tahunSebelumnya)
                         <li class="nav-item">
                             <a href="{{ route('kenaikan-siswa.index') }}" class="nav-link">
@@ -116,8 +115,6 @@
                             </a>
                         </li>
                     @endif
-
-
                     <li class="nav-item">
                         <a href="{{ route('rombel.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-users"></i>
@@ -125,6 +122,36 @@
                                 Rombongan Belajar
                             </p>
                         </a>
+                    </li>
+                    <li class="nav-header">SETTING RAPORT</li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-cogs"></i>
+                            <p>
+                                Setting Raport
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('k13kkm.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>KKM Mapel</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/tables/data.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Interval Predikat</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="pages/tables/jsgrid.html" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>jsGrid</p>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
 
                     {{--  <li class="nav-header">E-RAPORT</li>
@@ -260,6 +287,31 @@
                             </li>
                         </ul>
                     </li>  --}}
+
+                    <li class="nav-header">REKAP PRESENSI</li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-fingerprint"></i>
+                            <p>
+                                Rekapitulasi Presensi
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('presensi.siswa.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Siswa</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('presensi.guru.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Guru</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="nav-header">JURNAL MENGAJAR</li>
                     <li class="nav-item">
                         <a href="{{ route('jurnal.index') }}" class="nav-link">
@@ -276,13 +328,8 @@
                             <p>Cetak Buku Induk Siswa</p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fas fa-print"></i>
-                            <p>Cetak Raport Siswa</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
+
+                    {{--  <li class="nav-item">
                         <a href="{{ route('presensi.siswa.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-print"></i>
                             <p>Cetak Absensi Siswa</p>
@@ -293,7 +340,7 @@
                             <i class="nav-icon fas fa-print"></i>
                             <p>Cetak Absensi Guru</p>
                         </a>
-                    </li>
+                    </li>  --}}
                     <li class="nav-header">MANAJEMEN WEBSITE</li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">

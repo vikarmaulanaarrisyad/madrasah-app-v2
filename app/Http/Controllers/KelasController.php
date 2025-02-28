@@ -135,4 +135,11 @@ class KelasController extends Controller
     {
         //
     }
+
+    // fungsi mendapatkan semua data kelas
+    public function getKelas()
+    {
+        $query = Kelas::all();
+        return response()->json($query);
+    }
 }
