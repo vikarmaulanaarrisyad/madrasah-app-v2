@@ -14,7 +14,7 @@
                      Baca Selengkapnya
                  </a>
 
-             </div> <!-- about cont -->
+             </div>
              <div class="col-lg-6 offset-lg-1">
                  <div class="about-event mt-20">
                      <div class="event-title">
@@ -45,8 +45,8 @@
                      </ul>
                  </div> <!-- about event -->
              </div>
-         </div> <!-- row -->
-     </div> <!-- container -->
+         </div>
+     </div>
      <div class="about-bg">
          <img src="{{ asset('images/Bg-front.png') }}" alt="About">
      </div>
