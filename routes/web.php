@@ -50,9 +50,9 @@ Route::get('/event/{slug}', [EventFrontController::class, 'detail'])->name('fron
 // Route::get('/ppdb', [PpdbFrontController::class, 'index'])->name('front.ppdb_index');
 
 Route::group(['middleware' => 'auth'], function () {
-    // Route::get('/', function () {
-    //     return redirect()->route('dashboard');
-    // });
+    Route::get('/', function () {
+        return redirect()->route('dashboard');
+    });
 
     // Role Admin
     Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
