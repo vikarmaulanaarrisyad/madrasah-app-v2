@@ -7,7 +7,7 @@
                 </div>
                 <div class="about-cont">
                     <p>
-                        {!! Str::limit($sekolah->sambutan, 800) !!}
+                        {!! Str::limit(strip_tags($sekolah->sambutan), 800) !!}
                     </p>
                     <a href="#" class="main-btn mt-20" data-toggle="modal" data-target="#sambutanModal">Learn
                         More</a>
@@ -72,7 +72,7 @@
 
                     <!-- Sambutan Content -->
                     <div id="sambutanContent" style="display: none;">
-                        {!! $sekolah->sambutan !!}
+                        {!! Str::limit(strip_tags($sekolah->sambutan), 800) !!}
                     </div>
                 </div>
             </div>
