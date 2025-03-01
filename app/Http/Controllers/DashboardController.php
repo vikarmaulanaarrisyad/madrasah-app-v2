@@ -15,7 +15,6 @@ class DashboardController extends Controller
         $tahunPelajaran = TahunPelajaran::aktif()->first();
         $kurikulum = $tahunPelajaran?->kurikulum()->count() ?? 0;
         $rombel = $tahunPelajaran?->rombel()->count() ?? 0;
-        // dd($kurikulum);
         return view('dashboard.index', compact('guru', 'siswa', 'rombel', 'kurikulum'));
     }
 }
