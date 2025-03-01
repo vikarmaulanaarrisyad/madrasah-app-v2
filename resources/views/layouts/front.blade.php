@@ -13,7 +13,8 @@
     <title>{{ $sekolah->nama }}</title>
 
     <!--====== Favicon Icon ======-->
-    <link rel="shortcut icon" href="{{ asset('education') }}/images/favicon.png" type="image/png">
+    {{--  <link rel="shortcut icon" href="{{ Storage::url() }}" type="image/png">  --}}
+    <link rel="icon" href="{{ Storage::url($sekolah->logo ?? '') }}" type="image/*">
 
     <!--====== Slick css ======-->
     <link rel="stylesheet" href="{{ asset('education') }}/css/slick.css">
