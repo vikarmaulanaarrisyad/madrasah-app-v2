@@ -19,19 +19,19 @@
 
                 <!-- Link Download Template -->
                 <div class="mb-3">
-                    <a href="{{ asset('template/template_guru.xlsx') }}" class="btn btn-success btn-sm shadow">
+                    <a href="{{ asset('template/format_import_sikap.xls') }}" class="btn btn-success btn-sm shadow">
                         <i class="fas fa-download"></i> Download Template
                     </a>
                 </div>
 
                 <!-- Form Upload -->
-                <form id="uploadForm" action="{{ route('guru.importEXCEL') }}" method="POST"
+                <form id="uploadForm" action="{{ route('k13sikap.import') }}" method="POST"
                     enctype="multipart/form-data">
                     @csrf
                     <div class="mb-3">
                         <label for="excelFile" class="form-label fw-bold">Pilih File Excel</label>
                         <input type="file" class="form-control border-primary shadow-sm" id="excelFile"
-                            name="excelFile" accept=".xlsx, .xls" required>
+                            name="excelFile" required>
                         <div class="small text-muted mt-1">Hanya file dengan format .xlsx atau .xls yang diperbolehkan.
                         </div>
                     </div>
