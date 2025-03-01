@@ -44,7 +44,21 @@
 
                     <!-- Other fields remain the same -->
                     <div class="form-group">
-                        <label for="logo">Logo</label>
+                        <label for="logo_header">Logo Header</label>
+                        <input type="file" class="form-control @error('logo') is-invalid @enderror" id="logo_header"
+                            name="logo_header">
+                        @if ($aplikasi->logo_header)
+                            <img src="{{ Storage::url($aplikasi->logo_header) }}" alt="Logo" width="100"
+                                class="mt-2">
+                        @endif
+                        @error('logo_header')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <!-- Other fields remain the same -->
+                    <div class="form-group">
+                        <label for="logo">Logo Login</label>
                         <input type="file" class="form-control @error('logo') is-invalid @enderror" id="logo"
                             name="logo">
                         @if ($aplikasi->logo_login)
