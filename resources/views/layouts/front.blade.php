@@ -50,6 +50,11 @@
         img {
             max-width: 150% !important;
         }
+
+        #about-part {
+            position: relative;
+            padding-bottom: 320px;
+        }
     </style>
 
     @stack('css')
