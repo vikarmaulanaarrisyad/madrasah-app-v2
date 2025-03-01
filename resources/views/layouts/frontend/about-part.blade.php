@@ -72,7 +72,7 @@
 
                     <!-- Sambutan Content -->
                     <div id="sambutanContent" style="display: none;">
-                        {!! Str::limit(strip_tags($sekolah->sambutan), 800) !!}
+                        {!! $sekolah->sambutan !!}
                     </div>
                 </div>
             </div>
