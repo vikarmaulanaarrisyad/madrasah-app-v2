@@ -46,6 +46,16 @@
     <!--====== Responsive css ======-->
     <link rel="stylesheet" href="{{ asset('education') }}/css/responsive.css">
 
+    <style>
+        img {
+            max-width: 150% !important;
+        }
+    </style>
+    {{--  #about-part {
+        position: relative;
+        padding-bottom: 320px;
+    }  --}}
+
     @stack('css')
 </head>
 
