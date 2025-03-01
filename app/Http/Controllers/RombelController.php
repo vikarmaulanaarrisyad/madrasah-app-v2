@@ -198,147 +198,10 @@ class RombelController extends Controller
         //
     }
 
-    public function getDataSiswa1(Request $request)
-    {
-        // Dapatkan rombel dari request
-        $rombel = Rombel::findOrFail($request->rombel_id);
-
-        // Cek apakah tahun pelajaran aktif tersedia
-        $tahunPelajaran = TahunPelajaran::aktif()->first();
-        if (!$tahunPelajaran) {
-            return response()->json(['success' => false, 'message' => 'Tahun pelajaran aktif tidak ditemukan.']);
-        }
-
-        $tahunPelajaranId = $tahunPelajaran->id;
-
-        // Dapatkan level dari kelas yang terkait dengan rombel
-        $kelasLevel = $rombel->kelas->tingkat;
-
-        // Dapatkan siswa dengan level yang sesuai dan belum terdaftar di siswa_rombel untuk tahun pelajaran aktif
-        $siswa = Siswa::where('level', $kelasLevel) // Filter berdasarkan level
-            ->whereDoesntHave('siswa_rombel', function ($query) use ($tahunPelajaranId) {
-                $query->where('siswa_rombel.tahun_pelajaran_id', $tahunPelajaranId); // Gunakan nama tabel secara eksplisit
-            })
-            ->get();
-
-        // Kembalikan data siswa dalam format DataTables
-        return datatables($siswa)
-            ->addIndexColumn()
-            ->addColumn('aksi', function ($siswa) {
-                return '<input type="checkbox" class="select-siswa" name="siswa_id[]" value="' . $siswa->id . '">';
-            })
-
-            ->escapeColumns([]) // Prevent HTML escaping
-            ->make(true);
-    }
-
-    public function getDataSiswa2(Request $request)
-    {
-        // Dapatkan rombel dari request
-        $rombel = Rombel::findOrFail($request->rombel_id);
-
-        // Cek apakah tahun pelajaran aktif tersedia
-        $tahunPelajaran = TahunPelajaran::aktif()->first();
-        if (!$tahunPelajaran) {
-            return response()->json(['success' => false, 'message' => 'Tahun pelajaran aktif tidak ditemukan.']);
-        }
-
-        $tahunPelajaranId = $tahunPelajaran->id;
-        $semester = strtolower($tahunPelajaran->semester->nama); // Pastikan lowercase agar tidak case-sensitive
-        $kelasLevel = $rombel->kelas->tingkat;
-
-        // Jika semester Ganjil, hanya ambil siswa yang BELUM PERNAH terdaftar di siswa_rombel di tahun pelajaran sebelumnya
-        if ($semester == 'ganjil') {
-            $siswa = Siswa::where('level', $kelasLevel)
-                ->whereDoesntHave('siswa_rombel') // Pastikan siswa benar-benar baru (belum pernah masuk rombel sebelumnya)
-                ->get();
-        } else {
-            // Jika semester Genap, ambil siswa dari semester Ganjil tahun pelajaran yang sama
-            $tahunPelajaranSebelumnya = TahunPelajaran::where('id', '<', $tahunPelajaranId)
-                ->whereHas('semester', function ($q) {
-                    $q->where('nama', 'Ganjil');
-                })
-                ->orderBy('id', 'desc')
-                ->first();
-
-            if (!$tahunPelajaranSebelumnya) {
-                return response()->json(['success' => false, 'message' => 'Tahun pelajaran sebelumnya tidak ditemukan.']);
-            }
-
-            $tahunPelajaranSebelumnyaId = $tahunPelajaranSebelumnya->id;
-
-            $siswa = Siswa::where('level', $kelasLevel)
-                ->whereHas('siswa_rombel', function ($query) use ($tahunPelajaranSebelumnyaId) {
-                    $query->where('siswa_rombel.tahun_pelajaran_id', $tahunPelajaranSebelumnyaId);
-                })
-                ->get();
-        }
-
-        // Kembalikan data siswa dalam format DataTables
-        return datatables($siswa)
-            ->addIndexColumn()
-            ->addColumn('aksi', function ($siswa) {
-                return '<input type="checkbox" class="select-siswa" name="siswa_id[]" value="' . $siswa->id . '">';
-            })
-            ->escapeColumns([])
-            ->make(true);
-    }
-
-    public function getDataSiswa3(Request $request)
-    {
-        $rombel = Rombel::findOrFail($request->rombel_id);
-
-        $tahunPelajaran = TahunPelajaran::aktif()->first();
-        if (!$tahunPelajaran) {
-            return response()->json(['success' => false, 'message' => 'Tahun pelajaran aktif tidak ditemukan.']);
-        }
-
-        $tahunPelajaranId = $tahunPelajaran->id;
-        $semester = strtolower($tahunPelajaran->semester->nama);
-        $kelasLevel = $rombel->kelas->tingkat;
-
-        if ($semester == 'ganjil') {
-            // Ambil siswa yang belum ada di siswa_rombel untuk tahun pelajaran sekarang
-            $siswa = Siswa::where('level', $kelasLevel)
-                ->whereDoesntHave('siswa_rombel', function ($query) use ($tahunPelajaranId) {
-                    $query->where('tahun_pelajaran_id', $tahunPelajaranId);
-                })
-                ->get();
-        } else {
-            $tahunPelajaranSebelumnya = TahunPelajaran::where('id', '<', $tahunPelajaranId)
-                ->whereHas('semester', function ($q) {
-                    $q->where('nama', 'Ganjil');
-                })
-                ->orderBy('id', 'desc')
-                ->first();
-
-            if (!$tahunPelajaranSebelumnya) {
-                return response()->json(['success' => false, 'message' => 'Tahun pelajaran sebelumnya tidak ditemukan.']);
-            }
-
-            $tahunPelajaranSebelumnyaId = $tahunPelajaranSebelumnya->id;
-
-            $siswa = Siswa::where('level', $kelasLevel)
-                ->whereHas('siswa_rombel', function ($query) use ($tahunPelajaranSebelumnyaId) {
-                    $query->where('tahun_pelajaran_id', $tahunPelajaranSebelumnyaId);
-                })
-                ->get();
-        }
-
-        return datatables($siswa)
-            ->addIndexColumn()
-            ->addColumn('aksi', function ($siswa) {
-                return '<input type="checkbox" class="select-siswa" name="siswa_id[]" value="' . $siswa->id . '">';
-            })
-            ->escapeColumns([])
-            ->make(true);
-    }
-
     public function getDataSiswa(Request $request)
     {
         // Dapatkan rombel dari request
         $rombel = Rombel::findOrFail($request->rombel_id);
-
         // Cek apakah tahun pelajaran aktif tersedia
         $tahunPelajaran = TahunPelajaran::aktif()->first();
         if (!$tahunPelajaran) {
@@ -346,39 +209,9 @@ class RombelController extends Controller
         }
 
         $tahunPelajaranId = $tahunPelajaran->id;
-        $semester = $tahunPelajaran->semester->nama; // Pastikan lowercase agar tidak case-sensitive
+        $semester = $tahunPelajaran->semester->nama;
         $kelasLevel = $rombel->kelas->tingkat;
 
-        // // Jika semester Ganjil, hanya ambil siswa yang BELUM PERNAH terdaftar di siswa_rombel di tahun pelajaran sebelumnya
-        // if ($semester == 'Ganjil') {
-        //     $siswa = Siswa::where('level', $kelasLevel)
-        //         ->whereDoesntHave('siswa_rombel')
-        //         ->whereHas('siswa_rombel', function ($query) use ($tahunPelajaranId) {
-        //             $query->where('siswa_rombel.tahun_pelajaran_id', $tahunPelajaranId);
-        //         }) // Pastikan siswa benar-benar baru (belum pernah masuk rombel sebelumnya)
-        //         ->get();
-        // } else {
-        //     // Jika semester Genap, ambil siswa dari semester Ganjil tahun pelajaran yang sama
-        //     $tahunPelajaranSebelumnya = TahunPelajaran::where('id', '<', $tahunPelajaranId)
-        //         ->whereHas('semester', function ($q) {
-        //             $q->where('nama', 'Ganjil');
-        //         })
-        //         ->orderBy('id', 'desc')
-        //         ->first();
-
-        //     if (!$tahunPelajaranSebelumnya) {
-        //         return response()->json(['success' => false, 'message' => 'Tahun pelajaran sebelumnya tidak ditemukan.']);
-        //     }
-
-        //     $tahunPelajaranSebelumnyaId = $tahunPelajaranSebelumnya->id;
-
-        //     // Perbaikan: Tambahkan alias tabel di whereHas untuk menghindari ambiguitas
-        //     $siswa = Siswa::where('level', $kelasLevel)
-        //         ->whereHas('siswa_rombel', function ($query) use ($tahunPelajaranSebelumnyaId) {
-        //             $query->where('siswa_rombel.tahun_pelajaran_id', $tahunPelajaranSebelumnyaId);
-        //         })
-        //         ->get();
-        // }
         if ($semester == 'Ganjil') {
             // Ambil siswa yang belum memiliki entri di siswa_rombel untuk tahun pelajaran tertentu
             $siswa = Siswa::where('level', $kelasLevel)
@@ -387,7 +220,7 @@ class RombelController extends Controller
                 })
                 ->get();
         } else {
-            // Jika semester Genap, ambil siswa dari semester Ganjil tahun pelajaran yang sama
+            // Jika semester Genap, cari tahun pelajaran sebelumnya yang semester-nya Ganjil
             $tahunPelajaranSebelumnya = TahunPelajaran::where('id', '<', $tahunPelajaranId)
                 ->whereHas('semester', function ($q) {
                     $q->where('nama', 'Ganjil');
@@ -396,20 +229,31 @@ class RombelController extends Controller
                 ->first();
 
             if (!$tahunPelajaranSebelumnya) {
-                return response()->json(['success' => false, 'message' => 'Tahun pelajaran sebelumnya tidak ditemukan.']);
+                // Jika ini adalah tahun pelajaran pertama, hanya ambil siswa baru yang belum masuk siswa_rombel
+                $siswa = Siswa::where('level', $kelasLevel)
+                    ->whereDoesntHave('siswa_rombel', function ($query) use ($tahunPelajaranId) {
+                        $query->where('siswa_rombel.tahun_pelajaran_id', $tahunPelajaranId);
+                    })
+                    ->get();
+            } else {
+                $tahunPelajaranSebelumnyaId = $tahunPelajaranSebelumnya->id;
+
+                // Ambil siswa yang sudah terdaftar di semester Ganjil tahun pelajaran sebelumnya
+                $siswaTerdaftar = Siswa::where('level', $kelasLevel)
+                    ->whereHas('siswa_rombel', function ($query) use ($tahunPelajaranSebelumnyaId) {
+                        $query->where('siswa_rombel.tahun_pelajaran_id', $tahunPelajaranSebelumnyaId);
+                    });
+
+                // Ambil siswa baru yang belum memiliki entri di siswa_rombel untuk tahun pelajaran saat ini
+                $siswaBaru = Siswa::where('level', $kelasLevel)
+                    ->whereDoesntHave('siswa_rombel', function ($query) use ($tahunPelajaranId) {
+                        $query->where('siswa_rombel.tahun_pelajaran_id', $tahunPelajaranId);
+                    });
+
+                // Gabungkan hasil query siswa terdaftar dan siswa baru
+                $siswa = $siswaTerdaftar->union($siswaBaru)->get();
             }
-
-            $tahunPelajaranSebelumnyaId = $tahunPelajaranSebelumnya->id;
-
-            // Ambil siswa yang sudah terdaftar di tahun pelajaran sebelumnya
-            $siswa = Siswa::where('level', $kelasLevel)
-                ->whereHas('siswa_rombel', function ($query) use ($tahunPelajaranSebelumnyaId) {
-                    $query->where('siswa_rombel.tahun_pelajaran_id', $tahunPelajaranSebelumnyaId); // Tambahkan alias tabel
-                })
-                ->get();
         }
-
-
 
         // Kembalikan data siswa dalam format DataTables
         return datatables($siswa)
