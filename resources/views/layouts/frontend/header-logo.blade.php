@@ -4,8 +4,8 @@
                  <div class="col-lg-4 col-md-4">
                      <div class="logo">
                          <a href="{{ url('/') }}">
-                             <img src="{{ asset('images/logo-frontend.jpg') }}" alt="Logo" width="55%">
-                             {{--  <img src="{{ Storage::url($sekolah->logo) }}" alt="Logo">  --}}
+                             {{--  <img src="{{ asset('images/logo-frontend.jpg') }}" alt="Logo" width="55%">  --}}
+                             <img src="{{ Storage::url($sekolah->logo) }}" alt="Logo" width="55%">
                          </a>
                      </div>
                  </div>
