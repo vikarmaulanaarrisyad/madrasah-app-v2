@@ -9,7 +9,6 @@ use App\Http\Controllers\{
     DashboardController,
     EventController,
     GuruController,
-    GuruJurnalController,
     JurnalGuruController,
     KategoriController,
     KelasController,
@@ -30,13 +29,11 @@ use App\Http\Controllers\Admin\K13\KkmMapelController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Front\ArtikelFrontController;
 use App\Http\Controllers\Front\EventFrontController;
-use App\Http\Controllers\Front\PpdbFrontController;
 use App\Http\Controllers\Front\ProfileFrontController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-    // return view('auth.login');
 });
 
 Route::get('/artikel', [ArtikelFrontController::class, 'index'])->name('front.artikel_index');
@@ -46,17 +43,11 @@ Route::get('/profile/sejarah', [ProfileFrontController::class, 'sejarahIndex'])-
 Route::get('/event', [EventFrontController::class, 'index'])->name('front.event_index');
 Route::get('/event/{slug}', [EventFrontController::class, 'detail'])->name('front.event_detail');
 
-// Route : PPDB
-// Route::get('/ppdb', [PpdbFrontController::class, 'index'])->name('front.ppdb_index');
-
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('/', function () {
-        return redirect()->route('dashboard');
-    });
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Role Admin
     Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         //Route Tahun Pelajaran
         Route::get('/tahunpelajaran/data', [TahunPelajaranController::class, 'data'])->name('tahunpelajaran.data');
         Route::resource('/tahunpelajaran', TahunPelajaranController::class)->except('create', 'edit');
