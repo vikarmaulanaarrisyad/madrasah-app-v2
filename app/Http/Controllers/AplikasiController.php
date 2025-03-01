@@ -24,9 +24,10 @@ class AplikasiController extends Controller
             'nama' => 'required|string|max:255',
             'singkatan' => 'required',
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            'logo_header' => 'nullable|image|mimes:jpeg,png,jpg,gif',
         ]);
 
-        $data = $request->except('logo');
+        $data = $request->except('logo', 'logo_header');
 
         if ($request->hasFile('logo')) {
             if (Storage::disk('public')->exists($aplikasi->logo_login)) {
@@ -35,6 +36,15 @@ class AplikasiController extends Controller
 
             // Store the file with a unique name and store the original name if necessary
             $data['logo_login'] = upload('aplikasi', $request->file('logo'), 'aplikasi');
+        }
+
+        if ($request->hasFile('logo_header')) {
+            if (Storage::disk('public')->exists($aplikasi->logo_header)) {
+                Storage::disk('public')->delete($aplikasi->logo_header);
+            }
+
+            // Store the file with a unique name and store the original name if necessary
+            $data['logo_header'] = upload('aplikasi', $request->file('logo_header'), 'logo_header');
         }
 
         // Update the other fields with the validated data
