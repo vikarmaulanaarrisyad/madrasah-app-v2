@@ -110,38 +110,44 @@ function loopErrors(errors) {
     }
 
     for (error in errors) {
-        $(`[name=${error}]`).addClass("is-invalid");
+        let inputField = $(`[name=${error}]`);
 
-        if ($(`[name=${error}]`).hasClass("select2")) {
-            $(`[name=${error}]`).addClass("is-invalid");
+        inputField.addClass("is-invalid");
+
+        if (inputField.hasClass("select2")) {
+            inputField.addClass("is-invalid");
             $(
                 `<span class="error invalid-feedback">${errors[error][0]}</span>`
-            ).insertAfter($(`[name=${error}]`).next());
-        } else if ($(`[name=${error}]`).hasClass("summernote")) {
+            ).insertAfter(inputField.next());
+        } else if (inputField.hasClass("summernote")) {
             $(".note-editor").addClass("is-invalid");
             $(
                 `<span class="error invalid-feedback">${errors[error][0]}</span>`
-            ).insertAfter($(`[name=${error}]`).next());
-        } else if ($(`[name=${error}]`).hasClass("custom-control-input")) {
+            ).insertAfter(inputField.next());
+        } else if (inputField.hasClass("custom-control-input")) {
             $(
                 `<span class="error invalid-feedback">${errors[error][0]}</span>`
-            ).insertAfter($(`[name=${error}]`).next());
+            ).insertAfter(inputField.next());
+        } else if (inputField.attr("type") === "radio") {
+            // Menambahkan error di akhir grup radio
+            $(
+                `<span class="error invalid-feedback d-block">${errors[error][0]}</span>`
+            ).insertAfter(inputField.last().parent());
         } else {
-            if ($(`[name=${error}]`).length == 0) {
-                $(`[name="${error}[]"]`).addClass("is-invalid");
+            if (inputField.length == 0) {
+                let arrayField = $(`[name="${error}[]"]`);
+                arrayField.addClass("is-invalid");
                 $(
                     `<span class="error invalid-feedback">${errors[error][0]}</span>`
-                ).insertAfter($(`[name="${error}[]"]`).next());
+                ).insertAfter(arrayField.next());
             } else {
                 if (
-                    $(`[name=${error}]`)
-                        .next()
-                        .hasClass("input-group-append") ||
-                    $(`[name=${error}]`).next().hasClass("input-group-prepend")
+                    inputField.next().hasClass("input-group-append") ||
+                    inputField.next().hasClass("input-group-prepend")
                 ) {
                     $(
                         `<span class="error invalid-feedback">${errors[error][0]}</span>`
-                    ).insertAfter($(`[name=${error}]`).next());
+                    ).insertAfter(inputField.next());
                     $(".input-group-append .input-group-text").css(
                         "border-radius",
                         "0 .25rem .25rem 0"
@@ -152,7 +158,7 @@ function loopErrors(errors) {
                 } else {
                     $(
                         `<span class="error invalid-feedback">${errors[error][0]}</span>`
-                    ).insertAfter($(`[name=${error}]`));
+                    ).insertAfter(inputField);
                 }
             }
         }

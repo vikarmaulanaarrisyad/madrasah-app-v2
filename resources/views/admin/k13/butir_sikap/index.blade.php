@@ -309,7 +309,7 @@
                 }
             });
 
-            window.location.href = '{{ route('guru.exportEXCEL') }}';
+            window.location.href = '{{ route('k13sikap.export') }}';
 
             // Tutup loading setelah beberapa detik (opsional)
             setTimeout(() => {

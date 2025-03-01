@@ -6,5 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class K13ButirSikap extends Model
 {
-    //
+    protected $guarded = ['id'];
+    protected $table = 'k13_butir_sikaps';
 }

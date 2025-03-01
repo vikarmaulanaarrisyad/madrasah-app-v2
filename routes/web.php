@@ -156,6 +156,8 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Route Butir Sikap
         Route::get('/k13sikap/data', [ButirSikapController::class, 'data'])->name('k13sikap.data');
+        Route::get('/k13sikap/export-excel', [ButirSikapController::class, 'export'])->name('k13sikap.export');
+        Route::post('/k13sikap/import-excel', [ButirSikapController::class, 'import'])->name('k13sikap.import');
         Route::resource('/k13sikap', ButirSikapController::class);
     });
 });
