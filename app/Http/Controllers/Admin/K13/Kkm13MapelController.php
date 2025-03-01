@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\K13;
 
 use App\Http\Controllers\Controller;
 use App\Models\K13KkmMapel;
+use App\Models\TahunPelajaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -16,7 +17,10 @@ class Kkm13MapelController extends Controller
 
     public function data()
     {
+        $tapel = TahunPelajaran::aktif()->first();
+
         $query = K13KkmMapel::with('kelas.rombel.tahun_pelajaran', 'matapelajaran')
+            ->where('tahun_pelajaran_id', $tapel->id)
             ->orderBy('id', 'DESC');
 
         return datatables($query)
@@ -51,6 +55,8 @@ class Kkm13MapelController extends Controller
 
     public function store(Request $request)
     {
+        $tapel = TahunPelajaran::aktif()->first();
+
         $rules = [
             'kelas_id' => 'required',
             'mata_pelajaran_id' => 'required',
@@ -70,6 +76,7 @@ class Kkm13MapelController extends Controller
         // Cek apakah data dengan kelas_id & mata_pelajaran_id sudah ada
         $exists = K13KkmMapel::where('kelas_id', $request->kelas_id)
             ->where('mata_pelajaran_id', $request->mata_pelajaran_id)
+            ->where('tahun_pelajaran_id', $tapel->id)
             ->exists();
 
         if ($exists) {
@@ -81,6 +88,7 @@ class Kkm13MapelController extends Controller
 
         // Simpan data jika belum ada
         K13KkmMapel::create([
+            'tahun_pelajaran_id' => $tapel->id,
             'kelas_id' => $request->kelas_id,
             'mata_pelajaran_id' => $request->mata_pelajaran_id,
             'kkm' => $request->kkm
