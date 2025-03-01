@@ -146,9 +146,9 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="pages/tables/jsgrid.html" class="nav-link">
+                                <a href="{{ route('k13sikap.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>jsGrid</p>
+                                    <p>Butir Sikap</p>
                                 </a>
                             </li>
                         </ul>

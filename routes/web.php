@@ -23,6 +23,7 @@ use App\Http\Controllers\{
     TahunPelajaranController,
     UserProfileInformationController,
 };
+use App\Http\Controllers\Admin\K13\ButirSikapController;
 use App\Http\Controllers\Admin\K13\IntervalPredikatController;
 use App\Http\Controllers\Admin\K13\Kkm13MapelController;
 use App\Http\Controllers\Admin\K13\KkmMapelController;
@@ -161,5 +162,9 @@ Route::group(['middleware' => 'auth'], function () {
         // Route Interval
         Route::get('/k13interval/data', [IntervalPredikatController::class, 'data'])->name('k13interval.data');
         Route::resource('/k13interval', IntervalPredikatController::class);
+
+        // Route Butir Sikap
+        Route::get('/k13sikap/data', [ButirSikapController::class, 'data'])->name('k13sikap.data');
+        Route::resource('/k13sikap', ButirSikapController::class);
     });
 });
