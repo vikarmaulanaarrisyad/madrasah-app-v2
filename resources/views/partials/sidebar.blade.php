@@ -151,6 +151,12 @@
                                     <p>Butir Sikap</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('k13kd.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Data Kompetensi Dasar</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
