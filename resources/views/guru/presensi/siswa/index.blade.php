@@ -59,30 +59,42 @@
                     tanggal: tanggal
                 },
                 success: function(response) {
-
-                },
-                error: function(xhr, status, error) {
-                    let errorMessage = "Terjadi kesalahan!";
-
-                    if (xhr.responseJSON && xhr.responseJSON.error) {
-                        errorMessage = xhr.responseJSON.error; // Jika ada pesan error dari backend
-                    } else {
-                        errorMessage = xhr
-                        .responseText; // Tampilkan full response jika tidak ada properti `error`
+                    if (response.data.length === 0) { // Cek jika DataTables kosong
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Data Tidak Ditemukan',
+                            text: 'Rombel tidak ditemukan untuk guru ini!',
+                            confirmButtonText: 'OK'
+                        });
                     }
 
-                    console.error("Error Status:", status);
-                    console.error("Error Message:", error);
-                    console.error("Full Response:", xhr.responseText);
+                    // Tetap render DataTable meskipun kosong
+                    $('#tabelPresensi').DataTable().clear().rows.add(response.data).draw();
+                },
+                error: function(xhr) {
+                    let errorMessage = "Terjadi kesalahan!";
 
-                    toastr.error(errorMessage, "Error", {
-                        closeButton: true,
-                        progressBar: true,
-                        timeOut: 5000
-                    });
+                    if (xhr.status === 404 && xhr.responseJSON && xhr.responseJSON.error) {
+                        errorMessage = xhr.responseJSON.error;
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: errorMessage,
+                            confirmButtonText: 'OK'
+                        });
+                    } else {
+                        toastr.error(xhr.responseText, "Error", {
+                            closeButton: true,
+                            progressBar: true,
+                            timeOut: 5000
+                        });
+                    }
                 }
+
             });
         }
+
 
         $(document).ready(function() {
             // Inisialisasi DataTable
@@ -137,7 +149,7 @@
                         _token: $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
-                        table.ajax.reload();
+                        //table.ajax.reload();
                         updatePresensiStats();
                     },
                     error: function(xhr) {
