@@ -298,6 +298,14 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('presensigtk.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-fingerprint"></i>
+                            <p>
+                                Presensi Gtk
+                            </p>
+                        </a>
+                    </li>
                 @endif
             </ul>
         </nav>
