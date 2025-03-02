@@ -33,6 +33,7 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Front\ArtikelFrontController;
 use App\Http\Controllers\Front\EventFrontController;
 use App\Http\Controllers\Front\ProfileFrontController;
+use App\Http\Controllers\Guru\PresensiGuruController;
 use App\Http\Controllers\Guru\PresensiSiswaController;
 use Illuminate\Support\Facades\Route;
 
@@ -183,5 +184,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('/presensisiswa', PresensiSiswaController::class)->except('show');
         Route::post('/presensisiswa/simpan-presensi', [PresensiSiswaController::class, 'simpanPresensi'])->name('presensissiswa.simpanPresensi');
         Route::get('/presensisiswa/count', [PresensiSiswaController::class, 'count'])->name('presensisiswa.count');
+
+        // Route Presensi Guru
+        Route::get('/presensigtk/data', [PresensiGuruController::class, 'data'])->name('presensigtk.data');
+        Route::resource('/presensigtk', PresensiGuruController::class);
     });
 });
