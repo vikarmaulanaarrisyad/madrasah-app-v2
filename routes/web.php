@@ -27,11 +27,13 @@ use App\Http\Controllers\Admin\K13\IntervalPredikatController;
 use App\Http\Controllers\Admin\K13\KdMapelController;
 use App\Http\Controllers\Admin\K13\Kkm13MapelController;
 use App\Http\Controllers\Admin\K13\KkmMapelController;
+use App\Http\Controllers\Admin\K13\StatusPenilaianController;
 use App\Http\Controllers\Admin\K13\TglRaportController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Front\ArtikelFrontController;
 use App\Http\Controllers\Front\EventFrontController;
 use App\Http\Controllers\Front\ProfileFrontController;
+use App\Http\Controllers\Guru\PresensiSiswaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -169,5 +171,17 @@ Route::group(['middleware' => 'auth'], function () {
         // Route Tgl Raport K13
         Route::get('/k13tglraport/data', [TglRaportController::class, 'data'])->name('k13tglraport.data');
         Route::resource('/k13tglraport', TglRaportController::class);
+
+        // Route Status Penilaian
+        Route::get('/k13statuspenilaian/data', [StatusPenilaianController::class, 'data'])->name('k13statuspenilaian.data');
+        Route::resource('/k13statuspenilaian', StatusPenilaianController::class);
+    });
+
+    // Role Guru
+    Route::group(['middleware' => 'role:guru', 'prefix' => 'guru'], function () {
+        Route::get('/presensisiswa/data', [PresensiSiswaController::class, 'data'])->name('presensisiswa.data');
+        Route::resource('/presensisiswa', PresensiSiswaController::class)->except('show');
+        Route::post('/presensisiswa/simpan-presensi', [PresensiSiswaController::class, 'simpanPresensi'])->name('presensissiswa.simpanPresensi');
+        Route::get('/presensisiswa/count', [PresensiSiswaController::class, 'count'])->name('presensisiswa.count');
     });
 });
