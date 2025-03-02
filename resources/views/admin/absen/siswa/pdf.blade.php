@@ -90,7 +90,6 @@
         <thead>
             <tr>
                 <th rowspan="2">No</th>
-                <th rowspan="2">NIS</th>
                 <th rowspan="2">NISN</th>
                 <th rowspan="2">Nama</th>
                 <th colspan="{{ $jumlahHari }}">Tanggal</th>
@@ -117,7 +116,6 @@
                 @endphp
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $siswa['nis'] }}</td>
                     <td>{{ $siswa['nisn'] }}</td>
                     <td>{{ $siswa['nama'] }}</td>
 
