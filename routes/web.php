@@ -24,6 +24,7 @@ use App\Http\Controllers\{
 };
 use App\Http\Controllers\Admin\K13\ButirSikapController;
 use App\Http\Controllers\Admin\K13\IntervalPredikatController;
+use App\Http\Controllers\Admin\K13\KdMapelController;
 use App\Http\Controllers\Admin\K13\Kkm13MapelController;
 use App\Http\Controllers\Admin\K13\KkmMapelController;
 use App\Http\Controllers\API\UserController;
@@ -159,5 +160,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/k13sikap/export-excel', [ButirSikapController::class, 'export'])->name('k13sikap.export');
         Route::post('/k13sikap/import-excel', [ButirSikapController::class, 'import'])->name('k13sikap.import');
         Route::resource('/k13sikap', ButirSikapController::class);
+
+        // Route K13KD
+        Route::get('/k13kd/data', [KdMapelController::class, 'data'])->name('k13kd.data');
+        Route::resource('/k13kd', KdMapelController::class)->except('edit');
     });
 });
