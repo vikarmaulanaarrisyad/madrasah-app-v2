@@ -157,6 +157,12 @@
                                     <p>Data Kompetensi Dasar</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('k13tglraport.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Input Tanggal Raport</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
 
