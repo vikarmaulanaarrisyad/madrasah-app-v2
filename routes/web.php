@@ -114,6 +114,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/presensi-siswa', [CetakAbsenSiswaController::class, 'index'])->name('presensi.siswa.index');
         Route::get('/presensi-siswa/filter', [CetakAbsenSiswaController::class, 'filterPresensi'])->name('presensi.siswa.filter');
         Route::get('/presensi-siswa/download', [CetakAbsenSiswaController::class, 'downloadPdf'])->name('presensi.siswa.download');
+        Route::get('/presensi-siswa/cek-libur', [CetakAbsenSiswaController::class, 'cekHariLibur'])->name('presensi.siswa.cekHariLibur');
 
         // Route Cetak Absen Guru
         Route::get('/presensi-guru/data', [CetakAbsenGuruController::class, 'data'])->name('presensi.guru.data');

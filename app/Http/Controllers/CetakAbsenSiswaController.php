@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AbsensiSiswa;
+use App\Models\HariLibur;
 use App\Models\Rombel;
 use App\Models\Siswa;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -142,16 +143,29 @@ class CetakAbsenSiswaController extends Controller
             }
         }
 
+        $hariLiburArr = HariLibur::whereMonth('tanggal', $bulan)
+            ->pluck('tanggal')
+            ->toArray();
+
+
         // Load PDF from Blade view with required data
         $pdf = Pdf::loadView('admin.absen.siswa.pdf', compact(
             'dataPresensi', // Attendance data
             'namaBulan',    // Month name
             'jumlahHari',   // Number of days in the month
             'bulan',         // Pass bulan to view
-            'rombel'
+            'rombel',
+            'hariLiburArr'
         ))->setPaper('a4', 'landscape');
 
         // Stream the PDF (to display in the browser)
         return $pdf->stream("presensi-bulan-$bulan.pdf");
+    }
+
+    public function cekHariLibur()
+    {
+        $hariLibur = HariLibur::all(); // Ambil semua tanggal libur
+
+        return response()->json($hariLibur);
     }
 }
