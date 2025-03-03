@@ -55,7 +55,7 @@
 
     <!--====== PATNAR LOGO PART START ======-->
 
-    <div id="patnar-logo" class="pt-40 pb-80 gray-bg">
+    <div id="patnar-logo" class="pt-40 pb-80 gray-bg" style="display: none;">
         <div class="container">
             <div class="row patnar-slied">
                 <div class="col-lg-12">
