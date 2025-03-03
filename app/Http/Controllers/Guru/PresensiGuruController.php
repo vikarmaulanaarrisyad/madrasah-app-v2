@@ -77,10 +77,13 @@ class PresensiGuruController extends Controller
     public function cekHariLibur(Request $request)
     {
         $tanggal = now()->format('Y-m-d');
-        $isLibur = HariLibur::where('tanggal', $tanggal)->exists();
+        $hariLibur = HariLibur::where('tanggal', $tanggal)->first(); // Ambil data lengkap
 
-        if ($isLibur) {
-            return response()->json(['status' => 'libur', 'message' => 'Tanggal ini adalah hari libur!']);
+        if ($hariLibur) {
+            return response()->json([
+                'status' => 'libur',
+                'message' => 'Tanggal ini adalah ' . $hariLibur->keterangan
+            ]);
         }
 
         return response()->json(['status' => 'buka']);

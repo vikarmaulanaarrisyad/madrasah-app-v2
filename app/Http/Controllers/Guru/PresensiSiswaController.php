@@ -91,9 +91,33 @@ class PresensiSiswaController extends Controller
         $status = $request->input('status');
         $tanggal = $request->input('tanggal', date('Y-m-d'));
 
-        // Validasi data
+        // Konversi tanggal ke Carbon
+        $carbonTanggal = Carbon::parse($tanggal);
+
+        // Validasi data input
         if (!$siswa_id || !$status) {
             return response()->json(['error' => 'Data tidak lengkap'], 400);
+        }
+
+        // Cek apakah siswa_id valid (terdaftar di tabel siswa)
+        $siswa = Siswa::find($siswa_id);
+        if (!$siswa) {
+            return response()->json(['error' => 'Siswa tidak ditemukan'], 404);
+        }
+
+        // Cek apakah tanggal yang dipilih adalah hari Minggu
+        if ($carbonTanggal->isSunday()) {
+            return response()->json([
+                'error' => 'Presensi tidak dapat dilakukan pada hari Minggu.'
+            ], 400);
+        }
+
+        // Cek apakah tanggal termasuk hari libur (dari tabel hari_libur)
+        $hariLibur = HariLibur::where('tanggal', $tanggal)->exists();
+        if ($hariLibur) {
+            return response()->json([
+                'error' => 'Hari ini adalah hari libur, presensi tidak diperbolehkan.'
+            ], 400);
         }
 
         // Simpan atau update presensi
@@ -102,7 +126,10 @@ class PresensiSiswaController extends Controller
             ['status' => $status]
         );
 
-        return response()->json(['success' => 'Presensi berhasil diperbarui', 'data' => $presensi]);
+        return response()->json([
+            'success' => 'Presensi berhasil diperbarui',
+            'data' => $presensi
+        ], 201);
     }
 
     public function count(Request $request)

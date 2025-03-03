@@ -125,6 +125,9 @@
                 ]
             });
 
+            // Cek hari libur saat halaman pertama kali dibuka
+            cekHariLibur($('#tanggalInput').val());
+
             $(document).on('change', '.presensi-radio', function() {
                 let siswa_id = $(this).data('siswa');
                 let status = $(this).val();
@@ -140,11 +143,32 @@
                         _token: $('meta[name="csrf-token"]').attr('content')
                     },
                     success: function(response) {
+                        Swal.fire({
+                            title: "Berhasil!",
+                            text: response.success,
+                            icon: "success",
+                            timer: 3000,
+                            showConfirmButton: false,
+                        }).then(() => {
+                            updatePresensiStats();
+                        });
                         //table.ajax.reload();
-                        updatePresensiStats();
+                        //updatePresensiStats();
                     },
                     error: function(xhr) {
-                        console.error(xhr.responseJSON.error);
+                        let errorMessage = "Terjadi kesalahan.";
+                        if (xhr.responseJSON && xhr.responseJSON.error) {
+                            errorMessage = xhr.responseJSON.error;
+                        }
+
+                        Swal.fire({
+                            title: "Error!",
+                            text: errorMessage,
+                            icon: "error",
+                            confirmButtonText: "OK"
+                        }).then(() => {
+                            table.ajax.reload();
+                        });
                     }
                 });
             });
@@ -182,6 +206,7 @@
                     success: function(response) {
                         if (response.status === "libur") {
                             $('#tabelPresensi').hide();
+                            $('.presensi-radio').prop('disabled', true);
                             Swal.fire({
                                 icon: 'warning',
                                 title: 'Hari Libur!',
@@ -190,6 +215,7 @@
                             });
                         } else {
                             $('#tabelPresensi').show();
+                            $('.presensi-radio').prop('disabled', false);
                             table.ajax.reload();
                         }
                     },
