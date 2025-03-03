@@ -129,20 +129,6 @@
 
             // Event saat tanggal berubah
             $('#tanggal').on('change.datetimepicker', function() {
-                let selectedDate = $('#tanggalInput').val();
-                let dayOfWeek = new Date(selectedDate).getDay(); // 0 = Minggu, 1 = Senin, dst.
-
-                if (dayOfWeek === 0) { // Jika hari Minggu
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Hari Minggu!',
-                        text: 'Hari Minggu tidak ada presensi.',
-                        confirmButtonText: 'OK'
-                    });
-
-                    return; // Hentikan eksekusi lebih lanjut
-                }
-
                 table.ajax.reload();
                 updatePresensiStats();
             });
