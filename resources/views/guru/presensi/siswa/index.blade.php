@@ -95,9 +95,7 @@
             });
         }
 
-
         $(document).ready(function() {
-            // Inisialisasi DataTable
             table = $('.table').DataTable({
                 processing: true,
                 serverSide: true,
@@ -123,56 +121,87 @@
                         name: 'aksi',
                         orderable: false,
                         searchable: false
-                    },
+                    }
                 ]
             });
 
             // Event saat tanggal berubah
+            // Event saat tanggal berubah
             $('#tanggal').on('change.datetimepicker', function() {
-                let selectedDate = $('#tanggalInput').val();
+                let selectedDate = $('#tanggalInput').val().trim(); // Pastikan tidak ada spasi ekstra
+
+                if (!selectedDate) {
+                    return;
+                }
+
                 let dayOfWeek = new Date(selectedDate).getDay(); // 0 = Minggu, 1 = Senin, dst.
 
                 if (dayOfWeek === 0) { // Jika hari Minggu
+                    $('#tabelPresensi').hide();
                     Swal.fire({
                         icon: 'warning',
                         title: 'Hari Minggu!',
                         text: 'Hari Minggu tidak ada presensi.',
                         confirmButtonText: 'OK'
                     });
-
                     return; // Hentikan eksekusi lebih lanjut
                 }
 
-                table.ajax.reload();
-                updatePresensiStats();
+                cekHariLibur(selectedDate);
             });
 
-            // Event saat presensi diubah
-            $(document).on('change', '.presensi-radio', function() {
-                let siswa_id = $(this).data('siswa');
-                let status = $(this).val();
-                let tanggal = $('#tanggalInput').val();
-
+            function cekHariLibur(tanggal) {
                 $.ajax({
-                    url: '{{ route('presensissiswa.simpanPresensi') }}',
-                    type: 'POST',
+                    url: '{{ route('presensisiswa.cekHariLibur') }}',
+                    type: 'GET',
                     data: {
-                        siswa_id: siswa_id,
-                        status: status,
-                        tanggal: tanggal,
-                        _token: $('meta[name="csrf-token"]').attr('content')
+                        tanggal: tanggal
                     },
                     success: function(response) {
-                        //table.ajax.reload();
-                        updatePresensiStats();
+                        if (response.status === "libur") {
+                            $('#tabelPresensi').hide();
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Hari Libur!',
+                                text: response.message,
+                                confirmButtonText: 'OK'
+                            });
+                        } else {
+                            $('#tabelPresensi').show();
+                            table.ajax.reload();
+                        }
                     },
                     error: function(xhr) {
-                        console.error(xhr.responseJSON.error);
+                        //console.error("Terjadi kesalahan AJAX:", xhr.responseText);
                     }
                 });
-            });
+            }
 
-            // Load data pertama kali
+            function updatePresensiStats() {
+                let tanggal = $('#tanggalInput').val();
+                $.ajax({
+                    url: '{{ route('presensisiswa.count') }}',
+                    type: 'GET',
+                    data: {
+                        tanggal: tanggal
+                    },
+                    success: function(response) {
+                        if (response.data.length === 0) {
+                            Swal.fire({
+                                icon: 'warning',
+                                title: 'Data Tidak Ditemukan',
+                                text: 'Rombel tidak ditemukan untuk guru ini!',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                        table.clear().rows.add(response.data).draw();
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+
             updatePresensiStats();
         });
     </script>
