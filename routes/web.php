@@ -22,6 +22,7 @@ use App\Http\Controllers\{
     TahunPelajaranController,
     UserProfileInformationController,
 };
+use App\Http\Controllers\Admin\JamkerjaController;
 use App\Http\Controllers\Admin\K13\ButirSikapController;
 use App\Http\Controllers\Admin\K13\IntervalPredikatController;
 use App\Http\Controllers\Admin\K13\KdMapelController;
@@ -176,6 +177,11 @@ Route::group(['middleware' => 'auth'], function () {
         // Route Status Penilaian
         Route::get('/k13statuspenilaian/data', [StatusPenilaianController::class, 'data'])->name('k13statuspenilaian.data');
         Route::resource('/k13statuspenilaian', StatusPenilaianController::class);
+
+        // Route Jam Kerja
+        Route::get('/jamkerja', [JamKerjaController::class, 'index'])->name('jamkerja.index');
+        Route::post('/jamkerja/store', [JamKerjaController::class, 'store'])->name('jamkerja.store');
+        Route::get('/jamkerja/data', [JamKerjaController::class, 'getJamKerja'])->name('jamkerja.data');
     });
 
     // Role Guru
