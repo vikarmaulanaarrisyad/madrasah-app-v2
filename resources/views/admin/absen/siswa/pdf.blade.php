@@ -10,6 +10,32 @@
             font-family: Arial, sans-serif;
         }
 
+        .kop {
+            width: 100%;
+            border-top: none;
+            border-bottom: 5px solid black;
+            text-align: center;
+        }
+
+        .kop img {
+            width: 80px;
+            height: auto;
+        }
+
+        .kop td {
+            vertical-align: middle;
+        }
+
+        .kop .lembaga {
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .kop .alamat {
+            font-size: 14px;
+        }
+
         .title {
             text-align: center;
             font-size: 18px;
@@ -71,6 +97,26 @@
 </head>
 
 <body>
+    <table class="kop">
+        <tr>
+            <td style="width: 10%; text-align: center; border:none;">
+                <img src="{{ public_path('images/logo-madrasah.jpg') }}" alt="Logo Kiri" style="width:100px;">
+            </td>
+
+            <td style="width: 90%; text-align: center; border:none;">
+                <div class="lembaga">
+                    <span style="font-size: 20px; font-weight: bold;">YAYASAN ASSALAFIYAH AL MUNAWAROH</span><br>
+                    <span style="font-size: 22px; font-weight: bold;">MADRASAH IBTIDAIYAH ASSALAFIYAH</span><br>
+                    <span style="font-size: 14px; font-weight: bold;">STATUS: TERAKREDITASI B</span><br>
+                    <span style="font-size: 14px;">Desa Kemanggungan, Kec. Tarub, Kab. Tegal</span>
+                </div>
+                <div class="alamat" style="margin-top: 5px; font-size: 13px;">
+                    Alamat: Jl. Projosumarto II Gang Mawar 1, Kemanggungan, Tarub, Tegal 52184
+                </div>
+            </td>
+        </tr>
+    </table>
+
     <div class="title">
         PRESENSI HARIAN SISWA<br>
         TAHUN PELAJARAN {{ $rombel->tahun_pelajaran->nama }}
@@ -186,11 +232,11 @@
                 <p>Kepala {{ $sekolah->nama }}</p>
                 <br><br><br><br>
                 <p><strong>
-                        @if ($sekolah->guru)
-                            {{ $sekolah->guru->gelar_depan ? $sekolah->guru->gelar_depan . ' ' : '' }}
-                            {{ $sekolah->guru->nama_lengkap }}
-                            @if ($sekolah->guru->gelar_belakang)
-                                , {{ $sekolah->guru->gelar_belakang }}
+                        @if ($sekolah->kepala_madrasah)
+                            {{ $sekolah->kepala_madrasah->gelar_depan ? $sekolah->kepala_madrasah->gelar_depan . ' ' : '' }}
+                            {{ $sekolah->kepala_madrasah->nama_lengkap }}
+                            @if ($sekolah->kepala_madrasah->gelar_belakang)
+                                , {{ $sekolah->kepala_madrasah->gelar_belakang }}
                             @endif
                         @endif
                     </strong></p>
