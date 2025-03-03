@@ -39,17 +39,13 @@
                         <p><strong>Jam Pulang:</strong> <span id="jam-pulang">Menunggu...</span></p>
                     </div>
 
-                    <!-- Checkbox Work From Home -->
-                    {{--  <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="workFromHome">
-                        <label class="form-check-label" for="workFromHome">Work From Home</label>
-                    </div>  --}}
+
                     @php
                         $hariIni = \Carbon\Carbon::now()->locale('id')->isoFormat('dddd');
                     @endphp
 
                     @if ($hariIni !== 'Minggu')
-                        <div class="mt-3">
+                        <div class="mt-3" id="presensiButtons">
                             <button class="btn btn-success" id="absenMasuk">
                                 <i class="fas fa-check-circle"></i> Absen Masuk
                             </button>
@@ -63,16 +59,6 @@
                             <p>Presensi tidak tersedia.</p>
                         </div>
                     @endif
-
-                    <!-- Tombol Absen -->
-                    {{--  <div class="mt-3">
-                        <button class="btn btn-success" id="absenMasuk">
-                            <i class="fas fa-check-circle"></i> Absen Masuk
-                        </button>
-                        <button class="btn btn-danger" id="absenPulang">
-                            <i class="fas fa-sign-out-alt"></i> Pulang
-                        </button>
-                    </div>  --}}
 
                     <!-- Tombol Edit Absen -->
                     <button class="btn btn-warning mt-3" id="editAbsen" style="display: none;">
@@ -103,6 +89,8 @@
                     confirmButtonText: 'OK'
                 });
             }
+
+            cekHariLibur();
         });
 
         function updateTime() {
@@ -263,5 +251,25 @@
         }
 
         document.addEventListener("DOMContentLoaded", fetchPresensiData);
+
+        function cekHariLibur() {
+            $.ajax({
+                url: '{{ route('presensigtk.cekHariLibur') }}',
+                type: 'GET',
+                success: function(response) {
+                    if (response.status === 'libur') {
+                        document.getElementById("presensiButtons").style.display = "none";
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Hari Libur!',
+                            text: response.message,
+                            confirmButtonText: 'OK'
+                        });
+                        return;
+                    }
+                    fetchPresensiData();
+                }
+            });
+        }
     </script>
 @endpush

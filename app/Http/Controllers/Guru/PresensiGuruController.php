@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Guru;
 use App\Http\Controllers\Controller;
 use App\Models\AbsensiGuru;
 use App\Models\Guru;
+use App\Models\HariLibur;
 use App\Models\JamKerja;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -71,5 +72,17 @@ class PresensiGuruController extends Controller
         $presensi->save();
 
         return response()->json(['message' => 'Presensi berhasil disimpan!', 'data' => $presensi], 201);
+    }
+
+    public function cekHariLibur(Request $request)
+    {
+        $tanggal = now()->format('Y-m-d');
+        $isLibur = HariLibur::where('tanggal', $tanggal)->exists();
+
+        if ($isLibur) {
+            return response()->json(['status' => 'libur', 'message' => 'Tanggal ini adalah hari libur!']);
+        }
+
+        return response()->json(['status' => 'buka']);
     }
 }

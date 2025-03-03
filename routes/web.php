@@ -190,9 +190,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('/presensisiswa', PresensiSiswaController::class)->except('show');
         Route::post('/presensisiswa/simpan-presensi', [PresensiSiswaController::class, 'simpanPresensi'])->name('presensissiswa.simpanPresensi');
         Route::get('/presensisiswa/count', [PresensiSiswaController::class, 'count'])->name('presensisiswa.count');
+        Route::get('/presensisiswa/cek-libur', [PresensiSiswaController::class, 'cekHariLibur'])->name('presensisiswa.cekHariLibur');
 
         // Route Presensi Guru
         Route::get('/presensigtk/data', [PresensiGuruController::class, 'data'])->name('presensigtk.data');
+        Route::get('/presensigtk/cek-libur', [PresensiGuruController::class, 'cekHariLibur'])->name('presensigtk.cekHariLibur');
         Route::resource('/presensigtk', PresensiGuruController::class);
     });
 });

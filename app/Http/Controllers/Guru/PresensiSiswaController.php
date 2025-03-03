@@ -5,10 +5,14 @@ namespace App\Http\Controllers\Guru;
 use App\Http\Controllers\Controller;
 use App\Models\AbsensiSiswa;
 use App\Models\Guru;
+use App\Models\HariLibur;
 use App\Models\Rombel;
 use App\Models\Siswa;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class PresensiSiswaController extends Controller
 {
@@ -115,6 +119,17 @@ class PresensiSiswaController extends Controller
             'alpa' => $alpa,
             'izin' => $izin,
             'sakit' => $sakit
+        ]);
+    }
+
+    public function cekHariLibur(Request $request)
+    {
+        $tanggal = $request->tanggal;
+        $hariLibur = HariLibur::where('tanggal', $tanggal)->first();
+
+        return response()->json([
+            'status' => $hariLibur ? 'libur' : 'bekerja',
+            'message' => $hariLibur ? 'Hari ini adalah hari libur: ' . $hariLibur->keterangan : 'Hari ini bukan hari libur',
         ]);
     }
 }
