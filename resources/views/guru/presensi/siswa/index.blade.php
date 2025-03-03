@@ -125,7 +125,29 @@
                 ]
             });
 
-            // Event saat tanggal berubah
+            $(document).on('change', '.presensi-radio', function() {
+                let siswa_id = $(this).data('siswa');
+                let status = $(this).val();
+                let tanggal = $('#tanggalInput').val();
+
+                $.ajax({
+                    url: '{{ route('presensissiswa.simpanPresensi') }}',
+                    type: 'POST',
+                    data: {
+                        siswa_id: siswa_id,
+                        status: status,
+                        tanggal: tanggal,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        //table.ajax.reload();
+                        updatePresensiStats();
+                    },
+                    error: function(xhr) {
+                        console.error(xhr.responseJSON.error);
+                    }
+                });
+            });
             // Event saat tanggal berubah
             $('#tanggal').on('change.datetimepicker', function() {
                 let selectedDate = $('#tanggalInput').val().trim(); // Pastikan tidak ada spasi ekstra

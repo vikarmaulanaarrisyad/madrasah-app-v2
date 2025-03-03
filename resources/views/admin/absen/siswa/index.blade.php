@@ -173,6 +173,100 @@
             <thead class="table-dark">
                 <tr>
                     <th>Nama Siswa</th>`;
+
+            // Header tabel untuk setiap hari dalam bulan
+            for (let i = 1; i <= jumlahHari; i++) {
+                let tanggal = `${(new Date()).getFullYear()}-${bulanAngka[namaBulan]}-${String(i).padStart(2, '0')}`;
+                let currentDate = new Date(tanggal);
+                let dayOfWeek = currentDate.getDay(); // 0 = Minggu, 1 = Senin, dst.
+
+                // Jika hari Minggu, beri tanda khusus
+                if (dayOfWeek === 0) {
+                    tableHtml += `<th class="">${i}</th>`;
+                } else {
+                    tableHtml += `<th>${i}</th>`;
+                }
+            }
+
+            // Tambahkan header untuk rekap (Hadir, Izin, Sakit, Alpha)
+            tableHtml += `<th>H</th><th>I</th><th>S</th><th>A</th></tr></thead><tbody>`;
+
+            // Mengambil daftar hari libur secara AJAX sebelum mengisi tabel
+            $.ajax({
+                url: "{{ route('presensi.siswa.cekHariLibur') }}", // Sesuaikan dengan rute backend
+                type: "GET",
+                dataType: "json",
+                success: function(hariLiburList) {
+                    // Pastikan format tanggal hari libur sesuai
+                    let hariLiburArr = hariLiburList.map(libur => libur.tanggal);
+
+                    // Mengisi tabel data siswa
+                    for (let namaSiswa in data) {
+                        let hadir = 0,
+                            izin = 0,
+                            sakit = 0,
+                            alpha = 0;
+
+                        tableHtml += `<tr><td>${namaSiswa}</td>`;
+
+                        // Loop setiap hari dalam bulan
+                        for (let i = 1; i <= jumlahHari; i++) {
+                            let tanggal =
+                                `${(new Date()).getFullYear()}-${bulanAngka[namaBulan]}-${String(i).padStart(2, '0')}`;
+                            let currentDate = new Date(tanggal);
+                            let dayOfWeek = currentDate.getDay();
+
+                            // Cek apakah hari Minggu atau Hari Libur
+                            if (dayOfWeek === 0 || hariLiburArr.includes(tanggal)) {
+                                tableHtml += `<td class="bg-warning text-dark">-</td>`;
+                            } else {
+                                let status = data[namaSiswa][tanggal] || '-';
+
+                                // Hitung total H, I, S, A hanya jika statusnya bukan '-'
+                                if (status !== '-') {
+                                    if (status === 'H') {
+                                        hadir++;
+                                    } else if (status === 'I') {
+                                        izin++;
+                                    } else if (status === 'S') {
+                                        sakit++;
+                                    } else {
+                                        alpha++;
+                                    }
+                                }
+
+                                tableHtml += `<td>${status}</td>`;
+                            }
+                        }
+
+                        // Tambahkan rekap jumlah Hadir, Izin, Sakit, Alpha
+                        tableHtml += `<td>${hadir}</td><td>${izin}</td><td>${sakit}</td><td>${alpha}</td></tr>`;
+                    }
+
+                    tableHtml += `</tbody></table></div>`;
+
+                    // Update tampilan tabel di halaman setelah data lengkap
+                    $('#presensiTableContainer').html(tableHtml);
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Terjadi Kesalahan!',
+                        text: 'Gagal mengambil data hari libur, coba lagi.',
+                    });
+                }
+            });
+        }
+
+
+        function renderTable1(data, namaBulan, jumlahHari) {
+            let tableHtml = `
+    <div class="table-responsive">
+        <h5 class="text-center">Presensi Bulan ${namaBulan}</h5>
+        <table class="table table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>Nama Siswa</th>`;
             // Create header for each day of the month
             for (let i = 1; i <= jumlahHari; i++) {
                 tableHtml += `<th>${i}</th>`;

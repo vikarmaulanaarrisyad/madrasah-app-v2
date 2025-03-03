@@ -121,35 +121,25 @@
 
                     @for ($i = 1; $i <= $jumlahHari; $i++)
                         @php
-                            $tanggal = Carbon\Carbon::create(null, $bulan, $i)->toDateString();
-                            $isSunday = Carbon\Carbon::create(null, $bulan, $i)->isSunday();
-                            $isHoliday = in_array($tanggal, $hariLiburArr);
-
-                            if ($isSunday || $isHoliday) {
-                                // Jika hari Minggu atau hari libur, beri tanda '-' dan lewati perhitungan kehadiran
-                                $status = '-';
-                            } else {
-                                $status = $siswa['kehadiran'][$tanggal] ?? '';
-
-                                // Hitung jumlah hadir, sakit, izin, alpa
-                                if ($status === 'Hadir' || $status === 'H') {
-                                    $hadir++;
-                                    $status = 'H';
-                                } elseif ($status === 'Izin' || $status === 'I') {
-                                    $izin++;
-                                    $status = 'I';
-                                } elseif ($status === 'Sakit' || $status === 'S') {
-                                    $sakit++;
-                                    $status = 'S';
-                                } elseif ($status === 'Alpa' || $status === 'A') {
-                                    $alpha++;
-                                    $status = 'A';
-                                }
+                            $status =
+                                $siswa['kehadiran'][Carbon\Carbon::create(null, $bulan, $i)->toDateString()] ?? '';
+                            // Hitung jumlah hadir, sakit, izin, alpa
+                            if ($status === 'Hadir' || $status === 'H') {
+                                $hadir++;
+                                $status = 'H';
+                            } elseif ($status === 'Izin' || $status === 'I') {
+                                $izin++;
+                                $status = 'I';
+                            } elseif ($status === 'Sakit' || $status === 'S') {
+                                $sakit++;
+                                $status = 'S';
+                            } elseif ($status === 'Alpa' || $status === 'A') {
+                                $alpha++;
+                                $status = 'A';
                             }
                         @endphp
                         <td>{{ $status }}</td>
                     @endfor
-
 
                     <!-- Tampilkan total jumlah hadir, sakit, izin, dan alpa -->
                     <td>{{ $hadir }}</td>
@@ -197,7 +187,7 @@
 
             </td>
             <td>
-                <p>Kemanggungan, {{ tanggal_indonesia(now()->format('Y-m-d')) }} </p>
+                <p>Kemanggungan, </p>
                 <p>Guru </p>
                 <br><br><br><br>
                 <p><strong>
