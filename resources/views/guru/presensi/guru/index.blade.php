@@ -44,16 +44,35 @@
                         <input type="checkbox" class="form-check-input" id="workFromHome">
                         <label class="form-check-label" for="workFromHome">Work From Home</label>
                     </div>  --}}
+                    @php
+                        $hariIni = \Carbon\Carbon::now()->locale('id')->isoFormat('dddd');
+                    @endphp
+
+                    @if ($hariIni !== 'Minggu')
+                        <div class="mt-3">
+                            <button class="btn btn-success" id="absenMasuk">
+                                <i class="fas fa-check-circle"></i> Absen Masuk
+                            </button>
+                            <button class="btn btn-danger" id="absenPulang">
+                                <i class="fas fa-sign-out-alt"></i> Pulang
+                            </button>
+                        </div>
+                    @else
+                        <div class="alert alert-warning">
+                            <h5>Hari ini hari Minggu</h5>
+                            <p>Presensi tidak tersedia.</p>
+                        </div>
+                    @endif
 
                     <!-- Tombol Absen -->
-                    <div class="mt-3">
+                    {{--  <div class="mt-3">
                         <button class="btn btn-success" id="absenMasuk">
                             <i class="fas fa-check-circle"></i> Absen Masuk
                         </button>
                         <button class="btn btn-danger" id="absenPulang">
                             <i class="fas fa-sign-out-alt"></i> Pulang
                         </button>
-                    </div>
+                    </div>  --}}
 
                     <!-- Tombol Edit Absen -->
                     <button class="btn btn-warning mt-3" id="editAbsen" style="display: none;">
@@ -69,6 +88,22 @@
     <script>
         let jamMasukDB = "{{ $jamKerja->jam_masuk ?? '07:00' }}";
         let jamPulangDB = "{{ $jamKerja->jam_keluar ?? '15:00' }}";
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let now = new Date();
+            let day = now.getDay(); // 0 = Minggu, 1 = Senin, ..., 6 = Sabtu
+
+            if (day === 0) { // Jika hari Minggu
+                document.getElementById("absenMasuk").disabled = true;
+                document.getElementById("absenPulang").disabled = true;
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Hari Minggu',
+                    text: 'Hari ini adalah hari libur. Presensi tidak tersedia.',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
 
         function updateTime() {
             let now = new Date();
