@@ -57,6 +57,12 @@
                         </a>
                     </li>
                     <li class="nav-item">
+                        <a href="{{ route('jamkerja.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-clock"></i>
+                            <p>Jam Kerja</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('kurikulum.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-book-open"></i>
                             <p>Kurikulum</p>
