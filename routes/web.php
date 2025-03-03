@@ -22,6 +22,7 @@ use App\Http\Controllers\{
     TahunPelajaranController,
     UserProfileInformationController,
 };
+use App\Http\Controllers\Admin\HariLiburController;
 use App\Http\Controllers\Admin\JamkerjaController;
 use App\Http\Controllers\Admin\K13\ButirSikapController;
 use App\Http\Controllers\Admin\K13\IntervalPredikatController;
@@ -183,6 +184,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/jamkerja', [JamKerjaController::class, 'index'])->name('jamkerja.index');
         Route::post('/jamkerja/store', [JamKerjaController::class, 'store'])->name('jamkerja.store');
         Route::get('/jamkerja/data', [JamKerjaController::class, 'getJamKerja'])->name('jamkerja.data');
+
+        // Route Hari libur
+        Route::get('/harilibur/data', [HariLiburController::class, 'data'])->name('harilibur.data');
+        Route::post('/harilibur/delete-multiple', [HariLiburController::class, 'destroyMultiple'])->name('harilibur.destroyMultiple');
+        Route::resource('/harilibur', HariLiburController::class);
     });
 
     // Role Guru

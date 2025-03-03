@@ -18,7 +18,9 @@
                 </div>
             </div>
         </div>
+    </div>
 
+    <div class="row">
         <div class="col-lg-12 col-md-12 col-12">
             <div class="form-group">
                 <label for="kategori_id">Kategori <span class="text-danger">*</span></label>
@@ -30,21 +32,27 @@
                 </select>
             </div>
         </div>
+    </div>
 
+    <div class="row">
         <div class="col-lg-12 col-md-12 col-12">
             <div class="form-group">
                 <label for="judul">Judul <span class="text-danger">*</span></label>
                 <input id="judul" class="form-control" type="text" name="judul" autocomplete="off" required>
             </div>
         </div>
+    </div>
 
+    <div class="row">
         <div class="col-lg-12 col-md-12 col-12">
             <div class="form-group">
                 <label for="content">Konten</label>
                 <textarea id="content" class="form-control summernote" name="content" rows="3"></textarea>
             </div>
         </div>
+    </div>
 
+    <div class="row">
         <div class="col-lg-12 col-md-12 col-12">
             <div class="form-group">
                 <label for="image">Gambar</label>
