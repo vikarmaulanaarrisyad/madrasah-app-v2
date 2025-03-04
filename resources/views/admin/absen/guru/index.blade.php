@@ -54,7 +54,8 @@
                         <div class="col-md-6 d-flex align-items-end">
                             <button id="btnTampilkan" class="btn btn-primary" disabled>Tampilkan</button>
                             <button id="btnReset" class="btn btn-warning ml-2 mr-2">Reset</button>
-                            <button id="btnDownloadPdf" class="btn btn-danger" disabled>Download PDF</button>
+                            <button id="btnDownloadPdf" class="btn btn-danger mr-2" disabled>Download PDF</button>
+                            <button id="btnDownloadExcel" class="btn btn-success" disabled>Download Excel</button>
                         </div>
                     </div>
                 </div>
@@ -87,7 +88,7 @@
             // Reset Filter
             $('#btnReset').click(function() {
                 $('#filterGuru, #filterMonth').val('');
-                $('#filterMonth, #btnTampilkan, #btnDownloadPdf').prop('disabled', true);
+                $('#filterMonth, #btnTampilkan, #btnDownloadPdf, #btnDownloadExcel').prop('disabled', true);
                 $('#presensiTableContainer').html(''); // Hapus data tampilan
             });
 
@@ -119,6 +120,7 @@
                                 renderTable(response);
 
                                 $('#btnDownloadPdf').prop('disabled', false);
+                                $('#btnDownloadExcel').prop('disabled', false);
                             } else {
                                 Swal.fire({
                                     icon: 'info',
@@ -148,8 +150,19 @@
                     window.location.href = "{{ route('presensi.guru.download') }}?bulan=" + bulan +
                         "&guru=" + guru;
                 }
-
             });
+
+            // Download Excel
+            $('#btnDownloadExcel').click(function() {
+                let guru = $('#filterGuru').val();
+                let bulan = $('#filterMonth').val();
+
+                if (guru) {
+                    window.location.href = "{{ route('presensi.guru.download.export_excel') }}?bulan=" +
+                        bulan +
+                        "&guru=" + guru;
+                }
+            })
         });
 
         function renderTable(response) {
