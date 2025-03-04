@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\PresensiGuruExport;
 use App\Models\AbsensiGuru;
 use App\Models\Guru;
 use App\Models\JamKerja;
@@ -9,6 +10,7 @@ use App\Models\Libur;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CetakAbsenGuruController extends Controller
 {
@@ -120,5 +122,23 @@ class CetakAbsenGuruController extends Controller
             ->setPaper('a4', 'landscape');
 
         return $pdf->stream("presensi-{$guruId}-{$bulan}-{$tahun}.pdf");
+    }
+
+    public function downloadExcel(Request $request)
+    {
+        // Cek apakah ada filter guru
+        if ($request->has('guru')) {
+            $guru = Guru::find($request->guru);
+            $namaGuru = $guru ? str_replace(' ', '_', $guru->nama_lengkap) : 'Semua_Guru';
+        } else {
+            $namaGuru = 'Semua_Guru';
+        }
+
+        $bulan = $request->bulan ?? Carbon::now()->format('m');
+        $tahun = Carbon::now()->format('Y');
+
+        $fileName = "Presensi_{$namaGuru}_{$bulan}_{$tahun}.xlsx";
+
+        return Excel::download(new PresensiGuruExport($request), $fileName);
     }
 }

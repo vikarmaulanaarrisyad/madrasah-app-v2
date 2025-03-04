@@ -122,6 +122,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/presensi-guru', [CetakAbsenGuruController::class, 'index'])->name('presensi.guru.index');
         Route::get('/presensi-guru/filter', [CetakAbsenGuruController::class, 'filterPresensi'])->name('presensi.guru.filter');
         Route::get('/presensi-guru/download', [CetakAbsenGuruController::class, 'downloadPdf'])->name('presensi.guru.download');
+        Route::get('/presensi-guru/export', [CetakAbsenGuruController::class, 'downloadExcel'])->name('presensi.guru.download.export_excel');
 
         Route::get('/bukuinduk/data', [CetakBukuIndukController::class, 'data'])->name('bukuinduk.data');
         Route::get('/bukuinduk', [CetakBukuIndukController::class, 'index'])->name('bukuinduk.index');
