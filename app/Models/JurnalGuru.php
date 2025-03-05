@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class JurnalGuru extends Model
 {
+    protected $guarded = ['id'];
+
     public function tahun_pelajaran()
     {
         return $this->belongsTo(TahunPelajaran::class);

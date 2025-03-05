@@ -35,6 +35,7 @@ use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Front\ArtikelFrontController;
 use App\Http\Controllers\Front\EventFrontController;
 use App\Http\Controllers\Front\ProfileFrontController;
+use App\Http\Controllers\Guru\JurnalMengajarController;
 use App\Http\Controllers\Guru\PresensiGuruController;
 use App\Http\Controllers\Guru\PresensiSiswaController;
 use Illuminate\Support\Facades\Route;
@@ -204,5 +205,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/presensigtk/data', [PresensiGuruController::class, 'data'])->name('presensigtk.data');
         Route::get('/presensigtk/cek-libur', [PresensiGuruController::class, 'cekHariLibur'])->name('presensigtk.cekHariLibur');
         Route::resource('/presensigtk', PresensiGuruController::class);
+
+        // Route Jurnal
+        Route::get('/ajax/jurnalmengajar/matapelajaran/{rombel_id}', [JurnalMengajarController::class, 'getMataPelajaran'])->name('jurnalmengajar.get_mapel');
+        Route::get('/jurnalmengajar/data', [JurnalMengajarController::class, 'data'])->name('jurnalmengajar.data');
+        Route::get('/jurnalmengajar/get_last_pembelajaran', [JurnalMengajarController::class, 'getLastPembelajaran'])->name('jurnalmengajar.get_last_pembelajaran');
+        Route::resource('/jurnalmengajar', JurnalMengajarController::class);
     });
 });

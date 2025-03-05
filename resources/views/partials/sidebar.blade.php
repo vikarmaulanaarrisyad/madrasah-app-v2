@@ -318,6 +318,14 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('jurnalmengajar.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-book-reader"></i>
+                            <p>
+                                Jurnal Mengajar
+                            </p>
+                        </a>
+                    </li>
                 @endif
             </ul>
         </nav>
