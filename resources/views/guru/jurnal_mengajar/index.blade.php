@@ -94,7 +94,7 @@
             table.ajax.reload();
         })
 
-        function addForm(url, title = 'Setting Hari Libur') {
+        function addForm(url, title = 'Jurnal Mengajar') {
             $(modal).modal('show');
             $(`${modal} .modal-title`).text(title);
             $(`${modal} form`).attr('action', url);
@@ -175,7 +175,7 @@
         });
 
 
-        async function editForm(url, title = 'Edit Mata Pelajaran') {
+        async function editForm(url, title = 'Jurnal Mengajar') {
             Swal.fire({
                 title: "Memuat...",
                 text: "Mohon tunggu sebentar...",
