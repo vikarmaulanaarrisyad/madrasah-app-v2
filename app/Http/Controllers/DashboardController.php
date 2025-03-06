@@ -15,6 +15,12 @@ class DashboardController extends Controller
         $tahunPelajaran = TahunPelajaran::aktif()->first();
         $kurikulum = $tahunPelajaran?->kurikulum()->count() ?? 0;
         $rombel = $tahunPelajaran?->rombel()->count() ?? 0;
-        return view('dashboard.index', compact('guru', 'siswa', 'rombel', 'kurikulum'));
+        $siswaLaki = Siswa::aktif()->whereHas('jenis_kelamin', function ($query) {
+            $query->where('nama', 'Laki-laki');
+        })->count();
+        $siswaPerempuan  = Siswa::aktif()->whereHas('jenis_kelamin', function ($query) {
+            $query->where('nama', 'Perempuan');
+        })->count();
+        return view('dashboard.index', compact('guru', 'siswa', 'rombel', 'kurikulum', 'siswaLaki', 'siswaPerempuan'));
     }
 }

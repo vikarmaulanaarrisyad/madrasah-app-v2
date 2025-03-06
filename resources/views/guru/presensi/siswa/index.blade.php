@@ -101,6 +101,7 @@
                 serverSide: true,
                 autoWidth: false,
                 responsive: true,
+                paging: false,
                 ajax: {
                     url: '{{ route('presensisiswa.data') }}',
                     data: function(d) {
