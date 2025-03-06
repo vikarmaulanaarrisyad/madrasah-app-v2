@@ -186,6 +186,8 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/jamkerja', [JamKerjaController::class, 'index'])->name('jamkerja.index');
         Route::post('/jamkerja/store', [JamKerjaController::class, 'store'])->name('jamkerja.store');
         Route::get('/jamkerja/data', [JamKerjaController::class, 'getJamKerja'])->name('jamkerja.data');
+        Route::post('/jamkerja/store-khusus', [JamKerjaController::class, 'storeKhusus'])->name('jamkerja.storeKhusus');
+
 
         // Route Hari libur
         Route::get('/harilibur/data', [HariLiburController::class, 'data'])->name('harilibur.data');
