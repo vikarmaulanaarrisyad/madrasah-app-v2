@@ -3,21 +3,21 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Platform;
+use App\Models\Fasilitas;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
-class PlatformController extends Controller
+class FasilitasController extends Controller
 {
     public function index()
     {
-        return view('admin.platform.index');
+        return view('admin.fasilitas.index');
     }
 
     public function data()
     {
-        $query = Platform::all();
+        $query = Fasilitas::all();
 
         return datatables($query)
             ->addIndexColumn()
@@ -27,8 +27,8 @@ class PlatformController extends Controller
             })
             ->addColumn('aksi', function ($q) {
                 return '
-                <button onclick="editForm(`' . route('platform.show', $q->id) . '`)" class="btn btn-sm btn-primary" title="Edit"><i class="fas fa-pencil-alt"></i></button>
-                <button onclick="deleteData(`' . route('platform.destroy', $q->id) . '`, `' . $q->nama . '`)" class="btn btn-sm btn-danger" title="Hapus"><i class="fas fa-trash-alt"></i></button>
+                <button onclick="editForm(`' . route('fasilitas.show', $q->id) . '`)" class="btn btn-sm btn-primary" title="Edit"><i class="fas fa-pencil-alt"></i></button>
+                <button onclick="deleteData(`' . route('fasilitas.destroy', $q->id) . '`, `' . $q->nama . '`)" class="btn btn-sm btn-danger" title="Hapus"><i class="fas fa-trash-alt"></i></button>
             ';
             })
             ->escapeColumns([])
@@ -40,7 +40,7 @@ class PlatformController extends Controller
         $validator = Validator::make($request->all(), [
             'gambar' => 'required|mimes:png,jpg,jpeg|max:2048',
             'nama' => 'required',
-            'url' => 'required',
+            'short' => 'required|max:150',
         ]);
 
         if ($validator->fails()) {
@@ -53,11 +53,11 @@ class PlatformController extends Controller
 
         $data = [
             'nama' => $request->nama,
-            'url' => $request->url,
-            'gambar' => upload('platform', $request->file('gambar'), 'platform'),
+            'short' => $request->short,
+            'gambar' => upload('fasilitas', $request->file('gambar'), 'fasilitas'),
         ];
 
-        Platform::create($data);
+        Fasilitas::create($data);
 
         return response()->json([
             'status' => 'success',
@@ -67,17 +67,17 @@ class PlatformController extends Controller
 
     public function show($id)
     {
-        $data = Platform::findOrfail($id);
+        $data = Fasilitas::findOrfail($id);
         return response()->json(['data' => $data]);
     }
 
     public function update(Request $request, $id)
     {
-        $platform = Platform::findOrfail($id);
+        $fasilitas = Fasilitas::findOrfail($id);
         $validator = Validator::make($request->all(), [
             'gambar' => 'nullable|mimes:png,jpg,jpeg|max:2048',
             'nama' => 'required',
-            'url' => 'required',
+            'short' => 'required|max:150',
         ]);
 
         if ($validator->fails()) {
@@ -94,15 +94,15 @@ class PlatformController extends Controller
         // Jika ada foto baru yang diunggah
         if ($request->hasFile('gambar')) {
             // Hapus foto lama jika ada dan tidak null
-            if (!empty($platform->gambar) && Storage::disk('public')->exists($platform->gambar)) {
-                Storage::disk('public')->delete($platform->gambar);
+            if (!empty($fasilitas->gambar) && Storage::disk('public')->exists($fasilitas->gambar)) {
+                Storage::disk('public')->delete($fasilitas->gambar);
             }
 
             // Simpan foto baru dan perbarui data
-            $data['gambar'] = upload('platform', $request->file('gambar'), 'platform');
+            $data['gambar'] = upload('fasilitas', $request->file('gambar'), 'fasilitas');
         }
 
-        $platform->update($data);
+        $fasilitas->update($data);
 
         return response()->json([
             'status' => 'success',
@@ -112,12 +112,12 @@ class PlatformController extends Controller
 
     public function destroy($id)
     {
-        $platform = Platform::findOrfail($id);
-        if (Storage::disk('public')->exists($platform->gambar)) {
-            Storage::disk('public')->delete($platform->gambar);
+        $fasilitas = Fasilitas::findOrfail($id);
+        if (Storage::disk('public')->exists($fasilitas->gambar)) {
+            Storage::disk('public')->delete($fasilitas->gambar);
         }
 
-        $platform->delete();
+        $fasilitas->delete();
 
         return response()->json([
             'status' => 'success',
