@@ -31,6 +31,7 @@ use App\Http\Controllers\Admin\K13\Kkm13MapelController;
 use App\Http\Controllers\Admin\K13\KkmMapelController;
 use App\Http\Controllers\Admin\K13\StatusPenilaianController;
 use App\Http\Controllers\Admin\K13\TglRaportController;
+use App\Http\Controllers\Admin\PlatformController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Front\ArtikelFrontController;
 use App\Http\Controllers\Front\EventFrontController;
@@ -188,11 +189,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/jamkerja/data', [JamKerjaController::class, 'getJamKerja'])->name('jamkerja.data');
         Route::post('/jamkerja/store-khusus', [JamKerjaController::class, 'storeKhusus'])->name('jamkerja.storeKhusus');
 
-
         // Route Hari libur
         Route::get('/harilibur/data', [HariLiburController::class, 'data'])->name('harilibur.data');
         Route::post('/harilibur/delete-multiple', [HariLiburController::class, 'destroyMultiple'])->name('harilibur.destroyMultiple');
         Route::resource('/harilibur', HariLiburController::class);
+
+        // Route Platform
+        Route::get('/platform/data', [PlatformController::class, 'data'])->name('platform.data');
+        Route::resource('/platform', PlatformController::class);
     });
 
     // Role Guru

@@ -33,6 +33,13 @@
         @enderror
     </div>
     <div class="form-group">
+        <label for="opening">Jam Buka Sekolah</label>
+        <textarea class="form-control @error('opening') is-invalid @enderror" id="opening" name="opening" required>{{ old('opening', $sekolah->opening) }}</textarea>
+        @error('opening')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+    <div class="form-group">
         <label for="notelp">Nomor Telepon</label>
         <input type="number" class="form-control @error('notelp') is-invalid @enderror" id="notelp" name="notelp"
             value="{{ old('notelp', $sekolah->notelp) }}" required>
