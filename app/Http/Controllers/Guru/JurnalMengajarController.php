@@ -77,6 +77,7 @@ class JurnalMengajarController extends Controller
         // Ambil pembelajaran terakhir berdasarkan rombel dan mata pelajaran
         $lastPembelajaran = JurnalGuru::where('rombel_id', $request->rombel_id)
             ->where('mata_pelajaran_id', $request->mata_pelajaran_id)
+            ->where('guru_id', $guruId)
             ->orderBy('id', 'desc')
             ->value('pembelajaran_ke'); // Menggunakan value() agar langsung mendapatkan angka
 
