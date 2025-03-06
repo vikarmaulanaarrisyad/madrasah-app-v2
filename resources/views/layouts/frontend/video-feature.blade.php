@@ -3,7 +3,7 @@
         <div class="row align-items-center">
             <div class="col-lg-6 order-last order-lg-first">
                 <div class="video text-lg-left text-center pt-50">
-                    <a class="Video-popup" href="https://www.youtube.com/watch?v=_nC0KyCmz3c"><i
+                    <a class="Video-popup" href="https://www.youtube.com/watch?v=IavaGDq0FQg"><i
                             class="fa fa-play"></i></a>
                 </div> <!-- row -->
             </div>
