@@ -63,12 +63,13 @@ class JurnalGuruController extends Controller
             ->make(true);
     }
 
-    public function exportPDF(Request $request)
+    public function exportPDF1(Request $request)
     {
         $jurnals = $this->getData($request)
             ->with('mata_pelajaran', 'rombel.kurikulum', 'guru') // Ambil relasi kurikulum
             ->orderBy('mata_pelajaran_id', 'ASC')
-            ->get();
+            ->get()
+            ->groupBy('mata_pelajaran_id');
 
         if ($jurnals->isEmpty()) {
             return response()->json([
@@ -95,6 +96,35 @@ class JurnalGuruController extends Controller
                 ->set_option('isPhpEnabled', true);
         }
 
+
+        $fileName = now()->format('Ymd_His') . '_Jurnal.pdf';
+        return $pdf->stream($fileName);
+    }
+
+    public function exportPDF(Request $request)
+    {
+        $jurnals = $this->getData($request)
+            ->with('mata_pelajaran', 'rombel.kurikulum', 'guru')
+            ->orderBy('mata_pelajaran_id', 'ASC')
+            ->get()
+            ->groupBy('mata_pelajaran_id'); // Pastikan data dikelompokkan
+        if ($jurnals->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data tidak ditemukan.'
+            ], 403);
+        }
+
+        // Mengakses kurikulum dengan cara yang benar setelah groupBy()
+        $kurikulum = optional($jurnals->first()->first()->rombel->kurikulum)->nama ?? '';
+
+        // Pilih tampilan PDF sesuai kurikulum
+        $view = ($kurikulum === 'Kurikulum Merdeka') ? 'admin.jurnal.pdf_merdeka' : 'admin.jurnal.pdf_kur13';
+        $orientation = ($kurikulum === 'Kurikulum Merdeka') ? 'portrait' : 'landscape';
+
+        $pdf = Pdf::loadView($view, compact('jurnals'))
+            ->setPaper('a4', $orientation)
+            ->setOption('isPhpEnabled', true);
 
         $fileName = now()->format('Ymd_His') . '_Jurnal.pdf';
         return $pdf->stream($fileName);

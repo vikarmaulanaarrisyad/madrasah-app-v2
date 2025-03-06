@@ -79,25 +79,24 @@
             </tr>
             <tr>
                 <td><strong>Kelas / Semester</strong></td>
-                <td>: {{ optional($jurnals->first()->rombel->kelas)->nama ?? '-' }}
-                    {{ optional($jurnals->first()->rombel)->nama ?? '-' }} /
-                    {{ optional($jurnals->first()->tahun_pelajaran->semester)->nama ?? '-' }}</td>
+                <td>: {{ optional($jurnals->first()->first()->rombel->kelas)->nama ?? '-' }}
+                    {{ optional($jurnals->first()->first()->rombel)->nama ?? '-' }} /
+                    {{ optional($jurnals->first()->first()->tahun_pelajaran->semester)->nama ?? '-' }}</td>
             </tr>
             <tr>
                 <td><strong>Tahun Pelajaran</strong></td>
-                <td>: {{ optional($jurnals->first()->tahun_pelajaran)->nama ?? '-' }}</td>
+                <td>: {{ optional($jurnals->first()->first()->tahun_pelajaran)->nama ?? '-' }}</td>
             </tr>
         </table>
-
-        @foreach ($jurnals as $jurnal)
+        @foreach ($jurnals as $mataPelajaranId => $jurnalGroup)
             <table>
                 <tr>
                     <th colspan="2">Mata Pelajaran</th>
-                    <td>{{ $jurnal->mata_pelajaran->nama }}</td>
+                    <td>{{ $jurnalGroup->first()->mata_pelajaran->nama }}</td>
                 </tr>
                 <tr>
                     <th colspan="2">Tema</th>
-                    <td>{{ $jurnal->tema }}</td>
+                    <td>{{ $jurnalGroup->first()->tema }}</td>
                 </tr>
             </table>
 
@@ -109,32 +108,20 @@
                     <th>Penilaian</th>
                     <th>Hari/Tanggal</th>
                 </tr>
-                <tr>
-                    <td>{{ $jurnal->pembelajaran_ke }}</td>
-                    <td>{!! nl2br(e($jurnal->tujuan_pembelajaran)) !!}</td>
-                    <td>{!! nl2br(e($jurnal->materi)) !!}</td>
-                    <td>{{ $jurnal->penilaian }}</td>
-                    <td>{{ \Carbon\Carbon::parse($jurnal->tanggal)->translatedFormat('l, d F Y') }}</td>
-                </tr>
+                @foreach ($jurnalGroup as $jurnal)
+                    <tr>
+                        <td>{{ $jurnal->pembelajaran_ke }}</td>
+                        <td>{!! nl2br(e($jurnal->tujuan_pembelajaran)) !!}</td>
+                        <td>{!! nl2br(e($jurnal->materi)) !!}</td>
+                        <td>{{ $jurnal->penilaian }}</td>
+                        <td>{{ \Carbon\Carbon::parse($jurnal->tanggal)->translatedFormat('l, d F Y') }}</td>
+                    </tr>
+                @endforeach
             </table>
-
-            {{--  <table>
-                <tr>
-                    <th>Metode Pembelajaran</th>
-                    <th>Evaluasi</th>
-                    <th>Refleksi</th>
-                    <th>Tugas</th>
-                </tr>
-                <tr>
-                    <td>{{ $jurnal->metode_pembelajaran }}</td>
-                    <td>{{ $jurnal->evaluasi }}</td>
-                    <td>{{ $jurnal->refleksi }}</td>
-                    <td>{{ $jurnal->tugas }}</td>
-                </tr>
-            </table>  --}}
 
             <br>
         @endforeach
+
 
         <div class="signature">
             <table class="signature-table">
@@ -150,12 +137,12 @@
                     <td style="text-align: center; width: 50%;border:none;">
                         <p>Tarub, {{ tanggal_indonesia(now()->format('Y-m-d')) }}</p>
                         <p>Guru Kelas
-                            {{ optional(optional(optional($jurnals->first())->guru)->rombel)->kelas->nama ?? '' }}
+                            {{ optional(optional(optional($jurnals->first()->first())->guru)->rombel)->kelas->nama ?? '' }}
                         </p>
 
                         <br><br><br>
-                        <p><strong>{{ optional($jurnals->first()->guru)->nama_lengkap ?? '-' }},
-                                {{ optional($jurnals->first()->guru)->gelar_belakang ?? '' }}</strong></p>
+                        <p><strong>{{ optional($jurnals->first()->first()->guru)->nama_lengkap ?? '-' }},
+                                {{ optional($jurnals->first()->first()->guru)->gelar_belakang ?? '' }}</strong></p>
                     </td>
                 </tr>
             </table>
