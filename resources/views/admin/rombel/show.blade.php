@@ -98,6 +98,7 @@
             serverSide: true,
             autoWidth: false,
             responsive: true,
+            paging: false, // Nonaktifkan pagination agar semua data ditampilkan
             language: {
                 "processing": "Mohon bersabar..."
             },

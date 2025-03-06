@@ -158,6 +158,8 @@
             serverSide: true,
             autoWidth: false,
             responsive: true,
+            paging: false, // Tetap aktifkan pagination agar pengguna bisa memilih
+            pageLength: 50,
             language: {
                 "processing": "Mohon bersabar..."
             },
@@ -176,15 +178,15 @@
                     data: 'nisn'
                 },
                 {
-                    data: 'nis'
-                },
-                {
                     data: 'aksi',
                     sortable: false,
                     searchable: false
                 },
             ],
+            dom: 'Brt',
+            bSort: false,
         });
+
 
         function modalTambahSiswa() {
             $(modal).modal('show');

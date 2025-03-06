@@ -1,7 +1,6 @@
-    {{-- Modal for selecting students --}}
     <div class="modal fade" id="modalTambahSiswa" tabindex="-1" role="dialog" aria-labelledby="modalTambahSiswaLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
+        aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="modalTambahSiswaLabel">Pilih Siswa</h5>
@@ -17,7 +16,6 @@
                                     <th>No</th>
                                     <th>Nama Lengkap</th>
                                     <th>NISN</th>
-                                    <th>NIS</th>
                                     <th><input type="checkbox" id="selectAll"></th>
                                 </x-slot>
                             </x-table>
