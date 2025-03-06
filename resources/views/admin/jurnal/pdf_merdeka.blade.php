@@ -143,13 +143,19 @@
                         <p>Mengetahui,</p>
                         <p>Kepala {{ $sekolah->nama }}</p>
                         <br><br><br>
-                        <p><strong>{{ $sekolah->guru->nama_lengkap ?? '--------------------------' }}</strong></p>
+                        <p><strong>{{ $sekolah->kepala_madrasah->nama_lengkap ?? '--------------------------' }},
+                                {{ $sekolah->kepala_madrasah->gelar_belakang }}</strong>
+                        </p>
                     </td>
                     <td style="text-align: center; width: 50%;border:none;">
                         <p>Tarub, {{ tanggal_indonesia(now()->format('Y-m-d')) }}</p>
-                        <p>Guru Kelas V</p>
+                        <p>Guru Kelas
+                            {{ optional(optional(optional($jurnals->first())->guru)->rombel)->kelas->nama ?? '' }}
+                        </p>
+
                         <br><br><br>
-                        <p><strong>{{ optional($jurnals->first()->guru)->nama_lengkap ?? '-' }}</strong></p>
+                        <p><strong>{{ optional($jurnals->first()->guru)->nama_lengkap ?? '-' }},
+                                {{ optional($jurnals->first()->guru)->gelar_belakang ?? '' }}</strong></p>
                     </td>
                 </tr>
             </table>

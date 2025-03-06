@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Guru;
 use App\Models\JurnalGuru;
 use App\Models\Rombel;
+use App\Models\TahunPelajaran;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -15,7 +16,8 @@ class JurnalGuruController extends Controller
      */
     public function index()
     {
-        $rombel = Rombel::all();
+        $tapel = TahunPelajaran::aktif()->first();
+        $rombel = Rombel::where('tahun_pelajaran_id', $tapel->id)->get();
         $guru = Guru::all();
         return view('admin.jurnal.index', compact('rombel', 'guru'));
     }
@@ -79,7 +81,7 @@ class JurnalGuruController extends Controller
         $kurikulum = optional($jurnals->first()->rombel->kurikulum)->nama ?? '';
 
         // Jika kurikulum adalah "Merdeka", gunakan file PDF khusus
-        $view = ($kurikulum === 'Kurikulum Merdeka') ? 'jurnal.pdf_merdeka' : 'jurnal.pdf_kur13';
+        $view = ($kurikulum === 'Kurikulum Merdeka') ? 'admin.jurnal.pdf_merdeka' : 'admin.jurnal.pdf_kur13';
 
         if ($kurikulum === 'Kurikulum Merdeka') {
             // Buat file PDF
