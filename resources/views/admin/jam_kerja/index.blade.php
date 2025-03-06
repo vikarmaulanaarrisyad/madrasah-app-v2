@@ -13,27 +13,32 @@
                         <thead>
                             <tr>
                                 <th>Hari</th>
-                                <th>Jam Masuk</th>
-                                <th>Jam Keluar</th>
+                                <th>Jam Masuk (Biasa)</th>
+                                <th>Jam Keluar (Biasa)</th>
+                                <th>Jam Masuk (Ramadhan)</th>
+                                <th>Jam Keluar (Ramadhan)</th>
                             </tr>
                         </thead>
-                        <tbody id="jamKerjaTableBody">
+                        <tbody>
                             @foreach (['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'] as $hari)
                                 @php
-                                    $jamData = $jamKerja->where('hari', $hari)->first();
+                                    $jamNormal = $jamKerja->where('hari', $hari)->where('is_ramadhan', false)->first();
+                                    $jamRamadhan = $jamKerja->where('hari', $hari)->where('is_ramadhan', true)->first();
                                 @endphp
                                 <tr>
                                     <td>{{ $hari }}</td>
-                                    <td>
-                                        <input type="time" name="jam_masuk[{{ $hari }}]"
-                                            class="form-control jam-masuk" data-hari="{{ $hari }}"
-                                            value="{{ $jamData->jam_masuk ?? '' }}">
-                                    </td>
-                                    <td>
-                                        <input type="time" name="jam_keluar[{{ $hari }}]"
-                                            class="form-control jam-keluar" data-hari="{{ $hari }}"
-                                            value="{{ $jamData->jam_keluar ?? '' }}">
-                                    </td>
+                                    <td><input type="time" name="jam_masuk[{{ $hari }}]"
+                                            data-hari="{{ $hari }}" class="form-control jam-masuk"
+                                            value="{{ $jamNormal->jam_masuk ?? '' }}"></td>
+                                    <td><input type="time" name="jam_keluar[{{ $hari }}]"
+                                            data-hari="{{ $hari }}" class="form-control jam-keluar"
+                                            value="{{ $jamNormal->jam_keluar ?? '' }}"></td>
+                                    <td><input type="time" name="jam_masuk_ramadhan[{{ $hari }}]"
+                                            data-hari="{{ $hari }}" class="form-control jam-masuk-ramadhan"
+                                            value="{{ $jamRamadhan->jam_masuk ?? '' }}"></td>
+                                    <td><input type="time" name="jam_keluar_ramadhan[{{ $hari }}]"
+                                            data-hari="{{ $hari }}" class="form-control jam-keluar-ramadhan"
+                                            value="{{ $jamRamadhan->jam_keluar ?? '' }}"></td>
                                 </tr>
                             @endforeach
                         </tbody>
@@ -48,48 +53,45 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
-            $('.jam-masuk, .jam-keluar').on('change', function() {
-                let hari = $(this).data('hari');
-                let jamMasuk = $(`.jam-masuk[data-hari="${hari}"]`).val();
-                let jamKeluar = $(`.jam-keluar[data-hari="${hari}"]`).val();
-
-                if (jamMasuk && jamKeluar && jamKeluar <= jamMasuk) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Jam Tidak Valid',
-                        text: `Jam keluar harus lebih besar dari jam masuk untuk ${hari}.`,
-                        confirmButtonText: 'OK'
-                    });
-
-                    $(`.jam-keluar[data-hari="${hari}"]`).val('');
-                }
-            });
-        });
-
-        $(document).ready(function() {
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
 
-            // Validasi agar jam masuk lebih kecil dari jam keluar
-            $('.jam-masuk, .jam-keluar').on('change', function() {
-                let hari = $(this).data('hari');
-                let jamMasuk = $(`.jam-masuk[data-hari="${hari}"]`).val();
-                let jamKeluar = $(`.jam-keluar[data-hari="${hari}"]`).val();
+            function validateTimeInput(selector, type) {
+                $(selector).on('change', function() {
+                    let hari = $(this).data('hari');
+                    let jamMasuk = $(`.jam-masuk[data-hari="${hari}"]`).val();
+                    let jamKeluar = $(`.jam-keluar[data-hari="${hari}"]`).val();
+                    let jamMasukRamadhan = $(`.jam-masuk-ramadhan[data-hari="${hari}"]`).val();
+                    let jamKeluarRamadhan = $(`.jam-keluar-ramadhan[data-hari="${hari}"]`).val();
 
-                if (jamMasuk && jamKeluar && jamMasuk >= jamKeluar) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Kesalahan!',
-                        text: 'Jam masuk harus lebih awal dari jam keluar.',
-                        confirmButtonText: 'OK'
-                    });
+                    if (type === 'normal' && jamMasuk && jamKeluar && jamKeluar <= jamMasuk) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Jam Tidak Valid',
+                            text: `Jam keluar harus lebih besar dari jam masuk untuk ${hari}.`,
+                            confirmButtonText: 'OK'
+                        });
+                        $(`.jam-keluar[data-hari="${hari}"]`).val('');
+                    }
 
-                    $(this).val('');
-                }
-            });
+                    if (type === 'ramadhan' && jamMasukRamadhan && jamKeluarRamadhan && jamKeluarRamadhan <=
+                        jamMasukRamadhan) {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Jam Tidak Valid',
+                            text: `Jam keluar harus lebih besar dari jam masuk untuk ${hari} selama Ramadhan.`,
+                            confirmButtonText: 'OK'
+                        });
+                        $(`.jam-keluar-ramadhan[data-hari="${hari}"]`).val('');
+                    }
+                });
+            }
+
+            validateTimeInput('.jam-masuk, .jam-keluar', 'normal');
+            validateTimeInput('.jam-masuk-ramadhan, .jam-keluar-ramadhan', 'ramadhan');
 
             $('#formJamPresensi').on('submit', function(e) {
                 e.preventDefault();
@@ -117,13 +119,6 @@
                             text: response.message,
                             confirmButtonText: 'OK'
                         });
-
-                        response.data.forEach(item => {
-                            $(`.jam-masuk[data-hari="${item.hari}"]`).val(item
-                                .jam_masuk);
-                            $(`.jam-keluar[data-hari="${item.hari}"]`).val(item
-                                .jam_keluar);
-                        });
                     },
                     error: function(xhr) {
                         Swal.fire({
@@ -142,8 +137,15 @@
                     type: "GET",
                     success: function(data) {
                         data.forEach(item => {
-                            $(`.jam-masuk[data-hari="${item.hari}"]`).val(item.jam_masuk);
-                            $(`.jam-keluar[data-hari="${item.hari}"]`).val(item.jam_keluar);
+                            if (item.is_ramadhan) {
+                                $(`.jam-masuk-ramadhan[data-hari="${item.hari}"]`).val(item
+                                    .jam_masuk);
+                                $(`.jam-keluar-ramadhan[data-hari="${item.hari}"]`).val(item
+                                    .jam_keluar);
+                            } else {
+                                $(`.jam-masuk[data-hari="${item.hari}"]`).val(item.jam_masuk);
+                                $(`.jam-keluar[data-hari="${item.hari}"]`).val(item.jam_keluar);
+                            }
                         });
                     }
                 });
