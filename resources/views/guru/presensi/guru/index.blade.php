@@ -24,6 +24,25 @@
                         <p>Silahkan melakukan Presensi</p>
                     </div>
 
+                    @php
+                        use Alkoumi\LaravelHijriDate\Hijri;
+
+                        // Mendapatkan tanggal Hijriyah
+                        $hijriDate = Hijri::Date('l d F Y'); // Format hari, tanggal, bulan, tahun Hijriyah
+
+                        // Tentukan periode Ramadhan (Misalnya 1-30 Ramadhan)
+                        $isRamadhan = Hijri::Date('m') == 9; // 9 adalah bulan Ramadhan dalam Hijriyah
+                    @endphp
+
+                    <div class="alert alert-{{ $isRamadhan ? 'success' : 'primary' }}">
+                        <h5>Keterangan Presensi</h5>
+                        <p>
+                            Hari ini: <strong>{{ $hijriDate }}</strong> <br>
+                            Status: <strong>{{ $isRamadhan ? 'Presensi Bulan Ramadhan' : 'Presensi Reguler' }}</strong>
+                        </p>
+                    </div>
+
+
                     <!-- Batasan Waktu Presensi -->
                     <div class="alert alert-info">
                         <h5>Anda dapat melakukan Presensi:</h5>

@@ -1,5 +1,14 @@
 @extends('layouts.app')
 
+@section('title', 'Setting Jam Kerja')
+
+@section('subtitle', 'Setting Jam Kerja')
+
+@section('breadcrumb')
+    <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
+    <li class="breadcrumb-item active">Setting Jam Kerja</li>
+@endsection
+
 @section('content')
     <div class="row">
         <div class="col-lg-12">

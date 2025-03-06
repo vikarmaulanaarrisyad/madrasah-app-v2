@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 
 class PresensiGuruController extends Controller
 {
-    public function index()
+    public function index1()
     {
         $user = Auth::user();
 
@@ -28,6 +28,25 @@ class PresensiGuruController extends Controller
 
         return view('guru.presensi.guru.index', compact('jamKerja'));
     }
+
+    public function index()
+    {
+        $user = Auth::user();
+        $guru = Guru::where('user_id', $user->id)->first();
+
+        // Ambil nama hari sekarang dalam bahasa Indonesia
+        $hariIni = Carbon::now()->locale('id')->translatedFormat('l');
+
+        // Cek apakah sekarang bulan Ramadhan dalam kalender Hijriyah
+        $isRamadhan = isRamadhan(); // 9 = Ramadhan dalam kalender Hijriyah
+
+        // Ambil jam kerja berdasarkan hari dan status Ramadhan
+        $jamKerja = JamKerja::where('hari', $hariIni)
+            ->where('is_ramadhan', $isRamadhan)
+            ->first();
+        return view('guru.presensi.guru.index', compact('jamKerja'));
+    }
+
 
     public function data()
     {
