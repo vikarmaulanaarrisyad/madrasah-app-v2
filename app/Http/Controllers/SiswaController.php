@@ -36,45 +36,36 @@ class SiswaController extends Controller
         // Ambil tahun pelajaran yang sedang aktif
         $tahunAktif = TahunPelajaran::aktif()->first();
 
-        $query = Siswa::with('jenis_kelamin')->aktif()->orderBy('id', 'DESC');
+        $query = Siswa::with(['jenis_kelamin', 'siswa_rombel.kelas'])
+            ->aktif()
+            ->get(); // Ambil semua data dulu karena sortBy() hanya bisa digunakan di Collection
+
+        // Jika rombel perlu diurutkan
+        if (request()->has('rombel')) {
+            $query = $query->sortBy(function ($q) use ($tahunAktif) {
+                $rombel = $q->siswa_rombel->where('tahun_pelajaran_id', $tahunAktif->id)->first();
+                return $rombel ? ($rombel->kelas->nama . ' ' . $rombel->nama) : 'ZZZZ'; // Rombel kosong diletakkan di akhir
+            });
+        }
 
         return datatables($query)
             ->addIndexColumn()
-            ->editColumn('status', function ($q) {
-                $icon = $q->status ? 'fa-toggle-on text-success' : 'fa-toggle-off text-danger';
-                return '
-                <a href="#" onclick="updateStatus(' . $q->id . ')" class="status-toggle" kodeq="' . $q->id . '">
-                    <i class="fas ' . $icon . ' fa-lg"></i>
-                </a>
-            ';
-            })
             ->addColumn('rombel', function ($q) use ($tahunAktif) {
-                // Jika tidak ada tahun pelajaran aktif, langsung kembalikan badge merah
                 if (!$tahunAktif) {
                     return '<span class="badge badge-danger">Tidak ada tahun pelajaran aktif</span>';
                 }
 
-                // Cari rombel berdasarkan tahun pelajaran aktif
                 $rombel = $q->siswa_rombel->where('tahun_pelajaran_id', $tahunAktif->id)->first();
 
-                // Jika rombel ditemukan, tampilkan nama kelas + nama rombel
-                if ($rombel) {
-                    return optional($rombel->kelas)->nama . ' ' . $rombel->nama;
-                }
-
-                // Jika tidak ditemukan, tampilkan badge merah
-                return '<span class="badge badge-danger">Tidak terdaftar di rombel aktif</span>';
+                return $rombel ? ($rombel->kelas->nama . ' ' . $rombel->nama) : '<span class="badge badge-danger">Tidak terdaftar di rombel aktif</span>';
             })
-
             ->addColumn('aksi', function ($q) {
-                return '
-                <a href="' . route('siswa.detail', $q->id) . '" class="btn btn-sm btn-primary">Lihat Detail</a>
-                ';
-                // <button onclick="editForm(`' . route('siswa.show', $q->id) . '`)" class="btn btn-sm btn-primary" title="Edit"><i class="fas fa-pencil-alt"></i></button>
+                return '<a href="' . route('siswa.detail', $q->id) . '" class="btn btn-sm btn-primary">Lihat Detail</a>';
             })
             ->escapeColumns([])
             ->make(true);
     }
+
 
     /**
      * Show the form for creating a new resource.
