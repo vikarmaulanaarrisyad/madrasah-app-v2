@@ -93,6 +93,10 @@
             serverSide: true,
             autoWidth: false,
             responsive: true,
+            lengthMenu: [
+                [10, 30, 50, -1],
+                [10, 30, 50, "Semua"]
+            ],
             pageLength: 30,
             ajax: {
                 url: '{{ route('siswa.data') }}',
