@@ -1,13 +1,22 @@
 <?php
 
+use Alkoumi\LaravelHijriDate\Hijri;
 use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+
+// if (!function_exists('isRamadhan')) {
+//     function isRamadhan()
+//     {
+//         $now = now();
+//         return $now->month == 3 || $now->month == 4; // Biasanya Ramadhan di bulan Maret atau April
+//     }
+// }
 
 if (!function_exists('isRamadhan')) {
     function isRamadhan()
     {
-        $now = now();
-        return $now->month == 3 || $now->month == 4; // Biasanya Ramadhan di bulan Maret atau April
+        $hijriDate = Hijri::Date('m'); // Ambil bulan dalam kalender Hijriyah
+        return $hijriDate == 9; // Ramadhan adalah bulan ke-9 dalam kalender Hijriyah
     }
 }
 
