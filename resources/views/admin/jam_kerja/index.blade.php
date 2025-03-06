@@ -9,40 +9,49 @@
                 </x-slot>
                 <form id="formJamPresensi">
                     @csrf
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Hari</th>
-                                <th>Jam Masuk (Biasa)</th>
-                                <th>Jam Keluar (Biasa)</th>
-                                <th>Jam Masuk (Ramadhan)</th>
-                                <th>Jam Keluar (Ramadhan)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'] as $hari)
-                                @php
-                                    $jamNormal = $jamKerja->where('hari', $hari)->where('is_ramadhan', false)->first();
-                                    $jamRamadhan = $jamKerja->where('hari', $hari)->where('is_ramadhan', true)->first();
-                                @endphp
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead>
                                 <tr>
-                                    <td>{{ $hari }}</td>
-                                    <td><input type="time" name="jam_masuk[{{ $hari }}]"
-                                            data-hari="{{ $hari }}" class="form-control jam-masuk"
-                                            value="{{ $jamNormal->jam_masuk ?? '' }}"></td>
-                                    <td><input type="time" name="jam_keluar[{{ $hari }}]"
-                                            data-hari="{{ $hari }}" class="form-control jam-keluar"
-                                            value="{{ $jamNormal->jam_keluar ?? '' }}"></td>
-                                    <td><input type="time" name="jam_masuk_ramadhan[{{ $hari }}]"
-                                            data-hari="{{ $hari }}" class="form-control jam-masuk-ramadhan"
-                                            value="{{ $jamRamadhan->jam_masuk ?? '' }}"></td>
-                                    <td><input type="time" name="jam_keluar_ramadhan[{{ $hari }}]"
-                                            data-hari="{{ $hari }}" class="form-control jam-keluar-ramadhan"
-                                            value="{{ $jamRamadhan->jam_keluar ?? '' }}"></td>
+                                    <th>Hari</th>
+                                    <th>Jam Masuk (Biasa)</th>
+                                    <th>Jam Keluar (Biasa)</th>
+                                    <th>Jam Masuk (Ramadhan)</th>
+                                    <th>Jam Keluar (Ramadhan)</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach (['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'] as $hari)
+                                    @php
+                                        $jamNormal = $jamKerja
+                                            ->where('hari', $hari)
+                                            ->where('is_ramadhan', false)
+                                            ->first();
+                                        $jamRamadhan = $jamKerja
+                                            ->where('hari', $hari)
+                                            ->where('is_ramadhan', true)
+                                            ->first();
+                                    @endphp
+                                    <tr>
+                                        <td>{{ $hari }}</td>
+                                        <td><input type="time" name="jam_masuk[{{ $hari }}]"
+                                                data-hari="{{ $hari }}" class="form-control jam-masuk"
+                                                value="{{ $jamNormal->jam_masuk ?? '' }}"></td>
+                                        <td><input type="time" name="jam_keluar[{{ $hari }}]"
+                                                data-hari="{{ $hari }}" class="form-control jam-keluar"
+                                                value="{{ $jamNormal->jam_keluar ?? '' }}"></td>
+                                        <td><input type="time" name="jam_masuk_ramadhan[{{ $hari }}]"
+                                                data-hari="{{ $hari }}" class="form-control jam-masuk-ramadhan"
+                                                value="{{ $jamRamadhan->jam_masuk ?? '' }}"></td>
+                                        <td><input type="time" name="jam_keluar_ramadhan[{{ $hari }}]"
+                                                data-hari="{{ $hari }}" class="form-control jam-keluar-ramadhan"
+                                                value="{{ $jamRamadhan->jam_keluar ?? '' }}"></td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>
             </x-card>
