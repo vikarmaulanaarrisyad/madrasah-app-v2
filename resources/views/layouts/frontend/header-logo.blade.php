@@ -5,7 +5,7 @@
                      <div class="logo">
                          <a href="{{ url('/') }}">
                              {{--  <img src="{{ asset('images/logo-frontend.jpg') }}" alt="Logo" width="55%">  --}}
-                             <img src="{{ Storage::url($aplikasi->logo_header) }}" alt="Logo">
+                             <img src="{{ Storage::url($aplikasi->logo_header) }}" alt="Logo" class="logo-header1">
                          </a>
                      </div>
                  </div>

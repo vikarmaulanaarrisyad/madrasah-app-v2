@@ -45,8 +45,34 @@
 
     <!--====== Responsive css ======-->
     <link rel="stylesheet" href="{{ asset('education') }}/css/responsive.css">
+    <style>
+        img.logo-header1 {
+            max-width: 150% !important;
+        }
 
+        /* 📱 Smartphone Kecil (320px - 480px) */
+        @media screen and (max-width: 480px) {
+            img.logo-header1 {
+                max-width: 80% !important;
+            }
+        }
+
+        /* 📱 Smartphone Sedang (481px - 767px) */
+        @media screen and (max-width: 767px) {
+            img.logo-header1 {
+                max-width: 90% !important;
+            }
+        }
+
+        /* 📱 Tablet (768px - 1024px) */
+        @media screen and (max-width: 1024px) {
+            img.logo-header1 {
+                max-width: 100% !important;
+            }
+        }
+    </style>
     @stack('css')
+
 </head>
 
 <body>
