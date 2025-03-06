@@ -93,6 +93,7 @@
             serverSide: true,
             autoWidth: false,
             responsive: true,
+            pageLength: 30,
             ajax: {
                 url: '{{ route('siswa.data') }}',
             },
