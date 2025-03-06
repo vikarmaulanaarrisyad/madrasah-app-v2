@@ -271,6 +271,12 @@
                                     <p>Best Platform</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('fasilitas.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Fasilitas</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-header">MANAGEMEN PENGGUNA</li>

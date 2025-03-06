@@ -10,9 +10,28 @@
             <div class="col-lg-5 offset-lg-1 order-first order-lg-last">
                 <div class="feature pt-50">
                     <div class="feature-title">
-                        <h3>Our Facilities</h3>
+                        <h3>Fasilitas Madrasah</h3>
                     </div>
                     <ul>
+                        @php
+                            $fasilitas = \App\Models\Fasilitas::all();
+                        @endphp
+                        <li>
+                            @if ($fasilitas->isNotEmpty())
+                                @foreach ($fasilitas as $item)
+                                    <div class="singel-feature">
+                                        <div class="icon">
+                                            <img src="{{ Storage::url($item->gambar ?? '') }}" alt="icon"
+                                                style="width: 71px; height: 89px;">
+                                        </div>
+                                        <div class="cont">
+                                            <h4>{{ $item->nama }}</h4>
+                                            <p class="text-justify">{{ $item->short }}</p>
+                                        </div>
+                                    </div> <!-- singel feature -->
+                                @endforeach
+                            @else
+                        </li>
                         <li>
                             <div class="singel-feature">
                                 <div class="icon">
@@ -28,27 +47,17 @@
                         <li>
                             <div class="singel-feature">
                                 <div class="icon">
-                                    <img src="{{ asset('education') }}/images/all-icon/f-2.png" alt="icon">
+                                    <img src="{{ asset('education') }}/images/all-icon/f-1.png" alt="icon">
                                 </div>
                                 <div class="cont">
-                                    <h4>Alumni Support</h4>
+                                    <h4>Global Certificate</h4>
                                     <p>Gravida nibh vel velit auctor aliquetn auci elit cons solliazcitudirem sem
                                         quibibendum sem nibhutis.</p>
                                 </div>
                             </div> <!-- singel feature -->
                         </li>
-                        <li>
-                            <div class="singel-feature">
-                                <div class="icon">
-                                    <img src="{{ asset('education') }}/images/all-icon/f-3.png" alt="icon">
-                                </div>
-                                <div class="cont">
-                                    <h4>Books & Library</h4>
-                                    <p>Gravida nibh vel velit auctor aliquetn auci elit cons solliazcitudirem sem
-                                        quibibendum sem nibhutis.</p>
-                                </div>
-                            </div> <!-- singel feature -->
-                        </li>
+                        @endif
+
                     </ul>
                 </div> <!-- feature -->
             </div>

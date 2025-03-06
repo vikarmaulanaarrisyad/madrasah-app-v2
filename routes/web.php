@@ -22,6 +22,7 @@ use App\Http\Controllers\{
     TahunPelajaranController,
     UserProfileInformationController,
 };
+use App\Http\Controllers\Admin\FasilitasController;
 use App\Http\Controllers\Admin\HariLiburController;
 use App\Http\Controllers\Admin\JamkerjaController;
 use App\Http\Controllers\Admin\K13\ButirSikapController;
@@ -197,6 +198,10 @@ Route::group(['middleware' => 'auth'], function () {
         // Route Platform
         Route::get('/platform/data', [PlatformController::class, 'data'])->name('platform.data');
         Route::resource('/platform', PlatformController::class);
+
+        // Route Fasilitas
+        Route::get('/fasilitas/data', [FasilitasController::class, 'data'])->name('fasilitas.data');
+        Route::resource('/fasilitas', FasilitasController::class);
     });
 
     // Role Guru
