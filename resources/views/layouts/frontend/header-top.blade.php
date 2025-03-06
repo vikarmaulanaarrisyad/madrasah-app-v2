@@ -14,7 +14,7 @@
                     </div>
                     <div class="col-lg-6">
                         <div class="header-opening-time text-lg-right text-center">
-                            <p>Opening Hours : Senin - Kamis 07.00 s.d 14.00</p>
+                            <p>Opening Hours : {{ $sekolah->opening ?? '' }}</p>
                         </div>
                     </div>
                 </div> <!-- row -->

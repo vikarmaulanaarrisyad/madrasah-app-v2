@@ -265,6 +265,12 @@
                                     <p>Event</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a href="{{ route('platform.index') }}" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Best Platform</p>
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-header">MANAGEMEN PENGGUNA</li>
