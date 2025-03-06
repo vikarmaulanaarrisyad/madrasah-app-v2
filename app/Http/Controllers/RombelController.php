@@ -333,7 +333,9 @@ class RombelController extends Controller
     {
         $siswa = Siswa::whereHas('siswa_rombel', function ($query) use ($id) {
             $query->where('rombel_id', $id);
-        })->get();
+        })
+            ->orderBy('nama_lengkap', 'asc')
+            ->get();
 
         return datatables($siswa)
             ->addIndexColumn()
@@ -342,6 +344,7 @@ class RombelController extends Controller
                     <button type="button" onclick="hapusSiswa(' . $row->id . ')" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Hapus</button>
                 ';
             })
+            ->skipPaging()
             ->rawColumns(['aksi']) // Pastikan HTML tidak di-escape
             ->make(true);
     }
