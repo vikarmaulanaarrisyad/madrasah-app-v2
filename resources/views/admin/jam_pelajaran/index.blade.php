@@ -23,6 +23,7 @@
                                                 onchange="updateDurasi(this)">
                                                 <option value="pembelajaran" selected>Pembelajaran</option>
                                                 <option value="upacara">Upacara</option>
+                                                <option value="pembiasaan">Pembiasaan Diri</option>
                                                 <option value="istirahat">Istirahat</option>
                                             </select>
                                         </div>
@@ -59,6 +60,9 @@
                                                     onchange="updateDurasi(this)">
                                                     <option value="pembelajaran"
                                                         {{ $jam->jenis == 'pembelajaran' ? 'selected' : '' }}>Pembelajaran
+                                                    </option>
+                                                    <option value="pembiasaan"
+                                                        {{ $jam->jenis == 'pembiasaan' ? 'selected' : '' }}>Pembiasaan Diri
                                                     </option>
                                                     <option value="upacara"
                                                         {{ $jam->jenis == 'upacara' ? 'selected' : '' }}>Upacara</option>
@@ -136,9 +140,11 @@
             let durasiInput = row.querySelector('[name="durasi[]"]');
 
             if (selectElement.value === "upacara") {
-                durasiInput.value = 60;
+                durasiInput.value = 30;
             } else if (selectElement.value === "istirahat") {
                 durasiInput.value = 30;
+            } else if (selectElement.value === "pembiasaan") {
+                durasiInput.value = 15;
             } else {
                 durasiInput.value = 35;
             }
@@ -166,6 +172,7 @@
                     <select class="form-control" name="jenis[]" required onchange="updateDurasi(this)">
                         <option value="pembelajaran" selected>Pembelajaran</option>
                         <option value="upacara">Upacara</option>
+                        <option value="pembiasaan">Pembiasaan Diri</option>
                         <option value="istirahat">Istirahat</option>
                     </select>
                 </div>
