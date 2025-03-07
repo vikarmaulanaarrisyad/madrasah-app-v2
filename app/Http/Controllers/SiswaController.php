@@ -48,8 +48,29 @@ class SiswaController extends Controller
             });
         }
 
+        if (request()->has('nama_lengkap')) {
+            $query = $query->sortBy(function ($q) {
+                return $q->nama_lengkap; // Rombel kosong diletakkan di akhir
+            });
+        }
+
         return datatables($query)
             ->addIndexColumn()
+            ->addColumn('foto', function ($q) {
+                if ($q->foto) {
+                    $foto = Storage::url($q->foto);
+                } else {
+                    // Menentukan foto default berdasarkan jenis kelamin
+                    if ($q->jenis_kelamin->nama == 'Perempuan') {
+                        $foto = asset('AdminLTE/dist/img/avatar3.png'); // Ganti dengan gambar perempuan yang sesuai
+                    } else {
+                        $foto = asset('AdminLTE/dist/img/avatar4.png'); // Gambar default laki-laki
+                    }
+                }
+
+                return '<img src="' . $foto . '" class="img-thumbnail rounded-circle" width="50" height="50">';
+            })
+
             ->addColumn('rombel', function ($q) use ($tahunAktif) {
                 if (!$tahunAktif) {
                     return '<span class="badge badge-danger">Tidak ada tahun pelajaran aktif</span>';

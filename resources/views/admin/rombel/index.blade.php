@@ -52,19 +52,21 @@
                         </div>
                     </div>
                 </x-slot>
+                <div class="table-responsive">
+                    <x-table>
+                        <x-slot name="thead">
+                            <th>No</th>
+                            <th>Nama Rombel</th>
+                            <th>Tingkat</th>
+                            <th>Wali Kelas</th>
+                            <th>Kelas</th>
+                            <th>Kurikulum</th>
+                            <th>Jumlah Siswa</th>
+                            <th>Aksi</th>
+                        </x-slot>
+                    </x-table>
+                </div>
 
-                <x-table>
-                    <x-slot name="thead">
-                        <th>No</th>
-                        <th>Nama Rombel</th>
-                        <th>Tingkat</th>
-                        <th>Wali Kelas</th>
-                        <th>Kelas</th>
-                        <th>Kurikulum</th>
-                        <th>Jumlah Siswa</th>
-                        <th>Aksi</th>
-                    </x-slot>
-                </x-table>
             </x-card>
         </div>
     </div>

@@ -25,6 +25,7 @@ use App\Http\Controllers\{
 use App\Http\Controllers\Admin\FasilitasController;
 use App\Http\Controllers\Admin\HariLiburController;
 use App\Http\Controllers\Admin\JamkerjaController;
+use App\Http\Controllers\Admin\JamPelajaranController;
 use App\Http\Controllers\Admin\K13\ButirSikapController;
 use App\Http\Controllers\Admin\K13\IntervalPredikatController;
 use App\Http\Controllers\Admin\K13\KdMapelController;
@@ -32,6 +33,7 @@ use App\Http\Controllers\Admin\K13\Kkm13MapelController;
 use App\Http\Controllers\Admin\K13\KkmMapelController;
 use App\Http\Controllers\Admin\K13\StatusPenilaianController;
 use App\Http\Controllers\Admin\K13\TglRaportController;
+use App\Http\Controllers\Admin\PembelajaranController;
 use App\Http\Controllers\Admin\PlatformController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Front\ArtikelFrontController;
@@ -202,6 +204,19 @@ Route::group(['middleware' => 'auth'], function () {
         // Route Fasilitas
         Route::get('/fasilitas/data', [FasilitasController::class, 'data'])->name('fasilitas.data');
         Route::resource('/fasilitas', FasilitasController::class);
+
+        // Route Pembelajaran
+        Route::get('/pembelajaran/data', [PembelajaranController::class, 'data'])->name('pembelajaran.data');
+        Route::get('/pembelajaran/getData', [PembelajaranController::class, 'getData'])->name('pembelajaran.getData');
+        Route::get('/pembelajaran/getMapelByRombel', [PembelajaranController::class, 'getMapelByRombel'])->name('pembelajaran.getMapelByRombel');
+        Route::get('/pembelajaran/getGuru', [PembelajaranController::class, 'getGuru'])->name('pembelajaran.getGuru');
+        Route::post('/pembelajaran/setGuru', [PembelajaranController::class, 'setGuru'])->name('pembelajaran.setGuru');
+
+        // Route Pembelajaran
+        Route::resource('/pembelajaran', PembelajaranController::class);
+
+        // Route JamPelajaran
+        Route::resource('/jampelajaran', JamPelajaranController::class);
     });
 
     // Role Guru

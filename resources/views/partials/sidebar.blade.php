@@ -135,6 +135,22 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('pembelajaran.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-book"></i>
+                            <p>
+                                Pembelajaran
+                            </p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('jampelajaran.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-clock"></i>
+                            <p>
+                                Jam Pelajaran
+                            </p>
+                        </a>
+                    </li>
                     <li class="nav-header">SETTING RAPORT</li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
