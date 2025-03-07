@@ -17,4 +17,9 @@ class MataPelajaran extends Model
     {
         return $this->hasMany(MataPelajaran::class, 'id', 'parent_id');
     }
+
+    public function pembelajaran()
+    {
+        return $this->hasOne(Pembelajaran::class, 'mata_pelajaran_id', 'id');
+    }
 }

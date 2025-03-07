@@ -62,6 +62,7 @@
                 <x-table>
                     <x-slot name="thead">
                         <th>No</th>
+                        <th>Foto</th>
                         <th>NISN</th>
                         <th>Nama Lengkap</th>
                         <th>Tempat Lahir</th>
@@ -76,6 +77,7 @@
     </div>
     @include('admin.siswa.form')
     @include('admin.siswa.import-excel')
+    @include('admin.siswa.modal-webcame')
 @endsection
 
 @include('includes.datatables')
@@ -104,6 +106,11 @@
             columns: [{
                     data: 'DT_RowIndex',
                     name: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'foto',
                     orderable: false,
                     searchable: false
                 },
