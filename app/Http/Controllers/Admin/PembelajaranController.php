@@ -37,7 +37,15 @@ class PembelajaranController extends Controller
 
     public function getMapelByRombel(Request $request)
     {
+        $request->validate([
+            'rombel_id' => 'required|exists:rombels,id'
+        ]);
+
         $tapelId = TahunPelajaran::aktif()->pluck('id')->first();
+
+        if (!$tapelId) {
+            return response()->json(['success' => false, 'message' => 'Tahun Pelajaran aktif tidak ditemukan.'], 404);
+        }
 
         $rombel = Rombel::where('id', $request->rombel_id)
             ->where('tahun_pelajaran_id', $tapelId)
@@ -47,15 +55,18 @@ class PembelajaranController extends Controller
             return response()->json(['success' => false, 'message' => 'Rombel tidak ditemukan.'], 404);
         }
 
-        // Ambil data mata pelajaran dengan guru dari pembelajaran
         $mapels = MataPelajaran::where('kurikulum_id', $rombel->kurikulum_id)
             ->with([
                 'pembelajaran' => function ($query) use ($request) {
                     $query->where('rombel_id', $request->rombel_id)
-                        ->with('guru'); // Memuat relasi guru di dalam pembelajaran
+                        ->with('guru');
                 }
             ])
-            ->get();
+            ->get()
+            ->map(function ($mapel) {
+                $mapel->pembelajaran = $mapel->pembelajaran ?? []; // Pastikan selalu array
+                return $mapel;
+            });
 
         return response()->json(['success' => true, 'data' => $mapels]);
     }
@@ -69,7 +80,7 @@ class PembelajaranController extends Controller
     public function setGuru(Request $request)
     {
         // Cari ID guru berdasarkan nama lengkap
-        $guru_id = Guru::where('nama_lengkap', $request->guru_nama)->value('id');
+        $guru_id = Guru::where('id', $request->guru_id)->pluck('id')->first();
 
         if (!$guru_id) {
             return response()->json(['success' => false, 'message' => 'Guru tidak ditemukan.']);

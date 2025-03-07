@@ -22,4 +22,9 @@ class Guru extends Model
     {
         return $this->belongsTo(Rombel::class);
     }
+
+    public function pembelajaran()
+    {
+        return $this->hasMany(Pembelajaran::class, 'guru_id');
+    }
 }
