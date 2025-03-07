@@ -10,46 +10,89 @@
             <x-card>
                 <form id="form-jam-pelajaran">
                     <div id="jam-container">
-                        @foreach ($jamPelajaran as $jam)
-                            <div class="jam-row mt-2" data-id="{{ $jam->id }}">
-                                <div class="row">
-                                    <div class="col-md-1">
-                                        <input type="number" class="form-control" name="jam_ke[]" required
-                                            value="{{ $jam->jam_ke }}" readonly>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <select class="form-control" name="jenis[]" required onchange="updateDurasi(this)">
-                                            <option value="pembelajaran"
-                                                {{ $jam->jenis == 'pembelajaran' ? 'selected' : '' }}>Pembelajaran</option>
-                                            <option value="upacara" {{ $jam->jenis == 'upacara' ? 'selected' : '' }}>Upacara
-                                            </option>
-                                            <option value="istirahat" {{ $jam->jenis == 'istirahat' ? 'selected' : '' }}>
-                                                Istirahat</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <input type="number" class="form-control" name="durasi[]" required
-                                            value="{{ $jam->durasi }}" oninput="updateSelesai()">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <input type="time" class="form-control" name="mulai[]" required
-                                            value="{{ $jam->mulai }}" onchange="updateSelesai()">
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="input-group">
-                                            <input type="time" class="form-control" name="selesai[]" readonly
-                                                value="{{ $jam->selesai }}">
-                                            <div class="input-group-append">
-                                                <button type="button" class="btn btn-danger btn-sm"
-                                                    onclick="removeJam(this, {{ $jam->id }})">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                        <div id="jam-container">
+                            @if ($jamPelajaran->isEmpty())
+                                <div class="jam-row mt-2">
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <input type="number" class="form-control" name="jam_ke[]" required value="1"
+                                                readonly>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <select class="form-control" name="jenis[]" required
+                                                onchange="updateDurasi(this)">
+                                                <option value="pembelajaran" selected>Pembelajaran</option>
+                                                <option value="upacara">Upacara</option>
+                                                <option value="istirahat">Istirahat</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <input type="number" class="form-control" name="durasi[]" required
+                                                value="35" oninput="updateSelesai()">
+                                        </div>
+                                        <div class="col-md-3">
+                                            <input type="time" class="form-control" name="mulai[]" required>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="input-group">
+                                                <input type="time" class="form-control" name="selesai[]" readonly>
+                                                <div class="input-group-append">
+                                                    <button type="button" class="btn btn-danger btn-sm"
+                                                        onclick="removeJam(this, null)">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @else
+                                @foreach ($jamPelajaran as $jam)
+                                    <div class="jam-row mt-2" data-id="{{ $jam->id }}">
+                                        <div class="row">
+                                            <div class="col-md-1">
+                                                <input type="number" class="form-control" name="jam_ke[]" required
+                                                    value="{{ $jam->jam_ke }}" readonly>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <select class="form-control" name="jenis[]" required
+                                                    onchange="updateDurasi(this)">
+                                                    <option value="pembelajaran"
+                                                        {{ $jam->jenis == 'pembelajaran' ? 'selected' : '' }}>Pembelajaran
+                                                    </option>
+                                                    <option value="upacara"
+                                                        {{ $jam->jenis == 'upacara' ? 'selected' : '' }}>Upacara</option>
+                                                    <option value="istirahat"
+                                                        {{ $jam->jenis == 'istirahat' ? 'selected' : '' }}>Istirahat
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <input type="number" class="form-control" name="durasi[]" required
+                                                    value="{{ $jam->durasi }}" oninput="updateSelesai()">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="time" class="form-control" name="mulai[]" required
+                                                    value="{{ $jam->mulai }}" onchange="updateSelesai()">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="input-group">
+                                                    <input type="time" class="form-control" name="selesai[]" readonly
+                                                        value="{{ $jam->selesai }}">
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-danger btn-sm"
+                                                            onclick="removeJam(this, {{ $jam->id }})">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            @endif
+                        </div>
+
                     </div>
                     <button type="button" class="btn btn-sm btn-outline-success mt-2" onclick="addJam()">
                         <i class="fas fa-plus"></i> Tambah Jam
@@ -153,7 +196,7 @@
             let row = button.closest('.jam-row');
             let container = document.getElementById('jam-container');
 
-            if (container.children.length > 1) {
+            if (container.children.length >= 1) {
                 if (id) {
                     Swal.fire({
                         title: 'Hapus Jam Pelajaran?',
@@ -187,6 +230,7 @@
                                     updateJamKe();
                                     updateSelesai();
                                     Swal.fire('Terhapus!', 'Data berhasil dihapus.', 'success');
+                                    window.location.reload()
                                 },
                                 error: function(xhr) {
                                     Swal.fire('Error!', 'Gagal menghapus data.', 'error');
@@ -240,8 +284,7 @@
                         title: 'Berhasil!',
                         text: 'Data jam pelajaran berhasil disimpan.',
                     }).then(() => {
-                        updateJamKe();
-                        updateSelesai(); // Reload halaman setelah sukses
+                        window.location.reload() // Reload halaman setelah sukses
                     });
                 },
                 error: function(xhr) {
