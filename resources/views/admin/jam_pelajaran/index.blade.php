@@ -233,11 +233,18 @@
                                         'content') // Ambil CSRF token dari meta tag
                                 },
                                 success: function() {
-                                    row.remove();
-                                    updateJamKe();
-                                    updateSelesai();
-                                    Swal.fire('Terhapus!', 'Data berhasil dihapus.', 'success');
-                                    window.location.reload()
+                                    Swal.fire({
+                                        title: 'Terhapus!',
+                                        text: 'Data berhasil dihapus.',
+                                        icon: 'success',
+                                        showConfirmButton: false, // Menonaktifkan tombol OK
+                                        timer: 3000 // Swal akan otomatis tertutup setelah 1.5 detik
+                                    }).then(() => {
+                                        row.remove();
+                                        updateJamKe();
+                                        updateSelesai();
+                                        window.location.reload();
+                                    });
                                 },
                                 error: function(xhr) {
                                     Swal.fire('Error!', 'Gagal menghapus data.', 'error');
@@ -290,8 +297,10 @@
                         icon: 'success',
                         title: 'Berhasil!',
                         text: 'Data jam pelajaran berhasil disimpan.',
+                        showConfirmButton: false,
+                        timer: 3000
                     }).then(() => {
-                        window.location.reload() // Reload halaman setelah sukses
+                        window.location.reload(); // Reload halaman setelah sukses
                     });
                 },
                 error: function(xhr) {
