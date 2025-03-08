@@ -220,6 +220,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Route::jadwalPelajaran
         Route::get('/jadwalpelajaran/data', [JadwalPelajaranController::class, 'data'])->name('jadwalpelajaran.data');
+        Route::post('jadwalpelajaran/reset', [JadwalPelajaranController::class, 'reset'])->name('jadwalpelajaran.reset');
         Route::resource('/jadwalpelajaran', JadwalPelajaranController::class);
     });
 

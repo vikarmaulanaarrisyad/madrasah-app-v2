@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\JadwalPelajaran;
 use App\Models\JamPelajaran;
 use App\Models\MataPelajaran;
+use App\Models\Pembelajaran;
 use App\Models\Rombel;
 use App\Models\TahunPelajaran;
 use Illuminate\Http\Request;
@@ -61,6 +62,74 @@ class JadwalPelajaranController extends Controller
     }
 
     public function store(Request $request)
+    {
+        $request->validate([
+            'rombel_id' => 'required',
+            'jam_pelajaran_id' => 'required|integer',
+            'mata_pelajaran_id' => 'required|integer',
+            'day' => 'required|string',
+        ]);
+
+        // Ambil data guru dari pembelajaran
+        $pembelajaran = Pembelajaran::where('mata_pelajaran_id', $request->mata_pelajaran_id)->first();
+
+        // Periksa apakah pembelajaran ditemukan
+        if (!$pembelajaran) {
+            return response()->json(['message' => 'Pembelajaran tidak ditemukan!'], 422);
+        }
+
+        // Pastikan guru_id tidak null
+        if ($pembelajaran->guru_id == null) {
+            return response()->json(['message' => 'Guru tidak ditemukan!'], 422);
+        }
+
+        // Jika guru_id ada, lanjutkan proses
+        $guru_id = $pembelajaran->guru_id;
+
+        // Cek apakah guru sudah memiliki jadwal di jam dan hari yang sama
+        $bentrok = JadwalPelajaran::where('jam_pelajaran_id', $request->jam_pelajaran_id)
+            ->where('hari', $request->day)
+            ->where('rombel_id', '!=', $request->rombel_id)
+            ->whereIn('mata_pelajaran_id', function ($query) use ($guru_id) {
+                $query->select('mata_pelajaran_id')
+                    ->from('pembelajarans')
+                    ->where('guru_id', $guru_id);
+            })
+            ->get();
+
+        if ($bentrok->count() > 0) {
+            return response()->json(['message' => 'Jadwal guru bentrok dengan kelas lain!'], 422);
+        }
+
+
+        // Simpan atau update jadwal jika tidak bentrok
+        JadwalPelajaran::updateOrCreate(
+            [
+                'rombel_id' => $request->rombel_id,
+                'jam_pelajaran_id' => $request->jam_pelajaran_id,
+                'hari' => $request->day,
+            ],
+            ['mata_pelajaran_id' => $request->mata_pelajaran_id]
+        );
+
+        return response()->json(['success' => 'Jadwal berhasil diperbarui!']);
+    }
+
+    public function reset(Request $request)
+    {
+        $request->validate([
+            'rombel_id' => 'required|exists:rombels,id',
+        ]);
+
+        // Menghapus semua jadwal pelajaran berdasarkan rombel_id
+        JadwalPelajaran::where('rombel_id', $request->rombel_id)->delete();
+
+        return response()->json(['success' => 'Jadwal pelajaran telah berhasil direset.']);
+    }
+
+
+
+    public function store1(Request $request)
     {
         $request->validate([
             'rombel_id' => 'required',

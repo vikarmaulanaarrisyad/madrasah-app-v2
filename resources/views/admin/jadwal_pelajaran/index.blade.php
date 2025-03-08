@@ -13,7 +13,7 @@
         <div class="col-lg-12">
             <x-card>
                 <x-slot name="header">
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <label for="rombel_id">Pilih Rombel:</label>
                             <select id="rombel_id" class="form-control">
@@ -24,17 +24,9 @@
                                 @endforeach
                             </select>
                         </div>
-                        {{--  <div>
-                            <label for="kelas_id">Pilih Kelas:</label>
-                            <select id="kelas_id" class="form-control">
-                                @foreach ($kelasList as $kelas)
-                                    <option value="{{ $kelas->id }}" {{ $kelasId == $kelas->id ? 'selected' : '' }}>
-                                        {{ $kelas->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>  --}}
+                        <button id="reset-jadwal" class="btn btn-danger btn-sm">Reset Jadwal</button>
                     </div>
+
                 </x-slot>
 
                 <x-table>
@@ -94,6 +86,45 @@
                     .val();
             });
 
+            $('#reset-jadwal').click(function() {
+                const rombel_id = $('#rombel_id').val();
+
+                Swal.fire({
+                    title: 'Apakah Anda yakin?',
+                    text: 'Jadwal pelajaran untuk rombel ini akan dihapus!',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Ya, reset!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            url: "{{ route('jadwalpelajaran.reset') }}", // Ganti dengan route reset yang sesuai
+                            method: "POST",
+                            data: {
+                                _token: "{{ csrf_token() }}",
+                                rombel_id: rombel_id
+                            },
+                            success: function(response) {
+                                Swal.fire('Sukses!', 'Jadwal telah direset.', 'success')
+                                    .then(() => {
+                                        location.reload();
+                                    });
+                            },
+                            error: function(xhr) {
+                                if (xhr.status === 422) {
+                                    Swal.fire('Error!', xhr.responseJSON.message,
+                                        'error');
+                                } else {
+                                    Swal.fire('Error!', 'Terjadi kesalahan, coba lagi.',
+                                        'error');
+                                }
+                            }
+                        });
+                    }
+                });
+            });
+
             // Tambah/Edit Jadwal dengan Swal dan AJAX
             $('.schedule-cell').on('click', function() {
                 if ($(this).hasClass('non-clickable')) {
@@ -135,8 +166,14 @@
                                 () => {
                                     location.reload();
                                 });
-                        }).fail(function(error) {
-                            Swal.fire('Error!', 'Gagal menyimpan data.', 'error');
+                        }).fail(function(xhr) {
+                            // Menangani kesalahan dan menampilkan pesan error dari server
+                            if (xhr.status === 422) {
+                                Swal.fire('Error!', xhr.responseJSON.message, 'error');
+                            } else {
+                                Swal.fire('Error!', 'Terjadi kesalahan, coba lagi.',
+                                    'error');
+                            }
                         });
                     }
                 });
