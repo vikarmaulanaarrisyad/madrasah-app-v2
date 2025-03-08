@@ -244,5 +244,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::resource('/jurnalmengajar', JurnalMengajarController::class);
 
         Route::get('/jadwal-saat-ini', [JurnalMengajarController::class, 'jadwalSaatIni'])->name('jadwal.saat_ini');
+
+        Route::post('/notifications/read', function () {
+            auth()->user()->unreadNotifications->markAsRead();
+            return back();
+        })->name('notifications.markAsRead');
     });
 });

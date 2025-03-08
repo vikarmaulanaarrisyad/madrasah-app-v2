@@ -149,6 +149,7 @@ class JurnalMengajarController extends Controller
             'pembelajaran_ke' => $pembelajaranKe,
             'materi' => $request->materi,
             'keterangan' => $request->keterangan,
+            'jadwal_pelajaran_id' => $jadwalPelajaran->id,
         ];
 
         JurnalGuru::create($data);

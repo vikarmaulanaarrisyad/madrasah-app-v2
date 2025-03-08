@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Events\JurnalMengajarBelumDibuat;
 use App\Http\Controllers\Controller;
 use App\Models\JadwalPelajaran;
 use App\Models\JamPelajaran;
@@ -9,7 +10,10 @@ use App\Models\MataPelajaran;
 use App\Models\Pembelajaran;
 use App\Models\Rombel;
 use App\Models\TahunPelajaran;
+use App\Notifications\JurnalMengajarNotification;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class JadwalPelajaranController extends Controller
 {
@@ -148,5 +152,21 @@ class JadwalPelajaranController extends Controller
         );
 
         return response()->json(['success' => 'Jadwal berhasil diperbarui!']);
+    }
+
+    public function cekJurnal()
+    {
+        $guru = auth()->user(); // Ambil data guru yang login
+        $jadwalHariIni = $guru->jadwalPelajaran()
+            ->whereDate('tanggal', now()->toDateString())
+            ->get();
+
+        foreach ($jadwalHariIni as $jadwal) {
+            $jurnalAda = $guru->jurnals()->where('jadwal_pelajaran_id', $jadwal->id)->exists();
+
+            if (!$jurnalAda) {
+                $guru->notify(new JurnalMengajarNotification($jadwal)); // Kirim notifikasi
+            }
+        }
     }
 }
