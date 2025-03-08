@@ -34,6 +34,12 @@
     <link rel="stylesheet" href="{{ asset('AdminLTE/dist/css/adminlte.min.css?v=3.2.0') }}">
 
     <style>
+        .swal-dropdown-below {
+            top: auto !important;
+            bottom: auto !important;
+            transform: none !important;
+        }
+
         .note-editor {
             margin-bottom: 0;
         }
