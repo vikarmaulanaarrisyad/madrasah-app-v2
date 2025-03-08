@@ -35,4 +35,9 @@ class Rombel extends Model
             ->withPivot('tahun_pelajaran_id')
             ->withTimestamps();
     }
+
+    public function pembelajaran()
+    {
+        return $this->hasMany(Pembelajaran::class, 'rombel_id', 'id');
+    }
 }

@@ -242,5 +242,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/jurnalmengajar/data', [JurnalMengajarController::class, 'data'])->name('jurnalmengajar.data');
         Route::get('/jurnalmengajar/get_last_pembelajaran', [JurnalMengajarController::class, 'getLastPembelajaran'])->name('jurnalmengajar.get_last_pembelajaran');
         Route::resource('/jurnalmengajar', JurnalMengajarController::class);
+
+        Route::get('/jadwal-saat-ini', [JurnalMengajarController::class, 'jadwalSaatIni'])->name('jadwal.saat_ini');
     });
 });

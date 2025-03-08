@@ -24,14 +24,7 @@
                     <div class="col-lg-4">
                         <div class="form-group">
                             <label for="tanggal">Filter Tanggal <span class="text-danger">*</span></label>
-                            <div class="input-group datepicker" id="tanggal" data-target-input="nearest">
-                                <input type="text" id="tanggal" name="tanggal"
-                                    class="form-control datetimepicker-input" data-target="#tanggal"
-                                    data-toggle="datetimepicker" autocomplete="off" value="{{ date('Y-m-d') }}" />
-                                <div class="input-group-append" data-target="#tanggal" data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -66,14 +59,14 @@
         let button = '#submitBtn';
 
         table = $('.table').DataTable({
-            processing: true,
+            processing: false,
             serverSide: true,
             autoWidth: false,
             responsive: true,
             ajax: {
                 url: '{{ route('jurnalmengajar.data') }}',
                 data: function(d) {
-                    d.tanggal = $('[name=tanggal]').val()
+                    d.tanggal = $('#tanggal').val()
                 }
             },
             columns: [{
@@ -97,7 +90,7 @@
             ]
         })
 
-        $('#tanggal').on('change.datetimepicker', function() {
+        $('#tanggal').on('change', function() {
             table.ajax.reload();
         })
 
@@ -117,14 +110,8 @@
                 success: function(response) {
                     if (response.success) {
                         $('#mata_pelajaran').val(response.data.mata_pelajaran);
-                        $('[name=mata_pelajaran_id]').val(response.data.mata_pelajaran_id);
-                        $('#jam_ke').val(response.data.jam_ke);
-                        $('#jam_ke_hidden').val(response.data.jam_ke); // Update hidden input
                     } else {
                         $('#mata_pelajaran').val("Tidak ada jadwal saat ini");
-                        $('#mata_pelajaran_id').val("");
-                        $('#jam_ke').val("0");
-                        $('#jam_ke_hidden').val("0"); // Reset hidden input
                     }
                 },
                 error: function(xhr) {
@@ -132,6 +119,77 @@
                 }
             });
         }
+
+        // Fungsi Fetch Mata Pelajaran Berdasarkan Rombel
+        function fetchMataPelajaran(rombelId, selectedId = null, selectedName = null) {
+            let $mataPelajaranSelect = $('#mata_pelajaran');
+
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: `ajax/jurnalmengajar/matapelajaran/${rombelId}`, // Sesuaikan dengan endpoint
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(response) {
+                        let selectedValue = $mataPelajaranSelect.val(); // Simpan pilihan sebelumnya
+
+                        $mataPelajaranSelect.empty().append(
+                            '<option value="">Pilih Mata Pelajaran</option>');
+
+                        response.data.forEach(mataPelajaran => {
+                            let isSelected = (selectedValue == mataPelajaran.id || selectedId ==
+                                mataPelajaran.id) ? 'selected' : '';
+                            $mataPelajaranSelect.append(
+                                `<option value="${mataPelajaran.id}" ${isSelected}>${mataPelajaran.nama}</option>`
+                            );
+                        });
+
+                        // Jika opsi belum ada, tambahkan secara manual
+                        if (selectedId && !$mataPelajaranSelect.find(`option[value="${selectedId}"]`)
+                            .length) {
+                            let option = new Option(selectedName, selectedId, true, true);
+                            $mataPelajaranSelect.append(option);
+                        }
+
+                        $mataPelajaranSelect.trigger('change'); // Refresh Select2
+                        resolve(); // Resolusi sukses
+                    },
+                    error: function() {
+                        reject(); // Resolusi gagal
+                    }
+                });
+            });
+        }
+
+        $('#rombel_id').change(async function() {
+            let rombelId = $(this).val();
+
+            if (rombelId) {
+                Swal.fire({
+                    title: "Memuat...",
+                    text: "Mengambil data mata pelajaran...",
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                });
+
+                try {
+                    $('#mata_pelajaran').empty().prop('disabled', false);
+                    await fetchMataPelajaran(rombelId);
+                    Swal.close(); // Tutup loading setelah sukses
+                } catch (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops! Gagal',
+                        text: 'Terjadi kesalahan saat mengambil data mata pelajaran.',
+                        showConfirmButton: true,
+                    });
+                }
+            } else {
+                $('#mata_pelajaran').empty().prop('disabled', true);
+            }
+        });
 
 
         async function editForm(url, title = 'Jurnal Mengajar') {
