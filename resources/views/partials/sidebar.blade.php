@@ -151,6 +151,14 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('jadwalpelajaran.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-calendar"></i>
+                            <p>
+                                Jadwal Pelajaran
+                            </p>
+                        </a>
+                    </li>
                     <li class="nav-header">SETTING RAPORT</li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">

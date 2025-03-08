@@ -13,7 +13,6 @@ use App\Http\Controllers\{
     KategoriController,
     KelasController,
     KenaikanSiswaController,
-    KkmController,
     KurikulumController,
     MataPelajaranController,
     RombelController,
@@ -24,6 +23,7 @@ use App\Http\Controllers\{
 };
 use App\Http\Controllers\Admin\FasilitasController;
 use App\Http\Controllers\Admin\HariLiburController;
+use App\Http\Controllers\Admin\JadwalPelajaranController;
 use App\Http\Controllers\Admin\JamkerjaController;
 use App\Http\Controllers\Admin\JamPelajaranController;
 use App\Http\Controllers\Admin\K13\ButirSikapController;
@@ -217,6 +217,10 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Route JamPelajaran
         Route::resource('/jampelajaran', JamPelajaranController::class);
+
+        // Route::jadwalPelajaran
+        Route::get('/jadwalpelajaran/data', [JadwalPelajaranController::class, 'data'])->name('jadwalpelajaran.data');
+        Route::resource('/jadwalpelajaran', JadwalPelajaranController::class);
     });
 
     // Role Guru
