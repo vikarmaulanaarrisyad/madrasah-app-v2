@@ -40,6 +40,7 @@ use App\Http\Controllers\Front\ArtikelFrontController;
 use App\Http\Controllers\Front\EventFrontController;
 use App\Http\Controllers\Front\ProfileFrontController;
 use App\Http\Controllers\Guru\JurnalMengajarController;
+use App\Http\Controllers\Guru\K13\RencanaBobotPenilaianController;
 use App\Http\Controllers\Guru\PresensiGuruController;
 use App\Http\Controllers\Guru\PresensiSiswaController;
 use Illuminate\Support\Facades\Route;
@@ -245,9 +246,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/jadwal-saat-ini', [JurnalMengajarController::class, 'jadwalSaatIni'])->name('jadwal.saat_ini');
 
-        Route::post('/notifications/read', function () {
-            auth()->user()->unreadNotifications->markAsRead();
-            return back();
-        })->name('notifications.markAsRead');
+        Route::get('/bobotnilai/data', [RencanaBobotPenilaianController::class, 'data'])->name('bobotnilai.data');
+        Route::resource('/bobotnilai', RencanaBobotPenilaianController::class);
     });
 });
