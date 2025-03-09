@@ -338,14 +338,23 @@
 
                 @if (Auth::user()->hasRole('guru'))
                     <li class="nav-header">PRESENSI</li>
-                    <li class="nav-item">
-                        <a href="{{ route('presensisiswa.index') }}" class="nav-link">
-                            <i class="nav-icon fas fa-fingerprint"></i>
-                            <p>
-                                Presensi Siswa
-                            </p>
-                        </a>
-                    </li>
+                    @php
+                        // Ambil data guru berdasarkan user yang sedang login
+                        $guru = \App\Models\Guru::where('user_id', Auth::id())->first();
+
+                        // Periksa apakah guru ada di tabel Rombel
+                        $adaDiRombel = $guru ? \App\Models\Rombel::where('wali_kelas_id', $guru->id)->exists() : false;
+                    @endphp
+
+                    @if ($adaDiRombel)
+                        <li class="nav-item">
+                            <a href="{{ route('presensisiswa.index') }}" class="nav-link">
+                                <i class="nav-icon fas fa-fingerprint"></i>
+                                <p>Presensi Siswa</p>
+                            </a>
+                        </li>
+                    @endif
+
                     <li class="nav-item">
                         <a href="{{ route('presensigtk.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-fingerprint"></i>
