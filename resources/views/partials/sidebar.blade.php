@@ -1,6 +1,6 @@
-<aside class="main-sidebar elevation-4 sidebar-light-primary">
+<aside class="main-sidebar elevation-4 sidebar-light-success">
     <!-- Brand Logo -->
-    <a href="{{ url('/') }}" class="brand-link bg-primary">
+    <a href="{{ url('/') }}" class="brand-link bg-success">
         @if ($sekolah->logo != null)
             <img src="{{ Storage::url($sekolah->logo) ?? '' }}" alt="Logo"
                 class="brand-image img-circle elevation-3 bg-light" style="opacity: .8">
