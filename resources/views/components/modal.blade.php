@@ -9,7 +9,7 @@
         <div class="modal-content">
             <form method="{{ isset($method) ? $method : 'post' }}">
                 @isset($title)
-                    <div class="modal-header {{ isset($header) ? $header : 'bg-primary' }}">
+                    <div class="modal-header {{ isset($header) ? $header : 'bg-success' }}">
                         <h5 class="modal-title">{{ $title }}</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
