@@ -98,6 +98,8 @@
                     className: 'text-center'
                 }
             ],
+            dom: 'Brt',
+            bSort: false,
             columnDefs: [{
                 targets: [3, 4, 5],
                 className: "text-center"

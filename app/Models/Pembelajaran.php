@@ -23,4 +23,9 @@ class Pembelajaran extends Model
     {
         return $this->belongsTo(Guru::class, 'guru_id');
     }
+
+    public function nilaiPtsPas()
+    {
+        return $this->hasMany(K13NilaiPtsPas::class, 'pembelajaran_id');
+    }
 }

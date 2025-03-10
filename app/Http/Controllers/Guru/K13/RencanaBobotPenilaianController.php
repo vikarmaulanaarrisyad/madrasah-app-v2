@@ -38,6 +38,11 @@ class RencanaBobotPenilaianController extends Controller
 
         // Ambil data rencana bobot nilai untuk guru tertentu
         $dataRencanaBobotNilai = Pembelajaran::where('guru_id', $guru->id)
+            ->whereHas('mata_pelajaran', function ($query) {
+                $query->whereHas('kurikulum', function ($q) {
+                    $q->where('nama', 'Kurikulum 2013'); // Sesuaikan dengan nama kurikulum di database
+                });
+            })
             ->whereIn('rombel_id', $rombelId)
             ->where('status', 1)
             ->orderBy('mata_pelajaran_id', 'ASC')

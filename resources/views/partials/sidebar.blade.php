@@ -201,7 +201,7 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="nav-header">HASIL RAPORT</li>
+                    {{--  <li class="nav-header">HASIL RAPORT</li>
                     <li class="nav-item">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-cogs"></i>
@@ -218,7 +218,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li>
+                    </li>  --}}
 
                     <li class="nav-header">REKAP PRESENSI</li>
                     <li class="nav-item">
@@ -337,7 +337,7 @@
                 @endif
 
                 @if (Auth::user()->hasRole('guru'))
-                    <li class="nav-header">PRESENSI</li>
+                    <li class="nav-header">ADMINISTRASI GURU</li>
                     @php
                         // Ambil data guru berdasarkan user yang sedang login
                         $guru = \App\Models\Guru::where('user_id', Auth::id())->first();
@@ -371,11 +371,28 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-header">RAPORT</li>
                     <li class="nav-item">
                         <a href="{{ route('bobotnilai.index') }}" class="nav-link">
                             <i class="fas fa-check-circle nav-icon"></i>
                             <p>
                                 Bobot PH PTS dan PAS
+                            </p>
+                        </a>
+                    </li>
+                    {{--  <li class="nav-item">
+                        <a href="{{ route('rencanapengetahuan.index') }}" class="nav-link">
+                            <i class="fas fa-check-circle nav-icon"></i>
+                            <p>
+                                Nilai Pengetahuan
+                            </p>
+                        </a>
+                    </li>  --}}
+                    <li class="nav-item">
+                        <a href="{{ route('nilaiptspas.index') }}" class="nav-link">
+                            <i class="fas fa-check-circle nav-icon"></i>
+                            <p>
+                                Nilai PTS dan PAS
                             </p>
                         </a>
                     </li>
