@@ -40,13 +40,19 @@ use App\Http\Controllers\Front\ArtikelFrontController;
 use App\Http\Controllers\Front\EventFrontController;
 use App\Http\Controllers\Front\ProfileFrontController;
 use App\Http\Controllers\Guru\JurnalMengajarController;
+use App\Http\Controllers\Guru\K13\NilaiPtsPasController;
 use App\Http\Controllers\Guru\K13\RencanaBobotPenilaianController;
+use App\Http\Controllers\Guru\K13\RencanaNilaiPengetahuanController;
 use App\Http\Controllers\Guru\PresensiGuruController;
 use App\Http\Controllers\Guru\PresensiSiswaController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/maintance', function () {
+    return view('maintance');
 });
 
 Route::get('/artikel', [ArtikelFrontController::class, 'index'])->name('front.artikel_index');
@@ -248,5 +254,16 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::get('/bobotnilai/data', [RencanaBobotPenilaianController::class, 'data'])->name('bobotnilai.data');
         Route::resource('/bobotnilai', RencanaBobotPenilaianController::class);
+
+        // Route Rencana Nilai Pengetahuan
+        Route::get('/rencanapengetahuan/data', [RencanaNilaiPengetahuanController::class, 'data'])->name('rencanapengetahuan.data');
+        Route::resource('/rencanapengetahuan', RencanaNilaiPengetahuanController::class);
+
+        // Route nilai PTS
+        Route::get('/nilaiptspas/data', [NilaiPtsPasController::class, 'data'])->name('nilaiptspas.data');
+        Route::get('/nilaiptspas/create/{id}', [NilaiPtsPasController::class, 'create'])
+            ->name('nilaiptspas.create');
+
+        Route::resource('/nilaiptspas', NilaiPtsPasController::class)->except('create');
     });
 });
