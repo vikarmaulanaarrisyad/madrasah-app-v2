@@ -40,6 +40,8 @@ use App\Http\Controllers\Front\ArtikelFrontController;
 use App\Http\Controllers\Front\EventFrontController;
 use App\Http\Controllers\Front\ProfileFrontController;
 use App\Http\Controllers\Guru\JurnalMengajarController;
+use App\Http\Controllers\Guru\K13\NilaiHarianController;
+use App\Http\Controllers\Guru\K13\NilaiPengetahuanController;
 use App\Http\Controllers\Guru\K13\NilaiPtsPasController;
 use App\Http\Controllers\Guru\K13\RencanaBobotPenilaianController;
 use App\Http\Controllers\Guru\K13\RencanaNilaiPengetahuanController;
@@ -265,5 +267,15 @@ Route::group(['middleware' => 'auth'], function () {
             ->name('nilaiptspas.create');
 
         Route::resource('/nilaiptspas', NilaiPtsPasController::class)->except('create');
+
+        // Nilai Pengetahuan
+        Route::get('/nilaipengetahuan/siswa_data', [NilaiPengetahuanController::class, 'siswaData'])->name('nilaipengetahuan.siswa_data');
+        Route::get('/nilaipengetahuan/rombel/{rombel_id}/matapelajaran/{mapel_id}', [NilaiPengetahuanController::class, 'create'])->name('nilaipengetahuan.create');
+        Route::get('/nilaipengetahuan', [NilaiPengetahuanController::class, 'index'])->name('nilaipengetahuan.index');
+        Route::post('/nilaipengetahuan/store', [NilaiPengetahuanController::class, 'store'])->name('nilaipengetahuan.store');
+        Route::delete('/nilaipengetahuan/{id}', [NilaiPengetahuanController::class, 'destroy'])->name('nilaipengetahuan.destroy');
+
+
+        // Route::resource('/nilaiharian', NilaiHarianController::class);
     });
 });
