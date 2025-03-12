@@ -13,18 +13,30 @@
         <div class="col-lg-12">
             <x-card>
                 <x-slot name="header">
-                    <h5 class="card-title mb-2">
+                    <h5 class="card-title mb-1">
                         Nilai Harian
                         <span class="text-muted text-sm">{{ $rombel->kelas->nama }} {{ $rombel->nama }}</span>
                         <p class="text-xs">{{ $mataPelajaran->nama }}</p>
                     </h5>
-                    <div class="btn-group text-center text-md-right">
-                        <a href="#" class="btn btn-danger mb-1">Kembali</a>
-                        <a href="{{ route('nilaipengetahuan.create', [$rombel->id, $mataPelajaran->id]) }}"
-                            class="btn btn-primary mb-1">Tambah</a>
-                        <a href="#" class="btn btn-success mb-1">Upload</a>
-                        <a href="#" class="btn btn-warning mb-1">Export</a>
+                    @php
+                        $statusTerkirim = \App\Models\NilaiHarian::where('rombel_id', $rombel->id)
+                            ->where('mata_pelajaran_id', $mataPelajaran->id)
+                            ->where('status', 'terkirim')
+                            ->exists();
+                    @endphp
+
+                    <div class="btn-group text-center text-md-right float-right">
+                        @if (!$statusTerkirim)
+                            <a href="{{ route('nilaipengetahuan.create', [$rombel->id, $mataPelajaran->id]) }}"
+                                class="btn btn-primary mb-1">Tambah</a>
+                            <a href="#" class="btn btn-sm btn-success mb-1">Upload</a>
+                            <a href="#" class="btn btn-sm btn-warning mb-1">Export</a>
+                            <button class="btn btn-sm btn-danger mb-1" onclick="kirimNilai()">Kirim Nilai</button>
+                        @else
+                            <button class="btn btn-sm btn-warning mb-1" onclick="batalKirim()">Batal Kirim</button>
+                        @endif
                     </div>
+
                 </x-slot>
 
                 @php
@@ -49,14 +61,19 @@
                                         <th class="text-center">
                                             <div class="d-flex justify-content-between align-items-center flex-wrap">
                                                 <span>PH{{ $ph }}</span>
-                                                <div class="btn-group">
-                                                    <button class="btn btn-xs btn-warning"><i
-                                                            class="fas fa-edit"></i></button>
-                                                    <button class="btn btn-xs btn-danger"
-                                                        onclick="hapusNilai({{ $nilai->first()->id ?? "'Nilai'" }})">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </div>
+                                                @if (!$statusTerkirim)
+                                                    <div class="btn-group">
+                                                        <a href="{{ route('nilaipengetahuan.edit', [$rombel->id, $mataPelajaran->id, $ph]) }}"
+                                                            class="btn btn-xs btn-warning">
+                                                            <i class="fas fa-edit"></i>
+                                                        </a>
+                                                        <button class="btn btn-xs btn-danger"
+                                                            onclick="hapusNilai({{ $nilai->first()->id ?? "'Nilai'" }})">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                @endif
+
                                             </div>
                                         </th>
                                     @endforeach
@@ -127,6 +144,86 @@
                         error: function(xhr) {
                             Swal.fire("Error", xhr.responseJSON.message || "Terjadi kesalahan",
                                 "error");
+                        }
+                    });
+                }
+            });
+        }
+
+        function kirimNilai() {
+            Swal.fire({
+                title: "Konfirmasi",
+                text: "Apakah Anda yakin ingin mengirim nilai ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#28a745",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, Kirim!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Mengirim...",
+                        text: "Mohon tunggu, nilai sedang dikirim.",
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    $.ajax({
+                        url: "{{ route('nilaipengetahuan.kirim', [$rombel->id, $mataPelajaran->id]) }}",
+                        type: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                        },
+                        success: function(response) {
+                            Swal.fire("Berhasil", response.message, "success").then(() => {
+                                window.location.reload();
+                            });
+                        },
+                        error: function(xhr) {
+                            Swal.fire("Error", xhr.responseJSON.message ||
+                                "Terjadi kesalahan saat mengirim nilai", "error");
+                        }
+                    });
+                }
+            });
+        }
+
+        function batalKirim() {
+            Swal.fire({
+                title: "Konfirmasi",
+                text: "Apakah Anda yakin ingin membatalkan pengiriman nilai?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Ya, Batalkan!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Membatalkan...",
+                        text: "Mohon tunggu, pembatalan sedang diproses.",
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    $.ajax({
+                        url: "{{ route('nilaipengetahuan.batalKirim', [$rombel->id, $mataPelajaran->id]) }}",
+                        type: "POST",
+                        headers: {
+                            "X-CSRF-TOKEN": "{{ csrf_token() }}"
+                        },
+                        success: function(response) {
+                            Swal.fire("Berhasil", response.message, "success").then(() => {
+                                window.location.reload();
+                            });
+                        },
+                        error: function(xhr) {
+                            Swal.fire("Error", xhr.responseJSON.message ||
+                                "Terjadi kesalahan saat membatalkan pengiriman", "error");
                         }
                     });
                 }

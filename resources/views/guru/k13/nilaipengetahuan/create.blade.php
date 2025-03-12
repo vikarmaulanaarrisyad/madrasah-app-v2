@@ -37,7 +37,7 @@
                                     <td>
                                         <input type="hidden" name="siswa_id[]" value="{{ $siswa->id }}">
                                         <input type="number" class="form-control nilai" name="nilai[]" min="0"
-                                            max="100" required placeholder="0" value="0">
+                                            max="100" required placeholder="0">
                                     </td>
                                 </tr>
                             @endforeach
