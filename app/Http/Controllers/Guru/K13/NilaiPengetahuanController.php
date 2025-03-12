@@ -4,10 +4,12 @@ namespace App\Http\Controllers\Guru\K13;
 
 use App\Http\Controllers\Controller;
 use App\Models\Guru;
+use App\Models\K13KkmMapel;
 use App\Models\K13NilaiPengetahuan;
 use App\Models\K13RencanaNilaiPengetahuan;
 use App\Models\MataPelajaran;
 use App\Models\NilaiHarian;
+use App\Models\NilaiRaport;
 use App\Models\Pembelajaran;
 use App\Models\Rombel;
 use App\Models\TahunPelajaran;
@@ -205,14 +207,63 @@ class NilaiPengetahuanController extends Controller
     public function kirim($rombel_id, $mata_pelajaran_id)
     {
         try {
-            // Logika pengiriman nilai, bisa ditambahkan status "terkirim" jika ada
+            DB::beginTransaction(); // Mulai transaction
+
+            // Cek apakah ada nilai yang bisa dikirim
+            $nilaiHarian = NilaiHarian::where('rombel_id', $rombel_id)
+                ->where('mata_pelajaran_id', $mata_pelajaran_id)
+                ->get();
+
+            if ($nilaiHarian->isEmpty()) {
+                return response()->json(['message' => 'Tidak ada nilai yang bisa dikirim!'], 400);
+            }
+
+            $rombel = Rombel::where('id', $rombel_id)->first();
+            $tapel = TahunPelajaran::aktif()->first();
+
+            // Dapatkan KKM dari K13KkmMapel
+            $kkm = K13KkmMapel::where('kelas_id', $rombel->kelas->id)
+                ->where('mata_pelajaran_id', $mata_pelajaran_id)
+                ->value('kkm'); // Ambil nilai langsung
+
+            if (!$kkm) {
+                return response()->json(['message' => 'KKM tidak ditemukan!'], 400);
+            }
+
+            // Update status NilaiHarian menjadi "terkirim"
             NilaiHarian::where('rombel_id', $rombel_id)
                 ->where('mata_pelajaran_id', $mata_pelajaran_id)
                 ->update(['status' => 'terkirim']);
 
-            return response()->json(['message' => 'Nilai berhasil dikirim!']);
+            // Masukkan data ke NilaiRaport
+            foreach ($nilaiHarian as $nilai) {
+                // Pastikan nilai_pengetahuan dan nilai_keterampilan tidak NULL
+                $nilaiPengetahuan = $nilai->nilai_pengetahuan ?? 0;
+                $nilaiKeterampilan = $nilai->nilai_keterampilan ?? 0;
+
+                NilaiRaport::updateOrCreate(
+                    [
+                        'tahun_pelajaran_id' => $tapel->id,
+                        'pembelajaran_id' => 1,
+                        'rombel_id' => $rombel_id,
+                    ],
+                    [
+                        'kkm' => $kkm, // Gunakan KKM yang benar
+                        'nilai_pengetahuan' => $nilaiPengetahuan,
+                        'predikat_pengetahuan' => $this->hitungPredikat($nilaiPengetahuan),
+                        'nilai_keterampilan' => $nilaiKeterampilan,
+                        'predikat_keterampilan' => $this->hitungPredikat($nilaiKeterampilan),
+                        'nilai_spiritual' => $nilai->nilai_spiritual ?? '1',
+                        'nilai_sosial' => $nilai->nilai_sosial ?? '1',
+                    ]
+                );
+            }
+
+            DB::commit(); // Commit jika semua berhasil
+            return response()->json(['message' => 'Nilai berhasil dikirim dan dimasukkan ke Nilai Raport!']);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Terjadi kesalahan saat mengirim nilai!'], 500);
+            DB::rollBack(); // Rollback jika terjadi kesalahan
+            return response()->json(['message' => 'Terjadi kesalahan saat mengirim nilai!', 'error' => $e->getMessage()], 500);
         }
     }
 
@@ -227,6 +278,19 @@ class NilaiPengetahuanController extends Controller
             return response()->json(['message' => 'Pengiriman nilai dibatalkan!']);
         } catch (\Exception $e) {
             return response()->json(['message' => 'Terjadi kesalahan saat membatalkan pengiriman nilai!'], 500);
+        }
+    }
+
+    private function hitungPredikat($nilai)
+    {
+        if ($nilai >= 90) {
+            return 'A';
+        } elseif ($nilai >= 75) {
+            return 'B';
+        } elseif ($nilai >= 60) {
+            return 'C';
+        } else {
+            return 'D';
         }
     }
 }

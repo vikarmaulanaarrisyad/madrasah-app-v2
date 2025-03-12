@@ -446,11 +446,24 @@
                                 @endphp
 
                                 @foreach ($kelasUnik as $kelas)
+                                    @php
+                                        // Cek apakah nilai sudah dikirim berdasarkan rombel dan mata pelajaran
+                                        $nilaiTerkirim = \App\Models\NilaiHarian::where('rombel_id', $kelas['id'])
+                                            ->where('mata_pelajaran_id', $kelas['mata_pelajaran_id'])
+                                            ->where('status', 'terkirim') // Misalkan status 1 berarti sudah dikirim
+                                            ->exists();
+                                    @endphp
                                     <li class="nav-item">
                                         <a href="{{ route('nilaipengetahuan.index', ['rombel_id' => $kelas['id'], 'mata_pelajaran_id' => $kelas['mata_pelajaran_id']]) }}"
                                             class="nav-link">
                                             <i class="far fa-circle nav-icon"></i>
-                                            <p>{{ $kelas['nama'] }}</p>
+                                            <p>{{ $kelas['nama'] }}
+
+                                                @if ($nilaiTerkirim)
+                                                    <i class="fas fa-check-circle text-success"></i>
+                                                    <!-- Centang jika sudah dikirim -->
+                                                @endif
+                                            </p>
                                         </a>
                                     </li>
                                 @endforeach

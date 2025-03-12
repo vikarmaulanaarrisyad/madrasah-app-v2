@@ -31,9 +31,9 @@
                                 class="btn btn-primary mb-1">Tambah</a>
                             <a href="#" class="btn btn-sm btn-success mb-1">Upload</a>
                             <a href="#" class="btn btn-sm btn-warning mb-1">Export</a>
-                            <a href="#" class="btn btn-sm btn-danger mb-1" onclick="kirimNilai()">Kirim Nilai</a>
+                            <button class="btn btn-sm btn-danger mb-1" onclick="kirimNilai()">Kirim Nilai</button>
                         @else
-                            <a href="#" class="btn btn-sm btn-warning mb-1" onclick="batalKirim()">Batal Kirim</a>
+                            <button class="btn btn-sm btn-warning mb-1" onclick="batalKirim()">Batal Kirim</button>
                         @endif
                     </div>
 
@@ -178,7 +178,7 @@
                         },
                         success: function(response) {
                             Swal.fire("Berhasil", response.message, "success").then(() => {
-                                location.reload();
+                                window.location.reload();
                             });
                         },
                         error: function(xhr) {
@@ -218,7 +218,7 @@
                         },
                         success: function(response) {
                             Swal.fire("Berhasil", response.message, "success").then(() => {
-                                location.reload();
+                                window.location.reload();
                             });
                         },
                         error: function(xhr) {
