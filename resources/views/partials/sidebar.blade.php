@@ -388,6 +388,76 @@
                             </p>
                         </a>
                     </li>  --}}
+                    {{--  <li class="nav-item">
+                        <a href="{{ route('nilaipengetahuan.index') }}" class="nav-link">
+                            <i class="fas fa-check-circle nav-icon"></i>
+                            <p>
+                                Nilai Pengetahuan
+                            </p>
+                        </a>
+                    </li>  --}}
+
+
+                    <li class="nav-header">PENILAIAN ANDA</li>
+                    @php
+                        $tapel = \App\Models\TahunPelajaran::aktif()->first();
+                        $guru = \App\Models\Guru::where('user_id', Auth::id())->first();
+                        $rombelId = \App\Models\Rombel::where('tahun_pelajaran_id', $tapel->id)->pluck('id');
+
+                        $pembelajarans = \App\Models\Pembelajaran::where('guru_id', $guru->id)
+                            ->whereIn('rombel_id', $rombelId)
+                            ->where('status', 1)
+                            ->orderBy('mata_pelajaran_id', 'ASC')
+                            ->orderBy('rombel_id', 'ASC')
+                            ->get()
+                            ->groupBy(function ($item) {
+                                return $item->mata_pelajaran->nama; // Grouping berdasarkan nama mata pelajaran
+                            });
+                    @endphp
+
+                    @foreach ($pembelajarans as $mataPelajaranNama => $pembelajaranGroup)
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-book"></i>
+                                <p>
+                                    {{ $mataPelajaranNama }} <!-- Nama Mata Pelajaran -->
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview" style="display: none;">
+                                @php
+                                    // Ambil kelas unik dan urutkan secara numerik
+                                    $kelasUnik = $pembelajaranGroup
+                                        ->map(function ($p) {
+                                            return [
+                                                'id' => $p->rombel->id, // ID rombel untuk route
+                                                'mata_pelajaran_id' => $p->mata_pelajaran_id, // ID mata pelajaran agar unik
+                                                'nama' => $p->rombel->kelas->nama . ' ' . $p->rombel->nama,
+                                                'urutan' => (int) filter_var(
+                                                    $p->rombel->kelas->nama,
+                                                    FILTER_SANITIZE_NUMBER_INT,
+                                                ), // Ambil angka dari nama kelas
+                                            ];
+                                        })
+                                        ->unique(function ($item) {
+                                            return $item['id'] . '-' . $item['mata_pelajaran_id']; // Gabungkan ID rombel dan mata pelajaran agar unik
+                                        })
+                                        ->sortBy('urutan'); // Urutkan berdasarkan angka dalam nama kelas
+                                @endphp
+
+                                @foreach ($kelasUnik as $kelas)
+                                    <li class="nav-item">
+                                        <a href="{{ route('nilaipengetahuan.index', ['rombel_id' => $kelas['id'], 'mata_pelajaran_id' => $kelas['mata_pelajaran_id']]) }}"
+                                            class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>{{ $kelas['nama'] }}</p>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
+                    @endforeach
+
                     <li class="nav-item">
                         <a href="{{ route('nilaiptspas.index') }}" class="nav-link">
                             <i class="fas fa-check-circle nav-icon"></i>
