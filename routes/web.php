@@ -273,7 +273,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/nilaipengetahuan/rombel/{rombel_id}/matapelajaran/{mapel_id}', [NilaiPengetahuanController::class, 'create'])->name('nilaipengetahuan.create');
         Route::get('/nilaipengetahuan', [NilaiPengetahuanController::class, 'index'])->name('nilaipengetahuan.index');
         Route::post('/nilaipengetahuan/store', [NilaiPengetahuanController::class, 'store'])->name('nilaipengetahuan.store');
+        Route::get('/nilaipengetahuan/{rombel_id}/{mapel_id}/{ph}/edit', [NilaiPengetahuanController::class, 'edit'])
+            ->name('nilaipengetahuan.edit');
+        Route::put('/nilaipengetahuan/{rombel_id}/{mapel_id}/{ph}/update', [NilaiPengetahuanController::class, 'update'])
+            ->name('nilaipengetahuan.update');
+        Route::post('/nilaipengetahuan/{rombel}/{mapel}/kirim', [NilaiPengetahuanController::class, 'kirim'])
+            ->name('nilaipengetahuan.kirim');
+        Route::post('/nilaipengetahuan/{rombel}/{mapel}/batal-kirim', [NilaiPengetahuanController::class, 'batalKirim'])
+            ->name('nilaipengetahuan.batalKirim');
+
         Route::delete('/nilaipengetahuan/{id}', [NilaiPengetahuanController::class, 'destroy'])->name('nilaipengetahuan.destroy');
+
 
 
         // Route::resource('/nilaiharian', NilaiHarianController::class);

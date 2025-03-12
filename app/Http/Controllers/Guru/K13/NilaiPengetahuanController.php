@@ -108,7 +108,6 @@ class NilaiPengetahuanController extends Controller
         ], 201);
     }
 
-
     public function destroy($id)
     {
         try {
@@ -153,6 +152,81 @@ class NilaiPengetahuanController extends Controller
                 'message' => 'Terjadi kesalahan saat menghapus nilai.',
                 'error' => $e->getMessage()
             ], 500);
+        }
+    }
+
+    public function edit($rombel_id, $mapel_id, $ph)
+    {
+        $rombel = Rombel::with('siswa_rombel')->findOrFail($rombel_id);
+        $mataPelajaran = MataPelajaran::findOrFail($mapel_id);
+
+        $nilaiPH = NilaiHarian::where('rombel_id', $rombel_id)
+            ->where('mata_pelajaran_id', $mapel_id)
+            ->where('ph', $ph)
+            ->get();
+
+        return view('guru.k13.nilaipengetahuan.edit', compact('rombel', 'mataPelajaran', 'nilaiPH', 'ph'));
+    }
+
+    public function update(Request $request, $rombel_id, $mata_pelajaran_id, $ph)
+    {
+        try {
+            // Validasi input
+            $request->validate([
+                'siswa_id' => 'required|array',
+                'nilai' => 'required|array',
+                'nilai.*' => 'nullable|numeric|min:0|max:100',
+            ]);
+
+            // Loop untuk update nilai berdasarkan siswa_id dan PH
+            foreach ($request->siswa_id as $index => $siswa_id) {
+                NilaiHarian::updateOrCreate(
+                    [
+                        'siswa_id' => $siswa_id,
+                        'ph' => $ph,
+                        'mata_pelajaran_id' => $mata_pelajaran_id,
+                    ],
+                    ['nilai' => $request->nilai[$index]]
+                );
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Nilai berhasil diperbarui!'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function kirim($rombel_id, $mata_pelajaran_id)
+    {
+        try {
+            // Logika pengiriman nilai, bisa ditambahkan status "terkirim" jika ada
+            NilaiHarian::where('rombel_id', $rombel_id)
+                ->where('mata_pelajaran_id', $mata_pelajaran_id)
+                ->update(['status' => 'terkirim']);
+
+            return response()->json(['message' => 'Nilai berhasil dikirim!']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Terjadi kesalahan saat mengirim nilai!'], 500);
+        }
+    }
+
+    public function batalKirim($rombel_id, $mata_pelajaran_id)
+    {
+        try {
+            // Kembalikan status nilai agar bisa diedit kembali
+            NilaiHarian::where('rombel_id', $rombel_id)
+                ->where('mata_pelajaran_id', $mata_pelajaran_id)
+                ->update(['status' => null]);
+
+            return response()->json(['message' => 'Pengiriman nilai dibatalkan!']);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Terjadi kesalahan saat membatalkan pengiriman nilai!'], 500);
         }
     }
 }
