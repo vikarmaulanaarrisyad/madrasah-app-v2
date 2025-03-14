@@ -56,6 +56,9 @@ class PresensiSiswaController extends Controller
 
         return datatables($siswa)
             ->addIndexColumn()
+            ->addColumn('checkbox', function ($row) {
+                return '<input type="checkbox" class="siswa-checkbox" name="siswa[]" value="' . $row->id . '">';
+            })
             ->addColumn('nama', function ($s) {
                 return $s->nama_lengkap; // ✅ Mengambil langsung dari objek siswa
             })
@@ -158,5 +161,54 @@ class PresensiSiswaController extends Controller
             'status' => $hariLibur ? 'libur' : 'bekerja',
             'message' => $hariLibur ? 'Hari ini adalah hari libur: ' . $hariLibur->keterangan : 'Hari ini bukan hari libur',
         ]);
+    }
+
+    public function simpanPresensiAll(Request $request)
+    {
+
+        $request->validate([
+            'siswa_id' => 'required|array',
+            'presensi_status' => 'required|in:H,A,I,S',
+        ]);
+
+        try {
+            $tanggal = date('Y-m-d');
+
+            // Konversi tanggal ke Carbon
+            $carbonTanggal = Carbon::parse($tanggal);
+
+            // Cek apakah tanggal yang dipilih adalah hari Minggu
+            if ($carbonTanggal->isSunday()) {
+                return response()->json([
+                    'error' => 'Presensi tidak dapat dilakukan pada hari Minggu.'
+                ], 400);
+            }
+
+            // Cek apakah tanggal termasuk hari libur (dari tabel hari_libur)
+            $hariLibur = HariLibur::where('tanggal', $tanggal)->exists();
+            if ($hariLibur) {
+                return response()->json([
+                    'error' => 'Hari ini adalah hari libur, presensi tidak diperbolehkan.'
+                ], 400);
+            }
+
+            foreach ($request->siswa_id as $siswa_id) {
+                AbsensiSiswa::updateOrCreate(
+                    ['siswa_id' => $siswa_id, 'tgl_presensi' => $tanggal],
+                    ['status' => $request->presensi_status]
+                );
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Presensi berhasil disimpan!',
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Terjadi kesalahan saat menyimpan data!',
+                'error' => $e->getMessage(),
+            ], 500);
+        }
     }
 }

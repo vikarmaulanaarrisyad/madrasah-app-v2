@@ -238,6 +238,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/presensisiswa/data', [PresensiSiswaController::class, 'data'])->name('presensisiswa.data');
         Route::resource('/presensisiswa', PresensiSiswaController::class)->except('show');
         Route::post('/presensisiswa/simpan-presensi', [PresensiSiswaController::class, 'simpanPresensi'])->name('presensissiswa.simpanPresensi');
+        Route::post('/presensisiswa/simpan-presensi/all', [PresensiSiswaController::class, 'simpanPresensiAll'])->name('presensissiswa.simpanPresensiAll');
         Route::get('/presensisiswa/count', [PresensiSiswaController::class, 'count'])->name('presensisiswa.count');
         Route::get('/presensisiswa/cek-libur', [PresensiSiswaController::class, 'cekHariLibur'])->name('presensisiswa.cekHariLibur');
 
