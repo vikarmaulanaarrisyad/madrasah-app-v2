@@ -24,6 +24,25 @@
                         <p>Silahkan melakukan Presensi</p>
                     </div>
 
+                    @php
+                        use Alkoumi\LaravelHijriDate\Hijri;
+
+                        // Mendapatkan tanggal Hijriyah
+                        $hijriDate = Hijri::Date('l d F Y'); // Format hari, tanggal, bulan, tahun Hijriyah
+
+                        // Tentukan periode Ramadhan (Misalnya 1-30 Ramadhan)
+                        $isRamadhan = Hijri::Date('m') == 9; // 9 adalah bulan Ramadhan dalam Hijriyah
+                    @endphp
+
+                    <div class="alert alert-{{ $isRamadhan ? 'success' : 'primary' }}">
+                        <h5>Keterangan Presensi</h5>
+                        <p>
+                            Hari ini: <strong>{{ $hijriDate }}</strong> <br>
+                            Status: <strong>{{ $isRamadhan ? 'Presensi Bulan Ramadhan' : 'Presensi Reguler' }}</strong>
+                        </p>
+                    </div>
+
+
                     <!-- Batasan Waktu Presensi -->
                     <div class="alert alert-info">
                         <h5>Anda dapat melakukan Presensi:</h5>
@@ -39,21 +58,26 @@
                         <p><strong>Jam Pulang:</strong> <span id="jam-pulang">Menunggu...</span></p>
                     </div>
 
-                    <!-- Checkbox Work From Home -->
-                    {{--  <div class="form-check">
-                        <input type="checkbox" class="form-check-input" id="workFromHome">
-                        <label class="form-check-label" for="workFromHome">Work From Home</label>
-                    </div>  --}}
 
-                    <!-- Tombol Absen -->
-                    <div class="mt-3">
-                        <button class="btn btn-success" id="absenMasuk">
-                            <i class="fas fa-check-circle"></i> Absen Masuk
-                        </button>
-                        <button class="btn btn-danger" id="absenPulang">
-                            <i class="fas fa-sign-out-alt"></i> Pulang
-                        </button>
-                    </div>
+                    @php
+                        $hariIni = \Carbon\Carbon::now()->locale('id')->isoFormat('dddd');
+                    @endphp
+
+                    @if ($hariIni !== 'Minggu')
+                        <div class="mt-3" id="presensiButtons">
+                            <button class="btn btn-success" id="absenMasuk">
+                                <i class="fas fa-check-circle"></i> Absen Masuk
+                            </button>
+                            <button class="btn btn-danger" id="absenPulang">
+                                <i class="fas fa-sign-out-alt"></i> Pulang
+                            </button>
+                        </div>
+                    @else
+                        <div class="alert alert-warning">
+                            <h5>Hari ini hari Minggu</h5>
+                            <p>Presensi tidak tersedia.</p>
+                        </div>
+                    @endif
 
                     <!-- Tombol Edit Absen -->
                     <button class="btn btn-warning mt-3" id="editAbsen" style="display: none;">
@@ -69,6 +93,38 @@
     <script>
         let jamMasukDB = "{{ $jamKerja->jam_masuk ?? '07:00' }}";
         let jamPulangDB = "{{ $jamKerja->jam_keluar ?? '15:00' }}";
+
+        function addMinutesToTime(time, minutes) {
+            let [hour, minute] = time.split(":").map(Number);
+            let date = new Date();
+            date.setHours(hour, minute);
+            date.setMinutes(date.getMinutes() + minutes);
+            return date.toLocaleTimeString('id-ID', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        let jamMasukToleransi = addMinutesToTime(jamMasukDB, 15);
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let now = new Date();
+            let day = now.getDay(); // 0 = Minggu, 1 = Senin, ..., 6 = Sabtu
+
+            if (day === 0) { // Jika hari Minggu
+                document.getElementById("absenMasuk").disabled = true;
+                document.getElementById("absenPulang").disabled = true;
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Hari Minggu',
+                    text: 'Hari ini adalah hari libur. Presensi tidak tersedia.',
+                    confirmButtonText: 'OK'
+                });
+            }
+
+            cekHariLibur();
+        });
 
         function updateTime() {
             let now = new Date();
@@ -102,6 +158,8 @@
         function compareTime(currentTime, targetTime) {
             return currentTime.localeCompare(targetTime);
         }
+
+
         document.getElementById("absenMasuk").addEventListener("click", function() {
             let now = getCurrentTime();
 
@@ -228,5 +286,25 @@
         }
 
         document.addEventListener("DOMContentLoaded", fetchPresensiData);
+
+        function cekHariLibur() {
+            $.ajax({
+                url: '{{ route('presensigtk.cekHariLibur') }}',
+                type: 'GET',
+                success: function(response) {
+                    if (response.status === 'libur') {
+                        document.getElementById("presensiButtons").style.display = "none";
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Hari Libur!',
+                            text: response.message,
+                            confirmButtonText: 'OK'
+                        });
+                        return;
+                    }
+                    fetchPresensiData();
+                }
+            });
+        }
     </script>
 @endpush
