@@ -94,6 +94,20 @@
         let jamMasukDB = "{{ $jamKerja->jam_masuk ?? '07:00' }}";
         let jamPulangDB = "{{ $jamKerja->jam_keluar ?? '15:00' }}";
 
+        function addMinutesToTime(time, minutes) {
+            let [hour, minute] = time.split(":").map(Number);
+            let date = new Date();
+            date.setHours(hour, minute);
+            date.setMinutes(date.getMinutes() + minutes);
+            return date.toLocaleTimeString('id-ID', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        let jamMasukToleransi = addMinutesToTime(jamMasukDB, 15);
+
+
         document.addEventListener("DOMContentLoaded", function() {
             let now = new Date();
             let day = now.getDay(); // 0 = Minggu, 1 = Senin, ..., 6 = Sabtu
@@ -144,17 +158,21 @@
         function compareTime(currentTime, targetTime) {
             return currentTime.localeCompare(targetTime);
         }
+
+
         document.getElementById("absenMasuk").addEventListener("click", function() {
             let now = getCurrentTime();
 
-            if (compareTime(now, jamMasukDB) > 0) {
+            // Jika waktu saat ini lebih dari batas toleransi masuk (07:15), absen ditolak
+            if (compareTime(now, jamMasukToleransi) > 0) {
                 Swal.fire({
                     icon: 'error',
                     title: 'Gagal Absen Masuk!',
-                    text: `Presensi masuk hanya bisa dilakukan sebelum ${jamMasukDB}.`,
+                    text: `Presensi masuk hanya bisa dilakukan hingga ${jamMasukToleransi}.`,
                     confirmButtonText: 'OK'
                 });
             } else {
+                // Jika masih dalam rentang yang diperbolehkan, kirim absen
                 $.ajax({
                     url: "{{ route('presensigtk.store') }}",
                     type: "POST",
@@ -172,7 +190,7 @@
                         });
                     },
                     success: function(response) {
-                        fetchPresensiData()
+                        fetchPresensiData();
                         document.getElementById("jam-masuk").innerText = response.jam_masuk;
                         Swal.fire({
                             icon: 'success',
@@ -192,6 +210,7 @@
                 });
             }
         });
+
 
         document.getElementById("absenPulang").addEventListener("click", function() {
             let now = getCurrentTime();
