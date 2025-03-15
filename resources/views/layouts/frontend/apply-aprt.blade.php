@@ -9,9 +9,10 @@
                                 <div class="apply-cont apply-color-1">
                                     <h3>{{ $item->judul }}</h3>
                                     <p>
-                                        {!! $item->deskripsi !!}
+                                        {!! Str::limit($item->deskripsi, 200, '...') !!}
                                     </p>
-                                    <a href="#" class="main-btn">Lihat Detail</a>
+                                    <a href="{{ route('front.event_detail', $item->slug) }}" class="main-btn">Lihat
+                                        Detail</a>
                                 </div> <!-- apply cont -->
                             </div>
                         @endforeach
