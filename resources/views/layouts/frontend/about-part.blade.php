@@ -25,7 +25,7 @@
                                     <div class="singel-event">
                                         <span><i class="fa fa-calendar"></i>
                                             {{ \Carbon\Carbon::parse($event->tanggal)->format('d F Y') }}</span>
-                                        <a href="#">
+                                        <a href="{{ route('front.event_detail', $event->slug) }}">
                                             <h4>{{ $event->judul }}</h4>
                                         </a>
                                         <span><i class="fa fa-clock-o"></i>
@@ -46,7 +46,7 @@
         </div> <!-- row -->
     </div> <!-- container -->
     <div class="about-bg">
-        <img src="images/about/bg-1.png" alt="About">
+        <img src="/images/about/bg-1.png" alt="">
     </div>
 
     <!-- Modal -->
