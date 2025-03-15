@@ -37,12 +37,15 @@
                                 <a class="{{ request()->routeIs('front.artikel_index') ? 'active' : '' }}"
                                     href="{{ route('front.artikel_index') }}">Artikel</a>
                             </li>
-                            <li class="nav-item">
-                                <a href="#">PPDB</a>
-                                <ul class="sub-menu">
-                                    <li><a href="{{ route('front.ppdb.index', $ppdb->slug) }}">Informasi PPDB</a></li>
-                                </ul>
-                            </li>
+                            @if ($ppdb)
+                                <li class="nav-item">
+                                    <a href="#">PPDB</a>
+                                    <ul class="sub-menu">
+                                        <li><a href="{{ route('front.ppdb.index', $ppdb->slug) }}">Informasi PPDB</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            @endif
                             <li class="nav-item">
                                 <a href="{{ route('login') }}">Login</a>
                             </li>
