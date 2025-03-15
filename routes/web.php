@@ -35,9 +35,11 @@ use App\Http\Controllers\Admin\K13\StatusPenilaianController;
 use App\Http\Controllers\Admin\K13\TglRaportController;
 use App\Http\Controllers\Admin\PembelajaranController;
 use App\Http\Controllers\Admin\PlatformController;
+use App\Http\Controllers\Admin\PpdbController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Front\ArtikelFrontController;
 use App\Http\Controllers\Front\EventFrontController;
+use App\Http\Controllers\Front\PpdbFrontController;
 use App\Http\Controllers\Front\ProfileFrontController;
 use App\Http\Controllers\Guru\JurnalMengajarController;
 use App\Http\Controllers\Guru\K13\NilaiHarianController;
@@ -63,6 +65,8 @@ Route::get('/profile/sejarah', [ProfileFrontController::class, 'sejarahIndex'])-
 
 Route::get('/event', [EventFrontController::class, 'index'])->name('front.event_index');
 Route::get('/event/{slug}', [EventFrontController::class, 'detail'])->name('front.event_detail');
+
+Route::get('/ppdb/info/{slug}', [PpdbFrontController::class, 'index'])->name('front.ppdb.index');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -231,6 +235,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/jadwalpelajaran/data', [JadwalPelajaranController::class, 'data'])->name('jadwalpelajaran.data');
         Route::post('jadwalpelajaran/reset', [JadwalPelajaranController::class, 'reset'])->name('jadwalpelajaran.reset');
         Route::resource('/jadwalpelajaran', JadwalPelajaranController::class);
+
+        // PPDB
+        Route::get('/ppdb/data', [PpdbController::class, 'data'])->name('ppdb.data');
+        Route::resource('/ppdb', PpdbController::class);
     });
 
     // Role Guru
