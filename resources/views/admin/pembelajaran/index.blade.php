@@ -61,7 +61,6 @@
                 });
             }
 
-
             // Ambil daftar guru saat halaman dimuat
             function fetchGuruList() {
                 $.ajax({
