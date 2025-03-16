@@ -20,5 +20,9 @@
         $('.select2-container--bootstrap4 .select2-selection--multiple .select2-search__field')
             .css('margin-left', '.3rem')
             .css('margin-top', '.35rem');
+
+        $('.multipleSelect').select2({
+            theme: 'bootstrap4',
+        });
     </script>
 @endpush
