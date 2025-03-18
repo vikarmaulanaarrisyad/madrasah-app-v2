@@ -47,40 +47,44 @@
     <link rel="stylesheet" href="{{ asset('education') }}/css/responsive.css">
     <style>
         img.logo-header1 {
-            max-width: 150% !important;
+            max-width: 100% !important;
+            /* Tidak lebih dari container */
+            height: auto;
         }
 
         .header-logo-support {
             border-bottom: 1px solid #cecece;
             background-image: url('{{ Storage::url($aplikasi->logo_header) }}');
-            /* Pastikan variabel tersedia */
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            /* Tambahkan agar tidak terlalu kecil */
+            /* Menyesuaikan tinggi minimum */
         }
 
+        /* 📱 Smartphone Kecil (≤480px) */
         @media screen and (max-width: 480px) {
-            img.logo-header1 {
-                max-width: 80% !important;
+            .header-logo-support {
+                background-size: contain !important;
+                background-position: center;
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+                min-height: 89px !important;
+                /* Beri tinggi agar terlihat */
+                display: block !important;
+                /* Pastikan elemen tetap tampil */
             }
-
         }
 
         /* 📱 Smartphone Sedang (481px - 767px) */
         @media screen and (max-width: 767px) {
-            img.logo-header1 {
-                max-width: 90% !important;
+            .header-logo-support {
+                background-size: contain !important;
+                background-position: center;
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+                min-height: 89px !important;
+                display: block !important;
             }
-        }
-
-        /* 📱 Tablet (768px - 1024px) */
-        @media screen and (max-width: 1024px) {
-            img.logo-header1 {
-                max-width: 100% !important;
-            }
-
-
         }
     </style>
     @stack('css')
