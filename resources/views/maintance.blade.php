@@ -4,87 +4,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maintenance Mode</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <title>SMK Presiden</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            text-align: center;
-            background: url('http://yes.sgp1.digitaloceanspaces.com/diginews/uploads/2021/06/1-Website-maintenance-768x576.jpg') no-repeat center center fixed;
-            background-size: cover;
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            position: relative;
+        .header-top {
+            background: linear-gradient(to right, #003366, #00a67e);
+            color: white;
+            padding: 5px 0;
+            font-size: 14px;
         }
 
-        body::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.6);
-            /* Overlay gelap */
-            z-index: 0;
+        .header-main {
+            background: linear-gradient(to right, #003366, #00a67e);
+            color: white;
+            padding: 15px 0;
         }
 
-        .container {
-            position: relative;
-            background: rgba(255, 255, 255, 0.37);
-            backdrop-filter: blur(10px);
-            padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            max-width: 500px;
-            text-align: center;
-            z-index: 1;
+        .navbar-custom {
+            background: white;
+            padding: 10px 0;
         }
 
-        h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
+        .navbar-custom .nav-link {
+            color: black;
+            font-weight: bold;
         }
 
-        p {
-            font-size: 18px;
-            margin-bottom: 20px;
-        }
-
-        .loader {
-            border: 6px solid rgba(255, 255, 255, 0.3);
-            border-radius: 50%;
-            border-top: 6px solid #f39c12;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
+        .navbar-custom .nav-link:hover {
+            color: #00a67e;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <h1>🚧 Website Sedang dalam Perbaikan 🚧</h1>
-        <p>Kami sedang melakukan beberapa peningkatan untuk memberikan pengalaman yang lebih baik.</p>
-        <div class="loader"></div>
-        <p>Silakan kembali lagi nanti.</p>
+    <!-- Header Top -->
+    <div class="header-top">
+        <span><strong>Terbaru:</strong> Aktivitas Seru Siswa Mengenal Macam-</span>
     </div>
+
+    <!-- Header Main -->
+    <div class="header-main">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="logo d-flex align-items-center">
+                <img src="logo.png" alt="Logo SMK Presiden" width="50" class="me-2">
+                <h4 class="m-0">SMK PRESIDEN<br><small>ENTREPRENEUR INDONESIA SRAGEN</small></h4>
+            </div>
+            <div class="contact-info text-end">
+                <p class="m-0"><i class="fas fa-phone"></i> 0271-8856311</p>
+                <p class="m-0"><i class="fas fa-envelope"></i> info@smkpresiden.sch.id</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link active" href="#">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Profil</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Berita Terbaru</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Prestasi</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Kegiatan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">PPDB</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Artikel</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#">Karya Siswa</a></li>
+                </ul>
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Search...">
+                    <button class="btn btn-outline-success" type="submit"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

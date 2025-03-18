@@ -50,11 +50,21 @@
             max-width: 150% !important;
         }
 
-        /* 📱 Smartphone Kecil (320px - 480px) */
+        .header-logo-support {
+            border-bottom: 1px solid #cecece;
+            background-image: url('{{ Storage::url($aplikasi->logo_header) }}');
+            /* Pastikan variabel tersedia */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            /* Tambahkan agar tidak terlalu kecil */
+        }
+
         @media screen and (max-width: 480px) {
             img.logo-header1 {
                 max-width: 80% !important;
             }
+
         }
 
         /* 📱 Smartphone Sedang (481px - 767px) */
@@ -69,6 +79,8 @@
             img.logo-header1 {
                 max-width: 100% !important;
             }
+
+
         }
     </style>
     @stack('css')

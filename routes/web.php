@@ -21,6 +21,7 @@ use App\Http\Controllers\{
     TahunPelajaranController,
     UserProfileInformationController,
 };
+use App\Http\Controllers\Admin\AlbumController;
 use App\Http\Controllers\Admin\FasilitasController;
 use App\Http\Controllers\Admin\HariLiburController;
 use App\Http\Controllers\Admin\JadwalPelajaranController;
@@ -239,6 +240,10 @@ Route::group(['middleware' => 'auth'], function () {
         // PPDB
         Route::get('/ppdb/data', [PpdbController::class, 'data'])->name('ppdb.data');
         Route::resource('/ppdb', PpdbController::class);
+
+        // Album
+        Route::get('/album/data', [AlbumController::class, 'data'])->name('album.data');
+        Route::resource('/album', AlbumController::class);
     });
 
     // Role Guru
