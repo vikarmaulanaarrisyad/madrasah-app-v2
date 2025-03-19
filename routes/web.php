@@ -22,6 +22,7 @@ use App\Http\Controllers\{
     UserProfileInformationController,
 };
 use App\Http\Controllers\Admin\AlbumController;
+use App\Http\Controllers\Admin\CetakDaftarNilaiController;
 use App\Http\Controllers\Admin\FasilitasController;
 use App\Http\Controllers\Admin\HariLiburController;
 use App\Http\Controllers\Admin\JadwalPelajaranController;
@@ -244,6 +245,10 @@ Route::group(['middleware' => 'auth'], function () {
         // Album
         Route::get('/album/data', [AlbumController::class, 'data'])->name('album.data');
         Route::resource('/album', AlbumController::class);
+
+        // Cetak Daftar Nilai
+        Route::get('/cetakdaftarnilai/filter', [CetakDaftarNilaiController::class, 'filter'])->name('cetakdaftarnilai.filter');
+        Route::resource('/cetakdaftarnilai', CetakDaftarNilaiController::class);
     });
 
     // Role Guru

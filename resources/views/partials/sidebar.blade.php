@@ -260,6 +260,12 @@
                             <p>Cetak Buku Induk Siswa</p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ route('cetakdaftarnilai.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-print"></i>
+                            <p>Cetak Daftar Nilai Siswa</p>
+                        </a>
+                    </li>
 
                     <li class="nav-header">MANAJEMEN WEBSITE</li>
                     <li class="nav-item">

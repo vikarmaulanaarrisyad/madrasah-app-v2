@@ -29,8 +29,8 @@
                         @if (!$statusTerkirim)
                             <a href="{{ route('nilaipengetahuan.create', [$rombel->id, $mataPelajaran->id]) }}"
                                 class="btn btn-primary mb-1">Tambah</a>
-                            <a href="#" class="btn btn-sm btn-success mb-1">Upload</a>
-                            <a href="#" class="btn btn-sm btn-warning mb-1">Export</a>
+                            {{--  <a href="#" class="btn btn-sm btn-success mb-1">Upload</a>  --}}
+                            {{--  <a href="#" class="btn btn-sm btn-warning mb-1">Export</a>  --}}
                             <button class="btn btn-sm btn-danger mb-1" onclick="kirimNilai()">Kirim Nilai</button>
                         @else
                             <button class="btn btn-sm btn-warning mb-1" onclick="batalKirim()">Batal Kirim</button>
@@ -42,7 +42,7 @@
                 @php
                     $data = \App\Models\Rombel::find($rombel->id)?->siswa_rombel ?? collect();
 
-                    $nilaiPH = \App\Models\NilaiHarian::where('rombel_id', $rombel->id)
+                    $nilaiPH = \App\Models\K13NilaiPengetahuan::where('rombel_id', $rombel->id)
                         ->where('mata_pelajaran_id', $mataPelajaran->id)
                         ->orderBy('ph')
                         ->get()
