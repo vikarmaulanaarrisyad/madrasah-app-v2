@@ -75,15 +75,80 @@
             }
         }
 
-        /* 📱 Smartphone Sedang (481px - 767px) */
-        @media screen and (max-width: 767px) {
+        /* 📱 Smartphone Kecil (≤480px) */
+        @media (max-width: 480px) {
             .header-logo-support {
-                background-size: contain !important;
-                background-position: center;
-                padding-top: 0 !important;
-                padding-bottom: 0 !important;
-                min-height: 89px !important;
-                display: block !important;
+                min-height: 70px !important;
+            }
+
+            .pb-50 {
+                padding-bottom: 50px !important;
+            }
+        }
+
+        /* 📱 Smartphone Sedang (481px - 767px) */
+        @media (max-width: 767px) {
+            .header-logo-support {
+                min-height: 80px !important;
+            }
+
+            .pb-50 {
+                padding-bottom: 60px !important;
+            }
+        }
+
+        /* 📱 Tablet (768px - 1024px) */
+        @media (max-width: 1024px) {
+            .header-logo-support {
+                min-height: 85px !important;
+            }
+
+            .pb-50 {
+                padding-bottom: 70px !important;
+            }
+        }
+
+        /* 💻 Laptop Kecil (11-13 inch) (1025px - 1366px) */
+        @media (max-width: 1366px) {
+            .header-logo-support {
+                min-height: 90px !important;
+            }
+
+            .pb-50 {
+                padding-bottom: 80px !important;
+            }
+        }
+
+        /* 💻 Laptop Standar (14-15 inch) (1367px - 1600px) */
+        @media (max-width: 1600px) {
+            .header-logo-support {
+                min-height: 100px !important;
+            }
+
+            .pb-50 {
+                padding-bottom: 90px !important;
+            }
+        }
+
+        /* 🖥️ Laptop Besar (16-17 inch) (1601px - 1920px) */
+        @media (max-width: 1920px) {
+            .header-logo-support {
+                min-height: 110px !important;
+            }
+
+            .pb-50 {
+                padding-bottom: 100px !important;
+            }
+        }
+
+        /* 🖥️ Ultra-Wide Monitor (> 1920px) */
+        @media (min-width: 1921px) {
+            .header-logo-support {
+                min-height: 120px !important;
+            }
+
+            .pb-50 {
+                padding-bottom: 110px !important;
             }
         }
     </style>
