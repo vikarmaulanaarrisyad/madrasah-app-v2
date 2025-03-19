@@ -28,7 +28,11 @@
                             <x-slot name="thead">
                                 <th class="text-center">No</th>
                                 <th class="text-center">Nama Siswa</th>
-                                <th class="text-center">Nilai</th>
+                                <th class="text-center">
+                                    Nilai <input type="number" name="semua_nilai" id="semua_nilai" min="0"
+                                        max="100" class="form-control" style="width: 80px; display: inline-block;"
+                                        placeholder="0">
+                                </th>
                             </x-slot>
                             @foreach ($rombel->siswa_rombel as $index => $siswa)
                                 <tr>
@@ -55,6 +59,29 @@
 
 @push('scripts')
     <script>
+        $(document).ready(function() {
+            // Ketika nilai diinputkan di "Nilai Semua Siswa"
+            $('#semua_nilai').on('input', function() {
+                let nilaiSemua = $(this).val();
+
+                // Pastikan nilai valid (0 - 100)
+                if (nilaiSemua < 0 || nilaiSemua > 100) {
+                    $(this).addClass('is-invalid');
+                    return;
+                } else {
+                    $(this).removeClass('is-invalid');
+                }
+
+                // Set semua input nilai siswa dengan nilai yang diinputkan
+                $('.nilai').val(nilaiSemua);
+            });
+
+            // Hapus invalid class ketika input berubah
+            $('.nilai').on('input', function() {
+                $(this).removeClass('is-invalid');
+            });
+        });
+
         $(document).ready(function() {
             $('#btnSimpan').on('click', function() {
                 let isValid = true;

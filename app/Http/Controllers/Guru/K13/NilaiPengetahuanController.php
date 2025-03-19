@@ -38,7 +38,7 @@ class NilaiPengetahuanController extends Controller
             })
             ->editColumn('nilai', function ($siswa) {
                 // Ambil semua nilai harian untuk siswa tertentu
-                $nilaiHarian = NilaiHarian::where('siswa_id', $siswa->id)->pluck('nilai');
+                $nilaiHarian = K13NilaiPengetahuan::where('siswa_id', $siswa->id)->pluck('nilai');
 
                 // Gabungkan nilai menjadi string atau tampilkan jumlahnya
                 return $nilaiHarian->implode(', '); // Jika ingin menampilkan semua nilai dipisahkan dengan koma
@@ -69,6 +69,7 @@ class NilaiPengetahuanController extends Controller
             'rombel_id' => 'required|integer|exists:rombels,id',
             'mata_pelajaran_id' => 'required|integer|exists:mata_pelajarans,id',
             'siswa_id' => 'required|array',
+            'materi' => 'nullable',
             'nilai' => 'required|array',
             'nilai.*' => 'numeric|min:0|max:100', // Pastikan nilai antara 0-100
         ]);
@@ -85,17 +86,18 @@ class NilaiPengetahuanController extends Controller
         }
 
         // Cek PH terakhir berdasarkan mata pelajaran
-        $lastPH = NilaiHarian::where('mata_pelajaran_id', $validated['mata_pelajaran_id'])
+        $lastPH = K13NilaiPengetahuan::where('mata_pelajaran_id', $validated['mata_pelajaran_id'])
             ->max('ph'); // Ambil PH terbesar
 
         $newPH = $lastPH ? $lastPH + 1 : 1; // Jika ada, tambah 1; jika tidak, mulai dari 1
 
         foreach ($validated['siswa_id'] as $key => $siswaId) {
-            $nilai = NilaiHarian::updateOrCreate(
+            $nilai = K13NilaiPengetahuan::updateOrCreate(
                 [
                     'tahun_pelajaran_id' => $tapel->id,
                     'rombel_id' => $validated['rombel_id'],
                     'mata_pelajaran_id' => $validated['mata_pelajaran_id'],
+                    'materi' => null,
                     'siswa_id' => $siswaId,
                     'ph' => $newPH, // Set nilai PH
                 ],
@@ -113,16 +115,16 @@ class NilaiPengetahuanController extends Controller
     public function destroy($id)
     {
         try {
-            $nilai = NilaiHarian::findOrFail($id);
+            $nilai = K13NilaiPengetahuan::findOrFail($id);
 
             // Hapus semua nilai dengan PH yang sama untuk setiap siswa
-            NilaiHarian::where('ph', $nilai->ph)
+            K13NilaiPengetahuan::where('ph', $nilai->ph)
                 ->where('rombel_id', $nilai->rombel_id)
                 ->where('mata_pelajaran_id', $nilai->mata_pelajaran_id)
                 ->delete();
 
             // Ambil kembali semua nilai yang tersisa, urutkan berdasarkan siswa_id dan PH
-            $nilaiTersisa = NilaiHarian::where('rombel_id', $nilai->rombel_id)
+            $nilaiTersisa = K13NilaiPengetahuan::where('rombel_id', $nilai->rombel_id)
                 ->where('mata_pelajaran_id', $nilai->mata_pelajaran_id)
                 ->orderBy('siswa_id', 'asc')  // Urutkan per siswa
                 ->orderBy('ph', 'asc') // Pastikan PH juga diurutkan
@@ -147,7 +149,7 @@ class NilaiPengetahuanController extends Controller
             }
 
             return response()->json([
-                'message' => 'Nilai berhasil dihapus dan PH diperbarui!',
+                'message' => 'Nilai berhasil dihapus!',
             ], 200);
         } catch (\Exception $e) {
             return response()->json([
@@ -162,7 +164,7 @@ class NilaiPengetahuanController extends Controller
         $rombel = Rombel::with('siswa_rombel')->findOrFail($rombel_id);
         $mataPelajaran = MataPelajaran::findOrFail($mapel_id);
 
-        $nilaiPH = NilaiHarian::where('rombel_id', $rombel_id)
+        $nilaiPH = K13NilaiPengetahuan::where('rombel_id', $rombel_id)
             ->where('mata_pelajaran_id', $mapel_id)
             ->where('ph', $ph)
             ->get();
@@ -182,7 +184,7 @@ class NilaiPengetahuanController extends Controller
 
             // Loop untuk update nilai berdasarkan siswa_id dan PH
             foreach ($request->siswa_id as $index => $siswa_id) {
-                NilaiHarian::updateOrCreate(
+                K13NilaiPengetahuan::updateOrCreate(
                     [
                         'siswa_id' => $siswa_id,
                         'ph' => $ph,
@@ -210,7 +212,7 @@ class NilaiPengetahuanController extends Controller
             DB::beginTransaction(); // Mulai transaction
 
             // Cek apakah ada nilai yang bisa dikirim
-            $nilaiHarian = NilaiHarian::where('rombel_id', $rombel_id)
+            $nilaiHarian = K13NilaiPengetahuan::where('rombel_id', $rombel_id)
                 ->where('mata_pelajaran_id', $mata_pelajaran_id)
                 ->get();
 
@@ -231,7 +233,7 @@ class NilaiPengetahuanController extends Controller
             }
 
             // Update status NilaiHarian menjadi "terkirim"
-            NilaiHarian::where('rombel_id', $rombel_id)
+            K13NilaiPengetahuan::where('rombel_id', $rombel_id)
                 ->where('mata_pelajaran_id', $mata_pelajaran_id)
                 ->update(['status' => 'terkirim']);
 
@@ -271,7 +273,7 @@ class NilaiPengetahuanController extends Controller
     {
         try {
             // Kembalikan status nilai agar bisa diedit kembali
-            NilaiHarian::where('rombel_id', $rombel_id)
+            K13NilaiPengetahuan::where('rombel_id', $rombel_id)
                 ->where('mata_pelajaran_id', $mata_pelajaran_id)
                 ->update(['status' => null]);
 

@@ -44,7 +44,7 @@
 
                     <div class="text-right">
                         <button type="button" id="btn-simpan" class="btn btn-success">Simpan</button>
-                        <a href="{{ url()->previous() }}" class="btn btn-secondary">Batal</a>
+                        <button type="button" class="btn btn-secondary" onclick="kembali()">Kembali</button>
                     </div>
                 </form>
             </x-card>
@@ -99,5 +99,9 @@
                 });
             });
         });
+
+        function kembali() {
+            window.history.back();
+        }
     </script>
 @endpush

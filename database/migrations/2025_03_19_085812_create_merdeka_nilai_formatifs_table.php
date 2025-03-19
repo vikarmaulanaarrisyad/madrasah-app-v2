@@ -11,11 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('k13_nilai_pengetahuans', function (Blueprint $table) {
+        Schema::create('merdeka_nilai_formatifs', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('k13_rencana_nilai_pengetahuan_id');
+            $table->unsignedBigInteger('tahun_pelajaran_id');
+            $table->unsignedBigInteger('siswa_id');
             $table->unsignedBigInteger('rombel_id');
-            $table->integer('nilai');
+            $table->unsignedBigInteger('mata_pelajaran_id');
+            $table->integer('sum')->default(1);
+            $table->text('materi')->nullable();
+            $table->integer('nilai')->default(0);
             $table->timestamps();
         });
     }
@@ -25,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('k13_nilai_pengetahuans');
+        Schema::dropIfExists('merdeka_nilai_formatifs');
     }
 };

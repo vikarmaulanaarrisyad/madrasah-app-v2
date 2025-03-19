@@ -22,7 +22,7 @@
 
     <!--====== APPLY PART START ======-->
 
-    @include('layouts.frontend.apply-aprt')
+    {{--  @include('layouts.frontend.apply-aprt')  --}}
 
     <!--====== APPLY PART ENDS ======-->
 
@@ -42,5 +42,5 @@
 
     <!--====== NEWS PART ENDS ======-->
 
-    {{--  @include('layouts.frontend.course-part')  --}}
+    @include('layouts.frontend.course-part')
 @endsection
