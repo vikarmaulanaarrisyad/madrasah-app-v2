@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Nilai PH ' . $ph)
+@section('title', 'Edit Nilai Formatif ' . $sum)
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('nilaipengetahuan.index') }}">Nilai Harian</a></li>
-    <li class="breadcrumb-item active">Edit Nilai PH{{ $ph }}</li>
+    <li class="breadcrumb-item"><a href="{{ route('nilaiformatif.index') }}">Nilai Harian</a></li>
+    <li class="breadcrumb-item active">Edit Nilai BAB {{ $sum }}</li>
 @endsection
 
 @section('content')
@@ -13,19 +13,19 @@
             <x-card>
                 <x-slot name="header">
                     <h5 class="card-title mb-2">
-                        Edit Nilai PH{{ $ph }} - {{ $mataPelajaran->nama }}
+                        Edit Nilai BAB {{ $sum }} - {{ $mataPelajaran->nama }}
                     </h5>
                 </x-slot>
 
                 <form id="form-edit-nilai"
-                    action="{{ route('nilaipengetahuan.update', [$rombel->id, $mataPelajaran->id, $ph]) }}" method="POST">
+                    action="{{ route('nilaiformatif.update', [$rombel->id, $mataPelajaran->id, $sum]) }}" method="POST">
                     @csrf
                     @method('PUT')
 
                     <div class="form-group">
                         <label for="materi">Materi</label>
                         <textarea name="materi" id="materi" cols="2" rows="2" class="form-control"
-                            placeholder="Materi singkat...">{{ $nilaiPH->first()->materi ?? '' }}</textarea>
+                            placeholder="Materi singkat...">{{ $nilaiSUM->first()->materi ?? '' }}</textarea>
                     </div>
 
                     <x-table>
@@ -40,7 +40,7 @@
                                 </th>
                             </tr>
                         </x-slot>
-                        @foreach ($nilaiPH as $nilai)
+                        @foreach ($nilaiSUM as $nilai)
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $nilai->siswa->nama_lengkap }}</td>
@@ -78,7 +78,7 @@
                 });
 
                 $.ajax({
-                    url: "{{ route('nilaipengetahuan.update', [$rombel->id, $mataPelajaran->id, $ph]) }}",
+                    url: "{{ route('nilaiformatif.update', [$rombel->id, $mataPelajaran->id, $sum]) }}",
                     type: "PUT",
                     data: $('#form-edit-nilai').serialize(),
                     headers: {
@@ -97,7 +97,7 @@
 
                             // Redirect ke halaman dengan parameter dinamis
                             window.location.href =
-                                `/guru/nilaipengetahuan?rombel_id=${rombelId}&mata_pelajaran_id=${mataPelajaranId}`;
+                                `/guru/nilaiformatif?rombel_id=${rombelId}&mata_pelajaran_id=${mataPelajaranId}`;
                         });
                     },
                     error: function(xhr) {

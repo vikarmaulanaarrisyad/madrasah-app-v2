@@ -28,6 +28,7 @@
                                     </li>
                                 </ul>
                             </li>
+
                             <li class="nav-item">
                                 <a class="{{ request()->routeIs('front.event_index') ? 'active' : '' }}"
                                     href="{{ route('front.event_index') }}">Agenda</a>

@@ -331,6 +331,12 @@
 
                     <li class="nav-header">PENGATURAN</li>
                     <li class="nav-item">
+                        <a href="{{ route('manage-menu.index') }}" class="nav-link">
+                            <i class="nav-icon fas fa-list-alt"></i>
+                            <p>Menu</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('sekolah.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-school"></i>
                             <p>Madrasah</p>
@@ -451,6 +457,7 @@
                                                 'id' => $p->rombel->id, // ID rombel untuk route
                                                 'mata_pelajaran_id' => $p->mata_pelajaran_id, // ID mata pelajaran agar unik
                                                 'nama' => $p->rombel->kelas->nama . ' ' . $p->rombel->nama,
+                                                'kurikulum' => $p->rombel->kurikulum->nama ?? 'Tidak Ada Kurikulum',
                                                 'urutan' => (int) filter_var(
                                                     $p->rombel->kelas->nama,
                                                     FILTER_SANITIZE_NUMBER_INT,
@@ -463,7 +470,7 @@
                                         ->sortBy('urutan'); // Urutkan berdasarkan angka dalam nama kelas
                                 @endphp
 
-                                @foreach ($kelasUnik as $kelas)
+                                {{--  @foreach ($kelasUnik as $kelas)
                                     @php
                                         // Cek apakah nilai sudah dikirim berdasarkan rombel dan mata pelajaran
                                         $nilaiTerkirim = \App\Models\NilaiHarian::where('rombel_id', $kelas['id'])
@@ -484,7 +491,52 @@
                                             </p>
                                         </a>
                                     </li>
+                                @endforeach  --}}
+
+                                @foreach ($kelasUnik as $kelas)
+                                    @php
+                                        // Ambil informasi rombel dan kurikulum dalam satu query
+                                        $rombel = \App\Models\Rombel::with('kurikulum')->find($kelas['id']);
+                                        $kurikulum = $rombel->kurikulum->nama ?? 'Lainnya';
+
+                                        // Tentukan route berdasarkan kurikulum
+                                        $routeName =
+                                            $kurikulum == 'Kurikulum Merdeka'
+                                                ? 'nilaiformatif.index'
+                                                : 'nilaipengetahuan.index';
+
+                                        // Cek apakah nilai sudah dikirim berdasarkan kurikulum
+                                        if ($kurikulum == 'Kurikulum Merdeka') {
+                                            $nilaiTerkirim = \App\Models\MerdekaNilaiFormatif::where([
+                                                ['rombel_id', $kelas['id']],
+                                                ['mata_pelajaran_id', $kelas['mata_pelajaran_id']],
+                                                ['status', 'terkirim'],
+                                            ])->exists();
+                                        } else {
+                                            $nilaiTerkirim = \App\Models\NilaiHarian::where([
+                                                ['rombel_id', $kelas['id']],
+                                                ['mata_pelajaran_id', $kelas['mata_pelajaran_id']],
+                                                ['status', 'terkirim'],
+                                            ])->exists();
+                                        }
+                                    @endphp
+
+                                    <li class="nav-item">
+                                        <a href="{{ route($routeName, ['rombel_id' => $kelas['id'], 'mata_pelajaran_id' => $kelas['mata_pelajaran_id']]) }}"
+                                            class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>
+                                                {{ $kelas['nama'] }} ({{ $kurikulum }})
+                                                @if ($nilaiTerkirim)
+                                                    <i class="fas fa-check-circle text-success"></i>
+                                                    <!-- Tanda centang jika sudah dikirim -->
+                                                @endif
+                                            </p>
+                                        </a>
+                                    </li>
                                 @endforeach
+
+
                             </ul>
                         </li>
                     @endforeach

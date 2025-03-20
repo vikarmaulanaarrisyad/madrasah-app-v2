@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
-@section('title', 'Nilai Harian')
-@section('subtile', 'Nilai Harian')
+@section('title', 'Nilai Formatif')
+@section('subtile', 'Nilai Formatif')
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-    <li class="breadcrumb-item active">Nilai Harian</li>
+    <li class="breadcrumb-item active">Nilai Formatif</li>
 @endsection
 
 @section('content')
@@ -12,7 +12,7 @@
         <div class="col-lg-12">
             <x-card>
                 <x-slot name="header">
-                    <h5 class="card-title mb-2">Input Nilai Harian
+                    <h5 class="card-title mb-2">Input Nilai Formatif
                         <span class="text-muted text-sm">{{ $rombel->kelas->nama }} {{ $rombel->nama }}</span>
                         <p class="text-xs">{{ $mataPelajaran->nama }}</p>
                     </h5>
@@ -130,7 +130,7 @@
                 $('#btnSimpan').prop('disabled', true);
 
                 $.ajax({
-                    url: "{{ route('nilaipengetahuan.store') }}",
+                    url: "{{ route('nilaiformatif.store') }}",
                     type: "POST",
                     contentType: "application/json",
                     data: JSON.stringify({
@@ -156,7 +156,7 @@
 
                             // Redirect ke halaman dengan parameter dinamis
                             window.location.href =
-                                `/guru/nilaipengetahuan?rombel_id=${rombelId}&mata_pelajaran_id=${mataPelajaranId}`;
+                                `/guru/nilaiformatif?rombel_id=${rombelId}&mata_pelajaran_id=${mataPelajaranId}`;
                         });
                     },
                     error: function(xhr) {

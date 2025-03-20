@@ -1,14 +1,5 @@
 <section id="news-part" class="pt-115 pb-110">
     <div class="container">
-        <div class="breaking-news">
-            <span class="breaking-title">Breaking News:</span>
-            <marquee behavior="scroll" direction="left" scrollamount="5">
-                @foreach ($artikel as $item)
-                    <a href="{{ route('front.artikel_detail', $item->slug) }}">{{ $item->judul }}</a> &bull;
-                @endforeach
-            </marquee>
-        </div>
-
         <div class="row">
             <div class="col-lg-6">
                 <div class="section-title">
@@ -91,6 +82,6 @@
                     </div>
                 @endif
             </div>
-        </div> <!-- row -->
+        </div>
     </div> <!-- container -->
 </section>

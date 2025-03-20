@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class MerdekaNilaiFormatif extends Model
+class Menu extends Model
 {
     protected $guarded = ['id'];
 
-    public function siswa()
+    public function children()
     {
-        return $this->belongsTo(Siswa::class);
+        return $this->hasMany(Menu::class, 'menu_parent_id');
     }
 }
