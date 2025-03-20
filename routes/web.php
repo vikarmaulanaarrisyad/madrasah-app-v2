@@ -40,6 +40,7 @@ use App\Http\Controllers\Admin\Merdeka\NilaiFormatifController;
 use App\Http\Controllers\Admin\PembelajaranController;
 use App\Http\Controllers\Admin\PlatformController;
 use App\Http\Controllers\Admin\PpdbController;
+use App\Http\Controllers\Admin\PrestasiController;
 use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\Front\ArtikelFrontController;
 use App\Http\Controllers\Front\EventFrontController;
@@ -260,6 +261,10 @@ Route::group(['middleware' => 'auth'], function () {
         // Manage Menu
         Route::post('/manage-menu/update-order', [MenuController::class, 'updateOrder'])->name('manage-menu.updateOrder');
         Route::resource('manage-menu', MenuController::class);
+
+        // Prestasi
+        Route::get('/prestasi/data', [PrestasiController::class, 'data'])->name('prestasi.data');
+        Route::resource('/prestasi', PrestasiController::class);
     });
 
     // Role Guru
