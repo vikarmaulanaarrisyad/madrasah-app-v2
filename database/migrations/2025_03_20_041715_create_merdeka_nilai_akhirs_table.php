@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('merdeka_nilai_formatifs', function (Blueprint $table) {
+        Schema::create('merdeka_nilai_akhirs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('tahun_pelajaran_id');
             $table->unsignedBigInteger('siswa_id');
@@ -20,7 +20,8 @@ return new class extends Migration
             $table->integer('sum')->default(1);
             $table->text('materi')->nullable();
             $table->integer('nilai')->default(0);
-            $table->string('status')->nullable();
+            $table->integer('sumatif_tengah_semester')->default(0);
+            $table->integer('sumatif_akhir_semester')->default(0);
             $table->timestamps();
         });
     }
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('merdeka_nilai_formatifs');
+        Schema::dropIfExists('merdeka_nilai_akhirs');
     }
 };

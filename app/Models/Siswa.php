@@ -40,4 +40,9 @@ class Siswa extends Model
             ->withPivot('tahun_pelajaran_id', 'status', 'keterangan')
             ->withTimestamps();
     }
+
+    public function nilai_merdeka()
+    {
+        return $this->belongsTo(MerdekaNilaiAkhir::class, 'siswa_id', 'id');
+    }
 }

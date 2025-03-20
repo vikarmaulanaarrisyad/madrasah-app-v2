@@ -82,6 +82,6 @@
                     </div>
                 @endif
             </div>
-        </div> <!-- row -->
+        </div>
     </div> <!-- container -->
 </section>

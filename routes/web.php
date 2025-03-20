@@ -35,6 +35,8 @@ use App\Http\Controllers\Admin\K13\Kkm13MapelController;
 use App\Http\Controllers\Admin\K13\KkmMapelController;
 use App\Http\Controllers\Admin\K13\StatusPenilaianController;
 use App\Http\Controllers\Admin\K13\TglRaportController;
+use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\Admin\Merdeka\NilaiFormatifController;
 use App\Http\Controllers\Admin\PembelajaranController;
 use App\Http\Controllers\Admin\PlatformController;
 use App\Http\Controllers\Admin\PpdbController;
@@ -43,6 +45,7 @@ use App\Http\Controllers\Front\ArtikelFrontController;
 use App\Http\Controllers\Front\EventFrontController;
 use App\Http\Controllers\Front\PpdbFrontController;
 use App\Http\Controllers\Front\ProfileFrontController;
+use App\Http\Controllers\Frontend\MenuController as FrontendMenuController;
 use App\Http\Controllers\Guru\JurnalMengajarController;
 use App\Http\Controllers\Guru\K13\NilaiHarianController;
 use App\Http\Controllers\Guru\K13\NilaiPengetahuanController;
@@ -63,12 +66,15 @@ Route::get('/maintance', function () {
 
 Route::get('/artikel', [ArtikelFrontController::class, 'index'])->name('front.artikel_index');
 Route::get('/artikel/{slug}', [ArtikelFrontController::class, 'detail'])->name('front.artikel_detail');
+// Route::get('/profile/sejarah', [ProfileFrontController::class, 'sejarahIndex'])->name('front.sejarah_index');
 Route::get('/profile/sejarah', [ProfileFrontController::class, 'sejarahIndex'])->name('front.sejarah_index');
 
 Route::get('/event', [EventFrontController::class, 'index'])->name('front.event_index');
 Route::get('/event/{slug}', [EventFrontController::class, 'detail'])->name('front.event_detail');
 
 Route::get('/ppdb/info/{slug}', [PpdbFrontController::class, 'index'])->name('front.ppdb.index');
+
+// Route::get('/{slug}', [FrontendMenuController::class, 'detail'])->name('front.menu.detail');
 
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -248,7 +254,12 @@ Route::group(['middleware' => 'auth'], function () {
 
         // Cetak Daftar Nilai
         Route::get('/cetakdaftarnilai/filter', [CetakDaftarNilaiController::class, 'filter'])->name('cetakdaftarnilai.filter');
+        Route::get('/cetakdaftarnilai/get-matapelajaran', [CetakDaftarNilaiController::class, 'getMataPelajaran'])->name('cetakdaftarnilai.get.mata_pelajaran');
         Route::resource('/cetakdaftarnilai', CetakDaftarNilaiController::class);
+
+        // Manage Menu
+        Route::post('/manage-menu/update-order', [MenuController::class, 'updateOrder'])->name('manage-menu.updateOrder');
+        Route::resource('manage-menu', MenuController::class);
     });
 
     // Role Guru
@@ -287,7 +298,7 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::resource('/nilaiptspas', NilaiPtsPasController::class)->except('create');
 
-        // Nilai Pengetahuan
+        //K13 Nilai Pengetahuan
         Route::get('/nilaipengetahuan/siswa_data', [NilaiPengetahuanController::class, 'siswaData'])->name('nilaipengetahuan.siswa_data');
         Route::get('/nilaipengetahuan/rombel/{rombel_id}/matapelajaran/{mapel_id}', [NilaiPengetahuanController::class, 'create'])->name('nilaipengetahuan.create');
         Route::get('/nilaipengetahuan', [NilaiPengetahuanController::class, 'index'])->name('nilaipengetahuan.index');
@@ -303,6 +314,21 @@ Route::group(['middleware' => 'auth'], function () {
 
         Route::delete('/nilaipengetahuan/{id}', [NilaiPengetahuanController::class, 'destroy'])->name('nilaipengetahuan.destroy');
 
+        // Kurikulum Merdeka
+        Route::get('/nilaiformatif/siswa_data', [NilaiFormatifController::class, 'siswaData'])->name('nilaiformatif.siswa_data');
+        Route::get('/nilaiformatif/rombel/{rombel_id}/matapelajaran/{mapel_id}', [NilaiFormatifController::class, 'create'])->name('nilaiformatif.create');
+        Route::get('/nilaiformatif', [NilaiFormatifController::class, 'index'])->name('nilaiformatif.index');
+        Route::post('/nilaiformatif/store', [NilaiFormatifController::class, 'store'])->name('nilaiformatif.store');
+        Route::get('/nilaiformatif/{rombel_id}/{mapel_id}/{ph}/edit', [NilaiFormatifController::class, 'edit'])
+            ->name('nilaiformatif.edit');
+        Route::put('/nilaiformatif/{rombel_id}/{mapel_id}/{ph}/update', [NilaiFormatifController::class, 'update'])
+            ->name('nilaiformatif.update');
+        Route::post('/nilaiformatif/{rombel}/{mapel}/kirim', [NilaiFormatifController::class, 'kirim'])
+            ->name('nilaiformatif.kirim');
+        Route::post('/nilaiformatif/{rombel}/{mapel}/batal-kirim', [NilaiFormatifController::class, 'batalKirim'])
+            ->name('nilaiformatif.batalKirim');
+
+        Route::delete('/nilaiformatif/{id}', [NilaiFormatifController::class, 'destroy'])->name('nilaiformatif.destroy');
 
 
         // Route::resource('/nilaiharian', NilaiHarianController::class);

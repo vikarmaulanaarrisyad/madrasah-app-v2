@@ -44,13 +44,13 @@
                     </div>
                 </x-slot>
 
-                <x-table id="data-table">
+                <x-table>
                     <thead id="table-header" class="bg-success">
                         <tr>
                             <th colspan="10" class="text-center">Silakan pilih kelas dan mata pelajaran.</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="data-table">
                         <tr>
                             <td colspan="10" class="text-center">Tidak ada data.</td>
                         </tr>
@@ -73,16 +73,15 @@
                 if (rombelId) {
                     Swal.fire({
                         title: 'Loading...',
-                        text: 'Mohon tunggu, sedang mengambil data mata pelajaran...',
+                        text: 'Mohon tunggu, sedang mengambil data...',
                         allowOutsideClick: false,
                         didOpen: () => {
                             Swal.showLoading();
                         }
                     });
 
-                    // AJAX untuk mendapatkan daftar mata pelajaran berdasarkan rombel
                     $.ajax({
-                        url: "{{ route('cetakdaftarnilai.get.mata_pelajaran') }}", // Sesuaikan dengan route yang menangani permintaan ini
+                        url: "{{ route('cetakdaftarnilai.filter') }}",
                         type: "GET",
                         data: {
                             rombel_id: rombelId
@@ -90,72 +89,20 @@
                         success: function(response) {
                             Swal.close();
 
-                            let mataPelajaranSelect = $('#mata_pelajaran_id');
-                            mataPelajaranSelect.prop('disabled', false).html(
-                                '<option value="">- Pilih Mata Pelajaran -</option>');
+                            // Update Header Tabel
+                            $('#table-header').html(response.header);
 
-                            $.each(response.mata_pelajaran, function(key, item) {
-                                mataPelajaranSelect.append(
-                                    `<option value="${item.id}">${item.nama}</option>`
-                                );
-                            });
-                        },
-                        error: function() {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: 'Terjadi kesalahan saat mengambil data mata pelajaran!'
-                            });
-                        }
-                    });
-                } else {
-                    $('#mata_pelajaran_id').prop('disabled', true).html(
-                        '<option value="">- Pilih Mata Pelajaran -</option>');
-                    $('#data-table').html(
-                        '<tr><td colspan="10" class="text-center">Tidak ada data.</td></tr>');
-                }
-            });
-
-            // Event ketika mata pelajaran dipilih
-            $('#mata_pelajaran_id').change(function() {
-                let mataPelajaranId = $(this).val();
-                let rombelId = $('#rombel_id').val();
-
-                if (mataPelajaranId) {
-                    Swal.fire({
-                        title: 'Loading...',
-                        text: 'Mengambil data nilai akhir...',
-                        allowOutsideClick: false,
-                        didOpen: () => {
-                            Swal.showLoading();
-                        }
-                    });
-
-                    // AJAX untuk mendapatkan nilai akhir dari mata pelajaran yang dipilih
-                    $.ajax({
-                        url: "{{ route('cetakdaftarnilai.filter') }}", // Sesuaikan dengan route yang menangani permintaan ini
-                        type: "GET",
-                        data: {
-                            rombel_id: rombelId,
-                            mata_pelajaran_id: mataPelajaranId
-                        },
-                        success: function(response) {
-                            Swal.close();
-
-                            //$('#table-header').html(response.header);
+                            // Update Data Tabel
                             $('#data-table').html(response.body);
                         },
                         error: function() {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Oops...',
-                                text: 'Terjadi kesalahan saat mengambil nilai akhir!'
+                                text: 'Terjadi kesalahan saat mengambil data!'
                             });
                         }
                     });
-                } else {
-                    $('#data-table').html(
-                        '<tr><td colspan="10" class="text-center">Tidak ada data.</td></tr>');
                 }
             });
         });
