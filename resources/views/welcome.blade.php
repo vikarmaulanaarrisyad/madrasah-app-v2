@@ -43,4 +43,6 @@
     <!--====== NEWS PART ENDS ======-->
 
     @include('layouts.frontend.course-part')
+
+    @include('layouts.frontend.testimonial')
 @endsection

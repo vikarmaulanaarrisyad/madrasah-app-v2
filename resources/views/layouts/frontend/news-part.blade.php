@@ -1,3 +1,23 @@
+@push('css')
+    <style>
+        h3 {
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            font-size: 11px;
+        }
+
+        .singel-news .news-cont a h3 {
+            font-size: 18px;
+            color: #07294D;
+            padding-bottom: 10px;
+            padding-top: 10px;
+            -webkit-transition: all 0.4s linear;
+            transition: all 0.4s linear;
+        }
+    </style>
+@endpush
+
 <section id="news-part" class="pt-115 pb-110">
     <div class="container">
         <div class="row">
@@ -11,29 +31,33 @@
         <div class="row">
             @if ($artikelTerbaru)
                 <!-- Jika Ada Artikel Terbaru -->
-                <div class="col-lg-6">
-                    <div class="singel-news mt-30">
-                        <div class="news-thum pb-25">
-                            <img src="{{ $artikelTerbaru->image ? Storage::url($artikelTerbaru->image) : asset('images/no-image.jpg') }}"
-                                alt="News">
-                        </div>
-                        <div class="news-cont">
-                            <ul>
-                                <li><a href="#"><i class="fa fa-calendar"></i>
-                                        {{ tanggal_indonesia($artikelTerbaru->tgl_publish) }}</a></li>
-                                <li><a href="#"> <span>By</span> Admin</a></li>
-                            </ul>
-                            <a href="{{ route('front.artikel_detail', $artikelTerbaru->slug) }}">
-                                <h3>{{ $artikelTerbaru->judul ?? 'Tidak ada berita terbaru' }}</h3>
-                            </a>
-                            <p>
-                                {{--  {!! $artikelTerbaru->content ?? 'Belum ada konten berita yang tersedia.' !!}  --}}
-                                {{ Str::limit(strip_tags($artikelTerbaru->content ?? 'Tidak ada konten berita'), 150, '...') }}
+                @foreach ($artikelTerbaru as $item)
+                    <div class="col-lg-4">
+                        <div class="singel-news mt-30">
+                            <div class="news-thum pb-25">
+                                <img style="width: 336px; height:176px;"
+                                    src="{{ $item->image ? Storage::url($item->image) : asset('images/no-image.jpg') }}"
+                                    alt="News">
+                            </div>
+                            <div class="news-cont">
+                                <ul>
+                                    <li><a href="#"><i class="fa fa-calendar"></i>
+                                            {{ tanggal_indonesia($item->tgl_publish) }}</a></li>
+                                    <li><a href="#"> <span>By</span> Admin</a></li>
+                                </ul>
+                                <a href="{{ route('front.artikel_detail', $item->slug) }}">
+                                    <h3>
+                                        {{ $item->judul ?? 'Tidak ada berita terbaru' }}</h3>
+                                </a>
+                                <p>
+                                    {{--  {!! $item->content ?? 'Belum ada konten berita yang tersedia.' !!}  --}}
+                                    {{ Str::limit(strip_tags($item->content ?? 'Tidak ada konten berita'), 150, '...') }}
 
-                            </p>
-                        </div>
-                    </div> <!-- singel news -->
-                </div>
+                                </p>
+                            </div>
+                        </div> <!-- singel news -->
+                    </div>
+                @endforeach
             @else
                 <!-- Jika Tidak Ada Artikel Terbaru -->
                 <div class="col-lg-6">
@@ -45,7 +69,7 @@
                 </div>
             @endif
 
-            <div class="col-lg-6">
+            {{--  <div class="col-lg-4">
                 @if ($artikel->isNotEmpty())
                     @foreach ($artikel as $item)
                         <div class="singel-news news-list">
@@ -81,7 +105,7 @@
                             style="width: 100%; max-width: 400px;">
                     </div>
                 @endif
-            </div>
+            </div>  --}}
         </div>
     </div> <!-- container -->
 </section>
