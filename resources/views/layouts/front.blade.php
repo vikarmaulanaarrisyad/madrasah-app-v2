@@ -80,7 +80,7 @@
         /* 📱 Smartphone Kecil (≤480px) */
         @media (max-width: 480px) {
             .header-logo-support {
-                min-height: 70px !important;
+                min-height: 49px !important;
             }
 
             .pb-50 {
@@ -91,7 +91,7 @@
         /* 📱 Smartphone Sedang (481px - 767px) */
         @media (max-width: 767px) {
             .header-logo-support {
-                min-height: 80px !important;
+                min-height: 49px !important;
             }
 
             .pb-50 {
@@ -102,7 +102,7 @@
         /* 📱 Tablet (768px - 1024px) */
         @media (max-width: 1024px) {
             .header-logo-support {
-                min-height: 85px !important;
+                min-height: 49px !important;
             }
 
             .pb-50 {
@@ -113,7 +113,7 @@
         /* 💻 Laptop Kecil (11-13 inch) (1025px - 1366px) */
         @media (max-width: 1366px) {
             .header-logo-support {
-                min-height: 90px !important;
+                min-height: 49px !important;
             }
 
             .pb-50 {
@@ -124,7 +124,7 @@
         /* 💻 Laptop Standar (14-15 inch) (1367px - 1600px) */
         @media (max-width: 1600px) {
             .header-logo-support {
-                min-height: 100px !important;
+                min-height: 49px !important;
             }
 
             .pb-50 {
@@ -135,7 +135,7 @@
         /* 🖥️ Laptop Besar (16-17 inch) (1601px - 1920px) */
         @media (max-width: 1920px) {
             .header-logo-support {
-                min-height: 110px !important;
+                min-height: 49px !important;
             }
 
             .pb-50 {
@@ -146,7 +146,7 @@
         /* 🖥️ Ultra-Wide Monitor (> 1920px) */
         @media (min-width: 1921px) {
             .header-logo-support {
-                min-height: 120px !important;
+                min-height: 49px !important;
             }
 
             .pb-50 {
