@@ -12,4 +12,9 @@ class K13NilaiPtsPas extends Model
     {
         return $this->belongsTo(Rombel::class);
     }
+
+    public function pembelajaran()
+    {
+        return $this->belongsTo(Pembelajaran::class, 'pembelajaran_id');
+    }
 }

@@ -295,6 +295,9 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/nilaiptspas/data', [NilaiPtsPasController::class, 'data'])->name('nilaiptspas.data');
         Route::get('/nilaiptspas/create/{id}', [NilaiPtsPasController::class, 'create'])
             ->name('nilaiptspas.create');
+        Route::post('/nilaiptspas/kirim/{id}', [NilaiPtsPasController::class, 'kirim'])->name('nilaiptspas.kirim');
+        Route::post('/nilaiptspas/batal/{id}', [NilaiPtsPasController::class, 'batalKirim'])->name('nilaiptspas.batal');
+
 
         Route::resource('/nilaiptspas', NilaiPtsPasController::class)->except('create');
 

@@ -39,7 +39,10 @@ class NilaiPtsPasController extends Controller
                     $query->join('siswa_rombel', 'rombels.id', '=', 'siswa_rombel.rombel_id')
                         ->selectRaw('count(siswa_rombel.id)');
                 },
-                'nilaiPtsPas as jumlah_telah_dinilai'
+                'nilaiPtsPas as jumlah_telah_dinilai',
+                'nilaiPtsPas as jumlah_telah_dikirim' => function ($query) {
+                    $query->where('status', 'terkirim');
+                }
             ])
             ->orderBy('mata_pelajaran_id', 'ASC')
             ->orderBy('rombel_id', 'ASC')
@@ -55,22 +58,41 @@ class NilaiPtsPasController extends Controller
             })
             ->addColumn('aksi', function ($q) {
                 $aksi = '';
+
                 if ($q->jumlah_telah_dinilai == 0) {
                     $aksi .= '
-                        <button onclick="addForm(`' . route('nilaiptspas.create', $q->id) . '`, ' . $q->id . ')"
-                                class="btn btn-sm btn-primary" title="Tambah">
-                            <i class="fas fa-plus"></i>
-                        </button>';
+            <button onclick="addForm(`' . route('nilaiptspas.create', $q->id) . '`, ' . $q->id . ')"
+                    class="btn btn-sm btn-primary" title="Tambah">
+                <i class="fas fa-plus"></i>
+            </button>';
                 } else {
-                    $aksi .= '
-                        <button onclick="editForm(`' . route('nilaiptspas.edit', $q->id) . '`)"
-                                class="btn btn-sm btn-warning" title="Edit">
-                            <i class="fas fa-pencil-alt"></i>
-                        </button>';
+                    if ($q->jumlah_telah_dikirim == 0) {
+                        // Hanya tampilkan tombol edit jika nilai belum dikirim
+                        $aksi .= '
+                <button onclick="editForm(`' . route('nilaiptspas.edit', $q->id) . '`)"
+                        class="btn btn-sm btn-warning" title="Edit">
+                    <i class="fas fa-pencil-alt"></i>
+                </button>';
+
+                        // Jika nilai belum dikirim, tambahkan tombol "Kirim"
+                        $aksi .= '
+                <button onclick="kirimNilai(`' . route('nilaiptspas.kirim', $q->id) . '`)"
+                        class="btn btn-sm btn-primary" title="Kirim Nilai">
+                    <i class="fas fa-paper-plane"></i>
+                </button>';
+                    } else {
+                        // Jika nilai sudah dikirim, hanya tampilkan tombol "Batal Kirim"
+                        $aksi .= '
+                <button onclick="batalKirim(`' . route('nilaiptspas.batal', $q->id) . '`)"
+                        class="btn btn-sm btn-danger" title="Batal Kirim">
+                    <i class="fas fa-undo"></i>
+                </button>';
+                    }
                 }
 
                 return $aksi;
             })
+
             ->rawColumns(['input_nilai', 'aksi'])
             ->escapeColumns([])
             ->make(true);
@@ -177,5 +199,52 @@ class NilaiPtsPasController extends Controller
                 'message' => 'Terjadi kesalahan: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function kirim($id)
+    {
+        // Ambil data berdasarkan pembelajaran_id
+        $nilai = K13NilaiPtsPas::where('pembelajaran_id', $id)->get();
+
+        // Periksa apakah data ditemukan
+        if ($nilai->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data tidak ditemukan!',
+            ], 404);
+        }
+
+        // Update setiap item dalam koleksi
+        $nilai->each(function ($item) {
+            $item->update(['status' => 'terkirim']);
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Nilai berhasil dikirim!',
+        ]);
+    }
+
+    public function batalKirim($id)
+    {
+        $nilai = K13NilaiPtsPas::where('pembelajaran_id', $id)->get();
+
+        // Periksa apakah data ditemukan
+        if ($nilai->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data tidak ditemukan!',
+            ], 404);
+        }
+
+        // Update setiap item dalam koleksi
+        $nilai->each(function ($item) {
+            $item->update(['status' => NULL]);
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Pengiriman nilai berhasil dibatalkan!',
+        ]);
     }
 }
