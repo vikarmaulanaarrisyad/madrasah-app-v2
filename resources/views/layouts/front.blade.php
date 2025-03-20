@@ -115,10 +115,6 @@
             .header-logo-support {
                 min-height: 49px !important;
             }
-
-            .pb-50 {
-                padding-bottom: 80px !important;
-            }
         }
 
         /* 💻 Laptop Standar (14-15 inch) (1367px - 1600px) */

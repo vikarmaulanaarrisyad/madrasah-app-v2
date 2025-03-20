@@ -34,22 +34,12 @@
         @else
             @foreach ($siswa as $key => $item)
                 @php
-                    // Ambil semua nilai siswa berdasarkan sum
+                    // Ambil nilai siswa sesuai dengan sum yang tersedia
                     $nilaiSiswa = \App\Models\MerdekaNilaiAkhir::where('siswa_id', $item->id)
                         ->where('rombel_id', $rombel->id)
                         ->where('mata_pelajaran_id', $mataPelajaran->id)
                         ->get()
                         ->groupBy('sum');
-
-                    // Ambil nilai sumatif_tengah_semester & sumatif_akhir_semester dari K13NilaiPtsPas
-                    $nilaiSumatif = \App\Models\K13NilaiPtsPas::where('siswa_id', $item->id)
-                        ->where('rombel_id', $rombel->id)
-                        ->whereHas('pembelajaran', function ($q) use ($mataPelajaran) {
-                            $q->where('mata_pelajaran_id', $mataPelajaran->id);
-                        })
-                        ->select('nilai_pts', 'nilai_pas')
-                        ->first();
-
                 @endphp
 
                 <tr>
@@ -62,9 +52,8 @@
                         <td>{{ $nilaiSiswa[$sum]->first()->nilai ?? '-' }}</td>
                     @endforeach
 
-                    {{-- Menampilkan nilai sumatif_tengah_semester dan sumatif_akhir_semester dari K13NilaiPtsPas --}}
-                    <td>{{ $nilaiSumatif?->nilai_pts ?? '-' }}</td>
-                    <td>{{ $nilaiSumatif?->nilai_pas ?? '-' }}</td>
+                    <td>{{ $nilaiSiswa->first()?->first()->sumatif_tengah_semester ?? '-' }}</td>
+                    <td>{{ $nilaiSiswa->first()?->first()->sumatif_akhir_semester ?? '-' }}</td>
                 </tr>
             @endforeach
         @endif

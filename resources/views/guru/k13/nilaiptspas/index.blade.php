@@ -18,12 +18,13 @@
                                 <th rowspan="2" class="text-center" style="width: 100px;">No</th>
                                 <th rowspan="2" class="text-center">Mata Pelajaran</th>
                                 <th rowspan="2" class="text-center">Kelas</th>
-                                <th colspan="2" class="text-center" style="width: 200px;">Jumlah</th>
-                                <th rowspan="2" class="text-center" style="width: 100px;">Input Nilai</th>
+                                <th colspan="3" class="text-center" style="width: 200px;">Jumlah</th>
+                                <th rowspan="2" class="text-center" style="width: 100px;">Aksi</th>
                             </tr>
                             <tr>
-                                <th class="text-center" style="width: 100px;">Anggota Kelas</th>
-                                <th class="text-center" style="width: 100px;">Telah Dinilai</th>
+                                <th class="text-center" style="width: 100px;">Siswa</th>
+                                <th class="text-center" style="width: 100px;">Dinilai</th>
+                                <th class="text-center" style="width: 100px;">Terkirim</th>
                             </tr>
                         </x-slot>
                     </x-table>
@@ -70,6 +71,11 @@
                     className: 'text-center'
                 },
                 {
+                    data: 'jumlah_telah_dikirim',
+                    name: 'jumlah_telah_dikirim',
+                    className: 'text-center'
+                },
+                {
                     data: 'aksi',
                     name: 'aksi',
                     orderable: false,
@@ -111,6 +117,66 @@
             setTimeout(() => {
                 window.location.href = url;
             }, 1000); // Menunggu 1 detik sebelum navigasi
+        }
+
+        function kirimNilai(url) {
+            Swal.fire({
+                title: "Kirim Nilai?",
+                text: "Apakah Anda yakin ingin mengirim nilai ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Ya, Kirim!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            Swal.fire("Berhasil!", response.message, "success");
+                            // Bisa ditambahkan reload atau update tampilan
+                            location.reload();
+                        },
+                        error: function(xhr) {
+                            Swal.fire("Error!", "Terjadi kesalahan saat mengirim nilai.", "error");
+                        }
+                    });
+                }
+            });
+        }
+
+        function batalKirim(url) {
+            Swal.fire({
+                title: "Batalkan Pengiriman?",
+                text: "Apakah Anda yakin ingin membatalkan pengiriman nilai ini?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Ya, Batalkan!"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: url,
+                        type: "POST",
+                        data: {
+                            _token: $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            Swal.fire("Berhasil!", response.message, "success");
+                            location.reload();
+                        },
+                        error: function(xhr) {
+                            Swal.fire("Error!", "Terjadi kesalahan saat membatalkan pengiriman nilai.",
+                                "error");
+                        }
+                    });
+                }
+            });
         }
     </script>
 @endpush

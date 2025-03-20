@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\K13NilaiPtsPas;
 use App\Models\MataPelajaran;
 use App\Models\Rombel;
 use App\Models\Siswa;
@@ -24,6 +25,12 @@ class CetakDaftarNilaiController extends Controller
         $rombelId = $request->rombel_id;
         $rombel = Rombel::where('id', $rombelId)->first();
         $mataPelajaran = MataPelajaran::where('id', $request->mata_pelajaran_id)->first();
+        $nilaiPasPts = K13NilaiPtsPas::where('status', 'terkirim')
+            ->where('rombel_id', $rombel->id)
+            ->whereHas('pembelajaran', function ($q) use ($request) {
+                $q->where('mata_pelajaran_id', $request->mata_pelajaran_id);
+            })
+            ->get();
 
         $siswa = Siswa::whereHas('siswa_rombel', function ($q) use ($request) {
             $q->where('rombel_id', $request->rombel_id);
@@ -33,8 +40,8 @@ class CetakDaftarNilaiController extends Controller
 
         // Tentukan Header Tabel Sesuai Kurikulum
         if ($rombel->kurikulum->nama == 'Kurikulum Merdeka') {
-            $header = view('admin.daftarnilai.header_merdeka', compact('rombel', 'mataPelajaran'))->render();
-            $body = view('admin.daftarnilai.tabel_nilai_merdeka', compact('siswa', 'rombel', 'mataPelajaran'))->render();
+            $header = view('admin.daftarnilai.header_merdeka', compact('rombel', 'mataPelajaran',))->render();
+            $body = view('admin.daftarnilai.tabel_nilai_merdeka', compact('siswa', 'rombel', 'mataPelajaran', 'nilaiPasPts'))->render();
         } else {
             $header = view('admin.daftarnilai.header_2013')->render();
             $body = view('admin.daftarnilai.tabel_nilai_2013', compact('siswa'))->render();
