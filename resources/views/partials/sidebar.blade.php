@@ -278,6 +278,18 @@
                         </a>
                         <ul class="nav nav-treeview" style="display: none;">
                             <li class="nav-item">
+                                <a href="{{ route('manage-menu.index') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-list-alt"></i>
+                                    <p>Menu</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('pages.index') }}" class="nav-link">
+                                    <i class="nav-icon fas fa-globe"></i>
+                                    <p>Kelola Halaman Menu</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="{{ route('kategori.index') }}" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Kategori</p>
@@ -336,12 +348,6 @@
                     </li>
 
                     <li class="nav-header">PENGATURAN</li>
-                    <li class="nav-item">
-                        <a href="{{ route('manage-menu.index') }}" class="nav-link">
-                            <i class="nav-icon fas fa-list-alt"></i>
-                            <p>Menu</p>
-                        </a>
-                    </li>
                     <li class="nav-item">
                         <a href="{{ route('sekolah.index') }}" class="nav-link">
                             <i class="nav-icon fas fa-school"></i>

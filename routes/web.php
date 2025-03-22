@@ -37,6 +37,7 @@ use App\Http\Controllers\Admin\K13\StatusPenilaianController;
 use App\Http\Controllers\Admin\K13\TglRaportController;
 use App\Http\Controllers\Admin\MenuController;
 use App\Http\Controllers\Admin\Merdeka\NilaiFormatifController;
+use App\Http\Controllers\Admin\PageController;
 use App\Http\Controllers\Admin\PembelajaranController;
 use App\Http\Controllers\Admin\PlatformController;
 use App\Http\Controllers\Admin\PpdbController;
@@ -47,6 +48,7 @@ use App\Http\Controllers\Front\EventFrontController;
 use App\Http\Controllers\Front\PpdbFrontController;
 use App\Http\Controllers\Front\ProfileFrontController;
 use App\Http\Controllers\Frontend\MenuController as FrontendMenuController;
+use App\Http\Controllers\Frontend\PageFrontController;
 use App\Http\Controllers\Guru\JurnalMengajarController;
 use App\Http\Controllers\Guru\K13\NilaiHarianController;
 use App\Http\Controllers\Guru\K13\NilaiPengetahuanController;
@@ -64,6 +66,8 @@ Route::get('/', function () {
 Route::get('/maintance', function () {
     return view('maintance');
 });
+
+Route::get('/{slug}', [PageFrontController::class, 'show'])->name('front.pages.show');
 
 Route::get('/artikel', [ArtikelFrontController::class, 'index'])->name('front.artikel_index');
 Route::get('/artikel/{slug}', [ArtikelFrontController::class, 'detail'])->name('front.artikel_detail');
@@ -265,6 +269,10 @@ Route::group(['middleware' => 'auth'], function () {
         // Prestasi
         Route::get('/prestasi/data', [PrestasiController::class, 'data'])->name('prestasi.data');
         Route::resource('/prestasi', PrestasiController::class);
+
+        // Pages
+        Route::get('/pages/data', [PageController::class, 'data'])->name('pages.data');
+        Route::resource('/pages', PageController::class);
     });
 
     // Role Guru
