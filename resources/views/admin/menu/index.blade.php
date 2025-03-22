@@ -34,9 +34,8 @@
                     <div class="d-flex justify-content-between align-items-center">
                         <ul class="nav nav-pills">
                             <li class="nav-item">
-                                <a class="nav-link active" href="#activity" data-toggle="tab">Struktur Menu</a>
+                                <a class="nav-link active" href="#struktur-menu" data-toggle="tab">Struktur Menu</a>
                             </li>
-
                         </ul>
 
                         <button onclick="addForm(`{{ route('manage-menu.store') }}`)" class="btn btn-sm btn-primary">
@@ -48,7 +47,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="tab-content">
-                            <div class="tab-pane active" id="activity">
+                            <div class="tab-pane active" id="struktur-menu">
                                 <ul class="sortable-menu todo-list menu-list" data-widget="todo-list">
                                     @foreach ($menus->where('menu_parent_id', 0) as $menu)
                                         <li id="{{ $menu->id }}" data-id="{{ $menu->id }}">
