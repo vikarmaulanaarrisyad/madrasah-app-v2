@@ -63,24 +63,6 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/maintance', function () {
-    return view('maintance');
-});
-
-Route::get('/{slug}', [PageFrontController::class, 'show'])->name('front.pages.show');
-
-Route::get('/artikel', [ArtikelFrontController::class, 'index'])->name('front.artikel_index');
-Route::get('/artikel/{slug}', [ArtikelFrontController::class, 'detail'])->name('front.artikel_detail');
-// Route::get('/profile/sejarah', [ProfileFrontController::class, 'sejarahIndex'])->name('front.sejarah_index');
-Route::get('/profile/sejarah', [ProfileFrontController::class, 'sejarahIndex'])->name('front.sejarah_index');
-
-Route::get('/event', [EventFrontController::class, 'index'])->name('front.event_index');
-Route::get('/event/{slug}', [EventFrontController::class, 'detail'])->name('front.event_detail');
-
-Route::get('/ppdb/info/{slug}', [PpdbFrontController::class, 'index'])->name('front.ppdb.index');
-
-// Route::get('/{slug}', [FrontendMenuController::class, 'detail'])->name('front.menu.detail');
-
 Route::group(['middleware' => 'auth'], function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -350,3 +332,20 @@ Route::group(['middleware' => 'auth'], function () {
         // Route::resource('/nilaiharian', NilaiHarianController::class);
     });
 });
+
+// Route::get('/{slug}', [FrontendMenuController::class, 'detail'])->name('front.menu.detail');
+Route::get('/{slug}', [PageFrontController::class, 'show'])->name('front.pages.show');
+
+Route::get('/maintance', function () {
+    return view('maintance');
+});
+
+Route::get('/artikel', [ArtikelFrontController::class, 'index'])->name('front.artikel_index');
+Route::get('/artikel/{slug}', [ArtikelFrontController::class, 'detail'])->name('front.artikel_detail');
+// Route::get('/profile/sejarah', [ProfileFrontController::class, 'sejarahIndex'])->name('front.sejarah_index');
+Route::get('/profile/sejarah', [ProfileFrontController::class, 'sejarahIndex'])->name('front.sejarah_index');
+
+Route::get('/event', [EventFrontController::class, 'index'])->name('front.event_index');
+Route::get('/event/{slug}', [EventFrontController::class, 'detail'])->name('front.event_detail');
+
+Route::get('/ppdb/info/{slug}', [PpdbFrontController::class, 'index'])->name('front.ppdb.index');
