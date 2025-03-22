@@ -247,6 +247,7 @@ Route::group(['middleware' => 'auth'], function () {
         // Manage Menu
         Route::post('/manage-menu/update-order', [MenuController::class, 'updateOrder'])->name('manage-menu.updateOrder');
         Route::resource('manage-menu', MenuController::class);
+        Route::get('/get-submenu/{menu_id}', [MenuController::class, 'getSubmenu']);
 
         // Prestasi
         Route::get('/prestasi/data', [PrestasiController::class, 'data'])->name('prestasi.data');
@@ -335,6 +336,7 @@ Route::group(['middleware' => 'auth'], function () {
 
 // Route::get('/{slug}', [FrontendMenuController::class, 'detail'])->name('front.menu.detail');
 Route::get('/{slug}', [PageFrontController::class, 'show'])->name('front.pages.show');
+
 
 Route::get('/maintance', function () {
     return view('maintance');
