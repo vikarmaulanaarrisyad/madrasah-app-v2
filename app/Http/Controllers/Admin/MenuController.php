@@ -102,4 +102,11 @@ class MenuController extends Controller
 
         return response()->json(['message' => 'Struktur menu berhasil diperbarui!']);
     }
+
+    public function getSubmenu($menu_id)
+    {
+        $submenus = Menu::where('menu_parent_id', $menu_id)->get();
+
+        return response()->json($submenus);
+    }
 }

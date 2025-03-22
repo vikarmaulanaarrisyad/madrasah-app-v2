@@ -14,7 +14,9 @@ class PageController extends Controller
 {
     public function index()
     {
-        $menus = Menu::all();
+        $menus = Menu::where('menu_parent_id', 0)
+            ->orderBy('menu_position', 'ASC')
+            ->get();
 
         return view('admin.pages.index', compact('menus'));
     }
